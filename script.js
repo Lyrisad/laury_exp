@@ -460,7 +460,7 @@ function setActiveNavLink() {
     });
 }
 
-// Initialisation au chargement de la page fix du problème de la navigation active
+// Initialisation au chargement de la page fix du problème de la navigation active !
 document.addEventListener('DOMContentLoaded', function() {
     // Toujours initialiser la navigation active
     setActiveNavLink();
