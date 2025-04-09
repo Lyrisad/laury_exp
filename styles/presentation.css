@@ -1,0 +1,137 @@
+/* Import des variables globales */
+@import 'index.css';
+
+/* Section Présentation */
+.presentation {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+.presentation h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.presentation h1::after {
+    content: '';
+    display: block;
+    width: 100px;
+    height: 4px;
+    background: var(--primary-color);
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+.info-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--primary-color);
+    border-radius: 4px 0 0 4px;
+}
+
+.info-card:hover {
+    transform: translateX(10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.info-card h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-card:nth-child(2) h2::before {
+    content: '🎯';
+}
+
+.info-card:nth-child(3) h2::before {
+    content: '🔒';
+}
+
+.info-card:nth-child(4) h2::before {
+    content: '⚡';
+}
+
+.info-card p {
+    color: var(--secondary-color);
+    line-height: 1.8;
+}
+
+.cta-button {
+    display: block;
+    width: fit-content;
+    margin: 3rem auto 0;
+    padding: 1rem 2.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: var(--transition);
+    text-align: center;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--card-shadow);
+    background-color: #3955d6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .presentation {
+        padding: 2rem 1.5rem;
+    }
+
+    .presentation h1 {
+        font-size: 2rem;
+    }
+
+    .info-card {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .presentation {
+        padding: 1.5rem 1rem;
+    }
+
+    .presentation h1 {
+        font-size: 1.8rem;
+    }
+
+    .info-card h2 {
+        font-size: 1.3rem;
+    }
+
+    .cta-button {
+        width: 100%;
+        max-width: 300px;
+    }
+} 

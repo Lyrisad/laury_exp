@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - Questionnaire de Satisfaction</title>
+    <link rel="stylesheet" href="styles/admin.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="images/logo GC copie.png" alt="Logo Candor" class="header-logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="presentation.html">Présentation</a></li>
+                <li><a href="questionnaire.html">Questionnaire</a></li>
+                <li><a href="admin.html">Administration</a></li>
+                <button id="logoutButton" class="logout-button" style="display: none;">Déconnexion</button>
+            </ul>
+            
+        </nav>
+    </header>
+
+    <main>
+        <section class="admin">
+            <h1>Administration</h1>
+            
+            <div class="login-form" id="loginForm">
+                <h2>Connexion</h2>
+                <form id="adminLogin">
+                    <div class="form-group">
+                        <label for="username">Nom d'utilisateur :</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mot de passe :</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <button type="submit" class="submit-button">Se connecter</button>
+                </form>
+            </div>
+
+            <div class="questions-management" id="questionsManagement" style="display: none;">
+                <div class="questions-list">
+                    <h2>Liste des Questions</h2>
+                    <div id="questionsContainer"></div>
+                    <button id="addQuestion" class="cta-button">Ajouter une question</button>
+                </div>
+
+                <div class="question-form" id="questionForm" style="display: none;">
+                    <h2>Nouvelle Question</h2>
+                    <form id="questionFormElement">
+                        <div class="form-group">
+                            <label for="questionOrder">Ordre :</label>
+                            <input type="number" id="questionOrder" required min="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="questionText">Question :</label>
+                            <textarea id="questionText" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="responseType">Type de réponse :</label>
+                            <select id="responseType" required>
+                                <option value="">Sélectionnez un type</option>
+                                <option value="text">Champ texte</option>
+                                <option value="radio">Choix unique</option>
+                                <option value="checkbox">Choix multiple</option>
+                                <option value="barem">Évaluation sur 5</option>
+                                <option value="nps">NPS (0-10)</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="optionsContainer" style="display: none;">
+                            <label>Options de réponse :</label>
+                            <div id="optionsList"></div>
+                            <button type="button" id="addOption" class="secondary-button">Ajouter une option</button>
+                        </div>
+                        <button type="submit" class="submit-button">Enregistrer</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <section class="admin-statistics" id="adminStatistics" style="display: none;">
+            <h2>Statistiques du Questionnaire</h2>
+            <form id="statsFilters">
+              <div>
+                <label for="filterGenre">Filtrer par Genre :</label>
+                <select id="filterGenre">
+                  <option value="">Tous</option>
+                  <option value="Femme">Femme</option>
+                  <option value="Homme">Homme</option>
+                  <option value="Non-binaire">Non-binaire</option>
+                  <option value="Genre fluide">Genre fluide</option>
+                  <option value="Autre">Autre</option>
+                </select>
+              </div>
+              <div>
+                <label for="filterPoste">Filtrer par Poste :</label>
+                <select id="filterPoste">
+                  <option value="">Tous</option>
+                  <option value="paie">Paie</option>
+                  <option value="compta">Comptabilité</option>
+                  <option value="rh">Ressources Humaines</option>
+                  <option value="dev">Développement</option>
+                  <option value="gestion">Gestion</option>
+                  <option value="agent">Agent</option>
+                  <option value="manager">Manager</option>
+                </select>
+              </div>
+              <div>
+                <label for="filterDateFrom">Du :</label>
+                <input type="date" id="filterDateFrom">
+              </div>
+              <div>
+                <label for="filterDateTo">Au :</label>
+                <input type="date" id="filterDateTo">
+              </div>
+              <button id="applyFilters">Appliquer filtre</button>
+            </form>
+            
+            <div class="stats-container">
+              <canvas id="totalQuestionnairesChart"></canvas>
+              <canvas id="genreChart"></canvas>
+              <canvas id="posteChart"></canvas>
+              <canvas id="satisfactionChart"></canvas>
+              <canvas id="ageChart"></canvas>
+              <canvas id="satisfactionDistributionChart"></canvas>
+            </div>
+          </section>
+          <button id="toggleStats" class="cta-button">Afficher les Statistiques</button>          
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Questionnaire de Satisfaction crée par Daryl PARISI pour l'entreprise CANDOR. Tous droits réservés.</p>
+    </footer>
+
+    <!-- Modal de confirmation -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content confirm-modal">
+            <div class="confirm-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 8V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 16H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h3>Confirmer la suppression</h3>
+            <p>Êtes-vous sûr de vouloir supprimer cette question ? Cette action est irréversible.</p>
+            <div class="confirm-buttons">
+                <button id="confirmCancel" class="secondary-button">Annuler</button>
+                <button id="confirmDelete" class="delete-button">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+    <script src="stats.js"></script>
+</body>
+</html> 

@@ -1,0 +1,895 @@
+/* Import des variables globales */
+@import 'index.css';
+
+/* Section Admin */
+.admin {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+.admin h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.admin h1::after {
+    content: '';
+    display: block;
+    width: 100px;
+    height: 4px;
+    background: var(--primary-color);
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+/* Formulaire de connexion */
+.login-form {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: var(--card-shadow);
+}
+
+.login-form h2 {
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.1);
+}
+
+/* Boutons */
+.submit-button {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--primary-color);
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1rem;
+}
+
+.submit-button:hover {
+    background-color: #3955d6;
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow);
+}
+
+.secondary-button {
+    font-family: 'Poppins', sans-serif;
+    padding: 0.8rem 1.5rem;
+    background-color: white;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.9rem;
+}
+
+.secondary-button:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Gestion des questions */
+.questions-management {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: var(--card-shadow);
+}
+
+.questions-list h2 {
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+}
+
+#questionsContainer {
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+.cta-button:hover {
+    background-color: #3955d6;
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow);
+}
+
+/* Styles pour les éléments dynamiques */
+.question-item {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.question-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.question-item .header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.question-item .header h3 {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.question-item .header h3::before {
+    content: '❓';
+    font-size: 1.2rem;
+}
+
+.question-item .type-indicator {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.8rem;
+    background-color: rgba(74, 107, 255, 0.1);
+    color: var(--primary-color);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    gap: 0.5rem;
+}
+
+.question-item .type-indicator::before {
+    content: '📝';
+    font-size: 1rem;
+}
+
+.question-item .content {
+    flex: 1;
+}
+
+.question-item p {
+    color: var(--text-color);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.question-item .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.question-item button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    min-width: 120px;
+    justify-content: center;
+}
+
+.question-item button.edit {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.question-item button.edit::before {
+    content: '✏️';
+    font-size: 1rem;
+}
+
+.question-item button.delete {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+.question-item button.delete::before {
+    content: '🗑️';
+    font-size: 1rem;
+}
+
+.question-item button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow);
+}
+
+.question-item button.edit:hover {
+    background-color: #3955d6;
+}
+
+.question-item button.delete:hover {
+    background-color: #ff3333;
+}
+
+/* Options de réponse */
+.option-input {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.option-input input {
+    flex: 1;
+}
+
+.option-input button {
+    padding: 0.5rem 1rem;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.option-input button:hover {
+    background-color: #ff3333;
+    transform: translateY(-2px);
+}
+
+/* Skeleton Loading */
+.skeleton-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--card-shadow);
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 4px;
+}
+
+.skeleton-text {
+    height: 1rem;
+    margin-bottom: 1rem;
+}
+
+.skeleton-button {
+    height: 2.5rem;
+    width: 6rem;
+    border-radius: 8px;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* États de chargement */
+.loading {
+    position: relative;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+}
+
+/* Messages d'erreur */
+.error {
+    background-color: #fff5f5;
+    color: #ff4d4d;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    border-left: 4px solid #ff4d4d;
+}
+
+/* Success message */
+.success {
+    background-color: #f0fff4;
+    color: #38a169;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    border-left: 4px solid #38a169;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .admin {
+        padding: 2rem 1.5rem;
+    }
+
+    .admin h1 {
+        font-size: 2rem;
+    }
+
+    .login-form,
+    .questions-management {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin {
+        padding: 1.5rem 1rem;
+    }
+
+    .admin h1 {
+        font-size: 1.8rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 0.7rem;
+    }
+
+    .question-item .actions {
+        flex-direction: column;
+    }
+
+    .question-item button {
+        width: 100%;
+    }
+}
+
+.edit-button {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.edit-button:hover {
+    background-color: #3955d6;
+}
+
+.delete-button {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+.delete-button:hover {
+    background-color: #ff3333;
+}
+
+.responses-list {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: rgba(74, 107, 255, 0.05);
+    border-radius: 8px;
+}
+
+.responses-list h4 {
+    color: var(--primary-color);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.responses-list h4::before {
+    content: '📋';
+    font-size: 1.1rem;
+}
+
+.responses-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.responses-list li {
+    padding: 0.5rem 0.8rem;
+    background-color: white;
+    border-radius: 6px;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.responses-list li::before {
+    content: '•';
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+/* Modal d'édition */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.modal-content {
+    position: relative;
+    background-color: white;
+    margin: 5% auto;
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 15px;
+    box-shadow: var(--card-shadow);
+}
+
+.close-button {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: var(--transition);
+}
+
+.close-button:hover {
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+#editQuestionForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+#editQuestionForm .form-group {
+    margin-bottom: 1.5rem;
+}
+
+#editQuestionForm label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+#editQuestionForm input,
+#editQuestionForm textarea,
+#editQuestionForm select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    transition: var(--transition);
+
+}
+
+#editQuestionForm input:focus,
+#editQuestionForm textarea:focus,
+#editQuestionForm select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.1);
+}
+
+#editQuestionForm textarea {
+    min-height: 100px;
+    resize: none;
+}
+
+#editQuestionForm button[type="submit"] {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+#editQuestionForm button[type="submit"]:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow);
+}
+
+#editOptionsContainer {
+    background-color: rgba(74, 107, 255, 0.05);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+#editOptionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+#editAddOption {
+    font-family: 'Poppins', sans-serif;
+    padding: 0.8rem 1.5rem;
+    background-color: white;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.9rem;
+    margin-top: 1rem;
+}
+
+#editAddOption:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Animation de chargement pour le modal */
+#editQuestionForm.loading {
+    position: relative;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+#editQuestionForm.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+}
+
+/* Modal de confirmation */
+.confirm-modal {
+    max-width: 400px;
+    text-align: center;
+    padding: 2rem;
+}
+
+.confirm-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.5rem;
+    color: var(--primary-color);
+}
+
+.confirm-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.confirm-modal h3 {
+    color: var(--text-color);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.confirm-modal p {
+    color: var(--text-color);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.confirm-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.confirm-buttons button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    min-width: 120px;
+}
+
+.confirm-buttons .secondary-button {
+    background-color: #f0f0f0;
+    color: var(--text-color);
+    border: none;
+}
+
+.confirm-buttons .secondary-button:hover {
+    background-color: #e0e0e0;
+}
+
+.confirm-buttons .delete-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+}
+
+.confirm-buttons .delete-button:hover {
+    background-color: #ff3333;
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow);
+}
+
+/* Animation du modal */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-content {
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+#logoutButton {
+    background-color: #ffffff;
+    color: #ff4d4d;
+    border: 2px solid #ff4d4d;
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.9rem;
+    position: absolute;
+    right: 1rem;
+    top: 1.35rem;
+    z-index: 1001;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#logoutButton:hover {
+    background-color: #ff3333;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+#logoutButton::before {
+    content: '👋';
+    margin-right: 0.5rem;
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    #logoutButton {
+        position: fixed;
+        top: auto;
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+}
+
+@media (max-width: 480px) {
+    #logoutButton {
+        width: calc(100% - 2rem);
+        text-align: center;
+        border-radius: 30px;
+        bottom: 0.5rem;
+    }
+}
+/* Conteneur général de la section statistiques */
+#adminStatistics {
+    padding: 20px;
+    background-color: #f7f9fc;
+    margin: 20px auto;
+    max-width: 1200px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  /* Section de filtres */
+  #statsFilters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+    background: #fff;
+    border: 1px solid #e0e6ed;
+    padding: 15px;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  
+  #statsFilters div {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  #statsFilters label {
+    font-weight: 500;
+    color: #333;
+  }
+  
+  #statsFilters select,
+  #statsFilters input[type="date"] {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    background: #fff;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  #statsFilters select:hover,
+  #statsFilters input[type="date"]:hover {
+    border-color: #00b09b;
+    cursor: pointer;
+  }
+  
+  /* Bouton Appliquer filtre */
+  #applyFilters {
+    padding: 8px 16px;
+    background: #00b09b;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  #applyFilters:hover {
+    background: #009387;
+  }
+  
+  /* Conteneur des graphiques */
+  .stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+    padding: 10px;
+  }
+  
+  /* Canvas pour les graphiques */
+  .stats-container canvas {
+    flex: 1 1 45%;
+    max-width: 500px;
+    height: 400px;
+    background: #fff;
+    border: 1px solid #e0e6ed;
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  
+  /* En-tête de la section stats */
+  #adminStatistics h2 {
+    text-align: left;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #00b09b;
+  }
+  
+  #toggleStats {
+    position: fixed;
+    bottom: 20px;   /* Espace en bas */
+    left: 20px;     /* Espace à gauche */
+    z-index: 9999;  /* S'assurer qu'il soit toujours au-dessus des autres éléments */
+    background-color: #00b09b;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+  
+  #toggleStats:hover {
+    background-color: #009387;
+  }
+  

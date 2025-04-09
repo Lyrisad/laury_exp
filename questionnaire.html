@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="questionnaire">Questionnaire - Questionnaire de Satisfaction</title>
+    <link rel="stylesheet" href="styles/questionnaire.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="images/logo GC copie.png" alt="Logo Candor" class="header-logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html" data-translate="home">Accueil</a></li>
+                <li><a href="presentation.html" data-translate="presentation">Présentation</a></li>
+                <li><a href="questionnaire.html" data-translate="questionnaire">Questionnaire</a></li>
+                <li><a href="admin.html" data-translate="admin">Administration</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="questionnaire">
+            <h1 data-translate="questionnaire">Questionnaire de Satisfaction</h1>
+            
+            <!-- Modal de disclaimer -->
+            <div id="disclaimerModal" class="disclaimer-modal">
+                <div class="disclaimer-content">
+                    <h2>Confidentialité et Utilisation des Données</h2>
+                    <div class="disclaimer-text">
+                        <p>Ce questionnaire est entièrement anonyme. Aucune information permettant de vous identifier ne sera collectée.</p>
+                        <p>Les données recueillies seront utilisées par le <span class="strong">Groupe Candor</span> à des fins statistiques pour :</p>
+                        <ul>
+                            <li>Améliorer nos services et produits</li>
+                            <li>Analyser les tendances et besoins</li>
+                            <li>Développer de nouvelles idées</li>
+                            <li>Optimiser l'expérience au travail</li>
+                        </ul>
+                        <p>En participant à ce questionnaire, vous acceptez que vos réponses soient utilisées dans le cadre de ces analyses statistiques.</p>
+                    </div>
+                    <div class="disclaimer-actions">
+                        <button id="acceptDisclaimer" class="accept-button">J'accepte et je continue</button>
+                    </div>
+                </div>
+            </div>
+
+            <form id="questionnaireForm">
+                <div class="form-section">
+                    <h2 data-translate="generalInfo">Informations générales</h2>
+                    
+                    <div class="form-group">
+                        <label for="sexe">Genre</label>
+                        <select id="sexe" name="sexe" required>
+                            <option value="">Sélectionnez votre genre</option>
+                            <option value="Femme">Femme</option>
+                            <option value="Homme">Homme</option>
+                            <option value="Non-binaire">Non-binaire</option>
+                            <option value="Genre fluide">Genre fluide</option>
+                            <option value="Autre">Autre (veuillez préciser)</option>
+                            <option value="Préfère ne pas répondre">Préfère ne pas répondre</option>
+                        </select>
+                        <div id="autreGenreContainer" style="display: none; margin-top: 10px;">
+                            <input type="text" id="autreGenre" name="autreGenre" placeholder="Précisez votre genre">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="age" data-translate="age">Tranche d'âge :</label>
+                        <select id="age" name="age" required data-translate-options="age">
+                            <option value="" data-translate="selectAge">Sélectionnez votre tranche d'âge</option>
+                            <option value="18-25" data-translate="age1">18-25 ans</option>
+                            <option value="26-35" data-translate="age2">26-35 ans</option>
+                            <option value="35+" data-translate="age3">35 ans et plus</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="poste" data-translate="position">Poste :</label>
+                        <select id="poste" name="poste" required data-translate-options="position">
+                            <option value="" data-translate="selectPosition">Sélectionnez votre poste</option>
+                            <option value="paie" data-translate="position1">Paie</option>
+                            <option value="compta" data-translate="position2">Comptabilité</option>
+                            <option value="rh" data-translate="position3">Ressources Humaines</option>
+                            <option value="dev" data-translate="position4">Développement</option>
+                            <option value="gestion" data-translate="position5">Gestion</option>
+                            <option value="agent" data-translate="position6">Agent</option>
+                            <option value="manager" data-translate="position7">Manager</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2 data-translate="satisfaction">Questionnaire de satisfaction</h2>
+                    <div id="questionsContainer"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Comment évaluez-vous votre expérience avec ce questionnaire ?</label>
+                    <div class="rating-container">
+                        <div class="rating-stars">
+                            <div class="star-container" data-value="1">
+                                <div class="star" data-value="1">★</div>
+                            </div>
+                            <div class="star-container" data-value="2">
+                                <div class="star" data-value="2">★</div>
+                            </div>
+                            <div class="star-container" data-value="3">
+                                <div class="star" data-value="3">★</div>
+                            </div>
+                            <div class="star-container" data-value="4">
+                                <div class="star" data-value="4">★</div>
+                            </div>
+                            <div class="star-container" data-value="5">
+                                <div class="star" data-value="5">★</div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="satisfaction" class="rating-value" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="commentaires">Avez-vous des commentaires ou suggestions à nous faire partager ?</label>
+                    <textarea id="commentaires" name="commentaires" rows="4" placeholder="Vos commentaires sont précieux pour nous aider à améliorer ce questionnaire..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-button" data-translate="submit">Envoyer le questionnaire</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Questionnaire de Satisfaction crée par Daryl PARISI pour l'entreprise CANDOR. Tous droits réservés.</p>
+    </footer>
+
+    <script src="translations.js"></script>
+    <script src="language.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
