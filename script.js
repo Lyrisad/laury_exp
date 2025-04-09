@@ -464,34 +464,35 @@ function setActiveNavLink() {
 document.addEventListener('DOMContentLoaded', function() {
     // Toujours initialiser la navigation active
     setActiveNavLink();
-    
-    // Gestion du disclaimer (uniquement sur la page questionnaire)
-    if (window.location.pathname.includes('questionnaire.html')) {
-        const disclaimerModal = document.getElementById('disclaimerModal');
-        const acceptButton = document.getElementById('acceptDisclaimer');
-        const questionnaireForm = document.getElementById('questionnaireForm');
 
-        if (disclaimerModal && acceptButton && questionnaireForm) {
-            // Vérifier si le disclaimer a déjà été accepté
-            if (!localStorage.getItem('disclaimerAccepted')) {
-                disclaimerModal.style.display = 'block';
-                questionnaireForm.style.display = 'none';
-            } else {
-                disclaimerModal.style.display = 'none';
-                questionnaireForm.style.display = 'block';
+    // Vérifier si le formulaire questionnaire existe ; s'il existe, l'initialiser.
+    const questionnaireForm = document.getElementById('questionnaireForm');
+    const disclaimerModal = document.getElementById('disclaimerModal');
+    if (questionnaireForm) {
+        // Pour s'assurer que le modal de disclaimer est géré uniquement quand il existe
+        if (window.location.pathname.includes('questionnaire.html') || questionnaireForm) {
+            if (disclaimerModal) {
+                const acceptButton = document.getElementById('acceptDisclaimer');
+                if (!localStorage.getItem('disclaimerAccepted')) {
+                    disclaimerModal.style.display = 'block';
+                    questionnaireForm.style.display = 'none';
+                } else {
+                    disclaimerModal.style.display = 'none';
+                    questionnaireForm.style.display = 'block';
+                }
+
+                // Gestion du disclaimer
+                acceptButton.addEventListener('click', function() {
+                    disclaimerModal.style.display = 'none';
+                    questionnaireForm.style.display = 'block';
+                    localStorage.setItem('disclaimerAccepted', 'true');
+                });
             }
-
-            // Gérer l'acceptation du disclaimer
-            acceptButton.addEventListener('click', function() {
-                disclaimerModal.style.display = 'none';
-                questionnaireForm.style.display = 'block';
-                localStorage.setItem('disclaimerAccepted', 'true');
-            });
-
-            // Initialiser le questionnaire
+            // Initialiser le questionnaire (si l'élément existe, on l'appelle)
             initQuestionnaire();
         }
     }
 
+    // Initialiser NPS (si présent sur la page)
     initializeNps();
 });
