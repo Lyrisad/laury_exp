@@ -1,5 +1,5 @@
 // Configuration
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwnhyoZPM8J_Oyme6TFQlO79XLhSHJJstekElArYzn_sLBKxMhErKVTwWfSvISFvw4mYg/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby01JYE_cdckYrG_cHLQMcsgkqKb_0JJD_oxlqDf2_-OeKglJMgVOqDGAmFKQ3Pba5OSQ/exec';
 
 // Éléments du DOM
 let form = null;

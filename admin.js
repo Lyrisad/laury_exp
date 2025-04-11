@@ -1,5 +1,5 @@
 // Configuration
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwnhyoZPM8J_Oyme6TFQlO79XLhSHJJstekElArYzn_sLBKxMhErKVTwWfSvISFvw4mYg/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby01JYE_cdckYrG_cHLQMcsgkqKb_0JJD_oxlqDf2_-OeKglJMgVOqDGAmFKQ3Pba5OSQ/exec';
 const ADMIN_CREDENTIALS = {
     username: 'admin',
     password: 'password123' // À changer en production
@@ -73,7 +73,8 @@ document.getElementById('editAddOption').addEventListener('click', function() {
 
 // Gestionnaire d'événements pour le changement de type de réponse dans le modal d'édition
 document.getElementById('editResponseType').addEventListener('change', function() {
-    document.getElementById('editOptionsContainer').style.display = this.value !== 'text' ? 'block' : 'none';
+    // Afficher le container d'options uniquement pour 'radio' ou 'checkbox'
+    document.getElementById('editOptionsContainer').style.display = (this.value === 'radio' || this.value === 'checkbox') ? 'block' : 'none';
 });
 
 // Fonction pour afficher des notifications stylées
@@ -334,16 +335,24 @@ function displayQuestions(questions) {
 // Gestion du formulaire de question
 responseType.addEventListener('change', function() {
     const selectedType = this.value;
-    optionsContainer.style.display = selectedType !== 'text' && selectedType !== 'barem' ? 'block' : 'none';
+    // Afficher les options uniquement pour 'radio' ou 'checkbox'
+    optionsContainer.style.display = (selectedType === 'radio' || selectedType === 'checkbox') ? 'block' : 'none';
     
     // Ajuster le placeholder du texte de la question selon le type
     const questionText = document.getElementById('questionText');
     if (selectedType === 'barem') {
         questionText.placeholder = "Entrez la question pour l'évaluation sur 5";
+    } else if (selectedType === 'nps') {
+        questionText.placeholder = "Entrez la question pour l'évaluation sur 10";
+    } else if (selectedType === 'radio') {
+        questionText.placeholder = "Entrez la question pour le choix unique";
+    } else if (selectedType === 'checkbox') {
+        questionText.placeholder = "Entrez la question pour le choix multiple";
     } else {
         questionText.placeholder = "Entrez votre question";
     }
 });
+
 
 addOptionBtn.addEventListener('click', function() {
     const optionInput = document.createElement('div');

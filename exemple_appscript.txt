@@ -7,6 +7,7 @@
  *   - editQuestion
  *   - deleteQuestion
  *   - submitResponse
+ *   - getStat
  */
 function doGet(e) {
   var action = e.parameter.action;
@@ -127,48 +128,139 @@ function doGet(e) {
       result.message = "Question supprimée avec succès";
       
     } else if (action == "submitResponse") {
-      // Cette action peut être testée en GET (passage de paramètres dans l'URL)
-      // ou utilisée via POST (cf. doPost ci‑dessous).
-      
       var sheet = ss.getSheetByName("Données");
       // Si la feuille n'existe pas, on la crée et on y écrit les en-têtes.
       if (!sheet) {
         sheet = ss.insertSheet("Données");
-        var qSheet = ss.getSheetByName("Questions");
-        var qData = qSheet.getDataRange().getValues();
-        var headers = ["Date", "Sexe", "Age", "Poste"];
-        for (var i = 1; i < qData.length; i++) {
-          headers.push(qData[i][1]); // La colonne QUESTION de la feuille "Questions"
-        }
+        var headers = ["Date", "Sexe", "Age", "Poste", "Satisfaction", "Commentaire", "Réponses"];
         sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
       }
       
-      var timestamp = e.parameter.timestamp;
-      var sexe = e.parameter.sexe;
-      var age = e.parameter.age;
-      var poste = e.parameter.poste;
-      var responses = e.parameter.responses ? JSON.parse(e.parameter.responses) : [];
-      var rowData = [timestamp, sexe, age, poste];
+      // Formater la date
+      var timestamp = new Date(e.parameter.timestamp);
+      var formattedDate = Utilities.formatDate(timestamp, "Europe/Paris", "dd/MM/yyyy HH:mm");
       
-      // Récupérer les questions afin d'ordonner les réponses.
-      var qSheet = ss.getSheetByName("Questions");
-      var qData = qSheet.getDataRange().getValues();
-      for (var i = 1; i < qData.length; i++) {
-        var qText = qData[i][1];
-        var resp = "";
-        for (var j = 0; j < responses.length; j++) {
-          if (responses[j].question == qText) {
-            resp = responses[j].answer;
-            break;
-          }
-        }
-        rowData.push(resp);
-      }
+      // Vérifier que nous avons bien les réponses du questionnaire
+      var questionnaireResponses = e.parameter.questionnaireResponses || "";
+      
+      // Préparer la ligne de données
+      var rowData = [
+        formattedDate,           // Date
+        e.parameter.sexe,        // Sexe
+        e.parameter.age,         // Age
+        e.parameter.poste,       // Poste
+        e.parameter.satisfaction,// Note de satisfaction finale
+        e.parameter.commentaires,// Commentaire final
+        questionnaireResponses   // Réponses au questionnaire
+      ];
+      
+      // Ajouter la ligne
       sheet.appendRow(rowData);
       result.success = true;
       result.message = "Réponses enregistrées avec succès";
       
-    } else {
+    }else if (action == "getStats") {
+  var sheet = ss.getSheetByName("Données");
+  if (!sheet) {
+    throw new Error("La feuille 'Données' n'existe pas.");
+  }
+  var data = sheet.getDataRange().getValues();
+  // Si aucune réponse n'est enregistrée, renvoyer des statistiques vides
+  if (data.length < 2) {
+    result.stats = {
+      totalQuestionnaires: 0,
+      parGenre: {},
+      parPoste: {},
+      parAge: {},
+      moyenneSatisfaction: 0,
+      satisfactionDistribution: {}
+    };
+  } else {
+    // Récupérer les filtres (optionnels) et les normaliser (trim et toLowerCase)
+    var filterGenre = e.parameter.genre ? e.parameter.genre.trim().toLowerCase() : "";
+    var filterPoste = e.parameter.poste ? e.parameter.poste.trim().toLowerCase() : "";
+    var filterDateFrom = e.parameter.dateFrom ? e.parameter.dateFrom.trim() : "";
+    var filterDateTo = e.parameter.dateTo ? e.parameter.dateTo.trim() : "";
+    
+    // Indices attendus (à adapter si besoin) : 
+    // 0 Date, 1 Sexe, 2 Age, 3 Poste, 4 Satisfaction, 5 Commentaire, 6 Réponses
+    var filteredData = [];
+    for (var i = 1; i < data.length; i++) {
+      var row = data[i];
+      // Récupérer la date depuis la première colonne (en fonction du format enregistré)
+      var rowDate = new Date(row[0]);
+      var rowGenre = row[1] ? row[1].toString().trim().toLowerCase() : "";
+      var rowAge = row[2] ? row[2].toString().trim() : "";  // On laisse age tel quel pour l'affichage
+      var rowPoste = row[3] ? row[3].toString().trim().toLowerCase() : "";
+      
+      // Appliquer le filtre genre s'il a été défini
+      if (filterGenre && rowGenre !== filterGenre) continue;
+      // Appliquer le filtre poste s'il a été défini
+      if (filterPoste && rowPoste !== filterPoste) continue;
+      // Appliquer le filtre dateFrom
+      if (filterDateFrom) {
+        var fromDate = new Date(filterDateFrom);
+        if (rowDate < fromDate) continue;
+      }
+      // Appliquer le filtre dateTo
+      if (filterDateTo) {
+        var toDate = new Date(filterDateTo);
+        if (rowDate > toDate) continue;
+      }
+      filteredData.push(row);
+    }
+    
+    var stats = {
+      totalQuestionnaires: filteredData.length,
+      parGenre: {},
+      parPoste: {},
+      parAge: {},
+      moyenneSatisfaction: 0,
+      satisfactionDistribution: {}
+    };
+    var totalSatisfaction = 0;
+    var countSatisfaction = 0;
+    
+    for (var i = 0; i < filteredData.length; i++) {
+      var row = filteredData[i];
+      var genre = row[1] ? row[1].toString().trim() : "";
+      var age = row[2] ? row[2].toString().trim() : "";
+      var poste = row[3] ? row[3].toString().trim() : "";
+      var satisfaction = parseFloat(row[4]);
+      
+      // Comptabilisation par genre (en préservant la casse d'origine pour l'affichage, si nécessaire)
+      stats.parGenre[genre] = (stats.parGenre[genre] || 0) + 1;
+      
+      // Comptabilisation par poste
+      stats.parPoste[poste] = (stats.parPoste[poste] || 0) + 1;
+      
+      // Comptabilisation par tranche d'âge
+      stats.parAge[age] = (stats.parAge[age] || 0) + 1;
+      
+      // Distribution de la satisfaction (supposée être une note entre 1 et 5)
+      if (!isNaN(satisfaction)) {
+        stats.satisfactionDistribution[satisfaction] = (stats.satisfactionDistribution[satisfaction] || 0) + 1;
+        totalSatisfaction += satisfaction;
+        countSatisfaction++;
+      }
+    }
+    stats.moyenneSatisfaction = countSatisfaction > 0 ? totalSatisfaction / countSatisfaction : 0;
+    result.stats = stats;
+  }
+} else if (action == "getRawResponses") {
+  var sheet = ss.getSheetByName("Données");
+  if (!sheet) {
+    throw new Error("La feuille 'Données' n'existe pas.");
+  }
+  var data = sheet.getDataRange().getValues();
+  if (data.length < 1) {
+    result.error = "Aucune donnée trouvée.";
+  } else {
+    result.headers = data[0];      // Première ligne avec les intitulés
+    result.responses = data.slice(1); // Toutes les autres lignes
+  }
+  result.success = true;
+  } else {
       throw new Error("Action non reconnue");
     }
   } catch (err) {

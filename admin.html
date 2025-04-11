@@ -30,7 +30,7 @@
 
     <main>
         <section class="admin">
-            <h1>Administration</h1>
+            <h1 id="adminTitle">Administration</h1>
             
             <div class="login-form" id="loginForm">
                 <h2>Connexion</h2>
@@ -87,7 +87,7 @@
             </div>
         </section>
         <section class="admin-statistics" id="adminStatistics" style="display: none;">
-            <h2>Statistiques du Questionnaire</h2>
+            <h2><span class="admin-stats-icon">📊</span> Statistiques du Questionnaire</h2>
             <form id="statsFilters">
               <div>
                 <label for="filterGenre">Filtrer par Genre :</label>
@@ -123,7 +123,7 @@
               </div>
               <button id="applyFilters">Appliquer filtre</button>
             </form>
-            
+            <h3><span class="question-stats-icon">📈</span>  Statistiques Générales</h3>
             <div class="stats-container">
               <canvas id="totalQuestionnairesChart"></canvas>
               <canvas id="genreChart"></canvas>
@@ -131,6 +131,11 @@
               <canvas id="satisfactionChart"></canvas>
               <canvas id="ageChart"></canvas>
               <canvas id="satisfactionDistributionChart"></canvas>
+            </div>
+            <h3 class="question-stats-header"><span class="question-stats-icon">📈</span> Statistiques par Question</h3>
+            <div id="questionStatsContainer">
+                <h4 class="loading-text">Chargement des statistiques par question...</h4>
+                <div class="loader"></div>
             </div>
           </section>
           <button id="toggleStats" class="cta-button">Afficher les Statistiques</button>          
