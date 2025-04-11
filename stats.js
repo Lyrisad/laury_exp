@@ -9,7 +9,7 @@ document.getElementById('toggleStats').addEventListener('click', function() {
   if (!statsSection.style.display || statsSection.style.display === 'none') {
     statsSection.style.display = 'block';
     questionsManagement.style.display = 'none';
-    adminTitle.innerText = 'Statistiques';
+    adminTitle.innerText = 'Statistiques et Réponses';
     adminTitle.style.color = '#00b09b';
     adminTitle.style.setProperty('--admin-title-border-color', '#00b09b');
     loadStats();
@@ -24,20 +24,23 @@ document.getElementById('toggleStats').addEventListener('click', function() {
 
 // Récupération des filtres et construction de la query string
 function getFiltersQuery() {
-  const genreFilter = document.getElementById('filterGenre').value;
-  const posteFilter = document.getElementById('filterPoste').value;
+  const genreFilter = document.getElementById('filterGenre').value.trim().toLowerCase();
+  const posteFilter = document.getElementById('filterPoste').value.trim().toLowerCase();
+  const ageFilter = document.getElementById('filterAge').value.trim().toLowerCase();
   const dateFrom = document.getElementById('filterDateFrom').value;
   const dateTo = document.getElementById('filterDateTo').value;
   
   const params = new URLSearchParams();
   if (genreFilter) params.append('genre', genreFilter);
   if (posteFilter) params.append('poste', posteFilter);
+  if (ageFilter) params.append('age', ageFilter);
   if (dateFrom) params.append('dateFrom', dateFrom);
   if (dateTo) params.append('dateTo', dateTo);
   return params.toString();
 }
+
   
-// Fonction principale de chargement des statistiques globales et par question
+// Charge toutes les statistiques (globales, par question et réponses ouvertes)
 function loadStats() {
   const filters = getFiltersQuery();
   const url = `${SCRIPT_URL}?action=getStats${filters ? '&' + filters : ''}`;
@@ -51,8 +54,10 @@ function loadStats() {
     .then(data => {
       if (data.error) throw new Error(data.error);
       renderStats(data.stats);
-      // Ensuite, on charge les statistiques détaillées par question
+      // Charger les statistiques par question
       loadQuestionStats();
+      // Charger les réponses ouvertes
+      loadOpenResponses();
     })
     .catch(error => {
       console.error('Erreur:', error);
@@ -278,24 +283,25 @@ function loadQuestionStats() {
 
 function renderQuestionStats(questions, rawData) {
   const container = document.getElementById('questionStatsContainer');
-  container.innerHTML = ''; // Réinitialiser le conteneur
+  container.innerHTML = ''; // Reset the container
 
   if (!rawData.headers || !rawData.responses) {
-    console.error("La structure des données brutes n'est pas correcte :", rawData);
-    container.innerHTML = "<p>Aucune donnée trouvée pour les réponses.</p>";
+    console.error("The raw data structure is incorrect:", rawData);
+    container.innerHTML = "<p>No response data found.</p>";
     return;
   }
   
   const headers = rawData.headers;
   let responses = rawData.responses;
   
-  // --- Application des filtres sur les réponses ---
+  // --- Apply filters on responses ---
   const genreFilter = document.getElementById('filterGenre').value.trim().toLowerCase();
   const posteFilter = document.getElementById('filterPoste').value.trim().toLowerCase();
   const dateFrom = document.getElementById('filterDateFrom').value;
   const dateTo = document.getElementById('filterDateTo').value;
+  const ageFilter = document.getElementById('filterAge').value.trim().toLowerCase(); // New filter for age
   
-  // On suppose que rawData.responses suit cet ordre : 
+  // We assume rawData.responses follows this order:
   // index 0 = DATE, 1 = SEXE, 2 = AGE, 3 = POSTE, 4 = SATISFACTION, 5 = COMMENTAIRE, 6 = REPONSES, ...
   responses = responses.filter(row => {
     let include = true;
@@ -317,42 +323,47 @@ function renderQuestionStats(questions, rawData) {
       const rowDate = new Date(row[0]);
       if (rowDate > toDate) include = false;
     }
+    // New: filtering by age (index 2)
+    if (ageFilter) {
+      const rowAge = row[2] ? row[2].toString().trim().toLowerCase() : "";
+      if (rowAge !== ageFilter) include = false;
+    }
     return include;
   });
   
-  console.log("En-têtes :", headers);
-  console.log("Nombre total de réponses filtrées :", responses.length);
+  console.log("Headers:", headers);
+  console.log("Filtered responses count:", responses.length);
   
-  // Recherche de la colonne "reponses"
+  // Find the "reponses" column (converted to lowercase)
   const responsesColIndex = headers.findIndex(h => h.trim().toLowerCase() === "reponses");
   if (responsesColIndex === -1) {
-    console.error("Colonne 'Réponses' introuvable dans les en-têtes:", headers);
-    container.innerHTML = "<p>Colonne 'Réponses' non trouvée.</p>";
+    console.error("Column 'Réponses' not found in headers:", headers);
+    container.innerHTML = "<p>Column 'Réponses' not found.</p>";
     return;
   }
-  console.log("Index de la colonne Réponses:", responsesColIndex);
+  console.log("Responses column index:", responsesColIndex);
   
-  // Traitement de chaque question (pour les types agrégables)
+  // Process each question (for aggregatable types)
   questions.forEach(question => {
     if (['radio', 'checkbox', 'barem', 'nps'].includes(question.type)) {
       
-      let counts = {};          // Répartition des réponses
-      let totalResponses = 0;   // Nombre total de réponses pour cette question
-      let sumNumeric = 0;       // Somme des réponses numériques (pour moyenne)
-      let countNumeric = 0;     // Nombre de réponses numériques
-      let numericValues = [];   // Tableau pour calculer la médiane, min, max, écart-type
-      let genreCounts = {};     // Répartition par genre pour la question
-      let ageCounts = {};       // Répartition par tranche d'âge
+      let counts = {};          // Count of responses
+      let totalResponses = 0;   // Number of responses for this question
+      let sumNumeric = 0;       // Sum for numeric responses (for average)
+      let countNumeric = 0;     // Count of numeric responses
+      let numericValues = [];   // Array for calculating median, min, max, and std. dev.
+      let genreCounts = {};     // Response distribution by gender
+      let ageCounts = {};       // Response distribution by age
       
       responses.forEach(row => {
         let answerStr = row[responsesColIndex];
         if (!answerStr) return;
         let rowHasAnswerForThisQuestion = false;
         let numericAnswer;
-        // On extrait l'âge (colonne 2) et l'enregistre si présent
+        // Get age from column 2
         let ageGroup = row[2] ? row[2].toString().trim() : "Inconnu";
         
-        // Découpage de la chaîne par '|'
+        // Split the response string by '|'
         let parts = answerStr.split('|');
         parts.forEach(part => {
           const splitIndex = part.indexOf(':');
@@ -360,7 +371,7 @@ function renderQuestionStats(questions, rawData) {
           let key = part.substring(0, splitIndex).trim();
           let value = part.substring(splitIndex + 1).trim();
           
-          // Si la clé correspond à la question (normalisation)
+          // If the key matches the question (after normalization)
           if (normalizeString(key) === normalizeString(question.question)) {
             counts[value] = (counts[value] || 0) + 1;
             rowHasAnswerForThisQuestion = true;
@@ -378,24 +389,24 @@ function renderQuestionStats(questions, rawData) {
         
         if (rowHasAnswerForThisQuestion) {
           totalResponses++;
-          // Compter le genre
+          // Count gender (index 1)
           let rowGenre = row[1] ? row[1].toString().trim() : "Inconnu";
           genreCounts[rowGenre] = (genreCounts[rowGenre] || 0) + 1;
-          // Compter la tranche d'âge
+          // Count age distribution (using ageGroup)
           ageCounts[ageGroup] = (ageCounts[ageGroup] || 0) + 1;
         }
       });
       
-      console.log(`Données pour "${question.question}":`, counts);
+      console.log(`Data for "${question.question}":`, counts);
       
       if (Object.keys(counts).length === 0) {
         const noDataMsg = document.createElement('p');
-        noDataMsg.innerText = `Aucune réponse pour la question "${question.question}".`;
+        noDataMsg.innerText = `No responses for question "${question.question}".`;
         container.appendChild(noDataMsg);
         return;
       }
       
-      // Calculer le mode
+      // Calculate mode
       let modeAnswer = "";
       let modeCount = 0;
       for (let ans in counts) {
@@ -405,7 +416,7 @@ function renderQuestionStats(questions, rawData) {
         }
       }
       
-      // Calculs numériques (pour barem et nps)
+      // Numerical calculations (for barem and nps)
       let average = "N/A", median = "N/A", minVal = "N/A", maxVal = "N/A", stdDev = "N/A";
       if (['barem', 'nps'].includes(question.type) && countNumeric > 0) {
         average = (sumNumeric / countNumeric).toFixed(2);
@@ -415,10 +426,10 @@ function renderQuestionStats(questions, rawData) {
         stdDev = calculateStdDev(numericValues);
       }
       
-      // Construction du résumé HTML enrichi
-      let summaryHTML = `<p><strong>Total réponses :</strong> ${totalResponses}</p>`;
-      summaryHTML += `<p><strong>Réponse la plus fréquente :</strong> ${modeAnswer} (${modeCount} fois, ${(modeCount / totalResponses * 100).toFixed(1)}%)</p>`;
-      summaryHTML += `<p><strong>Pourcentage par réponse :</strong></p>`;
+      // Build the enriched summary HTML
+      let summaryHTML = `<p><strong>Total responses:</strong> ${totalResponses}</p>`;
+      summaryHTML += `<p><strong>Most frequent response:</strong> ${modeAnswer} (${modeCount} times, ${(modeCount / totalResponses * 100).toFixed(1)}%)</p>`;
+      summaryHTML += `<p><strong>Percentage per response:</strong></p>`;
       summaryHTML += `<ul class="response-percentage-list">`;
       for (let ans in counts) {
         let percent = (counts[ans] / totalResponses * 100).toFixed(1);
@@ -428,16 +439,16 @@ function renderQuestionStats(questions, rawData) {
           (<span class="response-percent">${percent}%</span>)
         </li>`;
       }
-      summaryHTML += `</ul>`;      
+      summaryHTML += `</ul>`;
       
       if (['barem', 'nps'].includes(question.type)) {
-        summaryHTML += `<p><strong>Moyenne :</strong> ${average}</p>`;
-        summaryHTML += `<p><strong>Médiane :</strong> ${median}</p>`;
-        summaryHTML += `<p><strong>Min - Max :</strong> ${minVal} - ${maxVal}</p>`;
-        summaryHTML += `<p><strong>Écart-type :</strong> ${stdDev}</p>`;
+        summaryHTML += `<p><strong>Average:</strong> ${average}</p>`;
+        summaryHTML += `<p><strong>Median:</strong> ${median}</p>`;
+        summaryHTML += `<p><strong>Min - Max:</strong> ${minVal} - ${maxVal}</p>`;
+        summaryHTML += `<p><strong>Std. Dev.:</strong> ${stdDev}</p>`;
       }
       
-      summaryHTML += `<p><strong>Répartition par genre :</strong></p>`;
+      summaryHTML += `<p><strong>Distribution by gender:</strong></p>`;
       summaryHTML += `<ul class="distribution-list genre-list">`;
       for (let g in genreCounts) {
         let percentGenre = (genreCounts[g] / totalResponses * 100).toFixed(1);
@@ -449,8 +460,7 @@ function renderQuestionStats(questions, rawData) {
       }
       summaryHTML += `</ul>`;
       
-      
-      summaryHTML += `<p><strong>Répartition par tranche d'âge :</strong></p>`;
+      summaryHTML += `<p><strong>Distribution by age:</strong></p>`;
       summaryHTML += `<ul class="distribution-list age-list">`;
       for (let age in ageCounts) {
         let percentAge = (ageCounts[age] / totalResponses * 100).toFixed(1);
@@ -462,12 +472,11 @@ function renderQuestionStats(questions, rawData) {
       }
       summaryHTML += `</ul>`;
       
-      
-      // Création d'un wrapper affichant le graphique et le résumé côte à côte
+      // Create a wrapper displaying the chart and summary side by side
       const wrapper = document.createElement('div');
       wrapper.classList.add('question-stats-wrapper');
       
-      // Div contenant le canvas du graphique
+      // Div containing the chart canvas
       const canvasDiv = document.createElement('div');
       const canvas = document.createElement('canvas');
       canvas.id = 'questionChart_' + question.order;
@@ -475,7 +484,7 @@ function renderQuestionStats(questions, rawData) {
       canvas.height = 400;
       canvasDiv.appendChild(canvas);
       
-      // Div contenant le résumé
+      // Div containing the summary
       const summaryDiv = document.createElement('div');
       summaryDiv.classList.add('question-summary');
       summaryDiv.innerHTML = summaryHTML;
@@ -483,20 +492,20 @@ function renderQuestionStats(questions, rawData) {
       wrapper.appendChild(canvasDiv);
       wrapper.appendChild(summaryDiv);
       
-      // Titre de la question
+      // Title of the question
       const questionTitle = document.createElement('h3');
       questionTitle.innerText = `Question ${question.order} : ${question.question}`;
       container.appendChild(questionTitle);
       container.appendChild(wrapper);
       
-      // Création du graphique avec Chart.js
+      // Create the chart using Chart.js
       const ctx = canvas.getContext('2d');
       new Chart(ctx, {
         type: 'bar',
         data: {
           labels: Object.keys(counts),
           datasets: [{
-            label: 'Nombre de réponses',
+            label: 'Number of responses',
             data: Object.values(counts),
             backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#8e44ad', '#2ecc71']
           }]
@@ -507,12 +516,211 @@ function renderQuestionStats(questions, rawData) {
           scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
         }
       });
-    } // Fin du traitement pour cette question
+    } // End processing for this question
+  });
+}
+
+
+// Fonction pour charger les réponses ouvertes
+function loadOpenResponses() {
+  fetch(`${SCRIPT_URL}?action=getQuestions`)
+    .then(response => {
+      if (!response.ok) throw new Error('Erreur lors du chargement des questions');
+      return response.json();
+    })
+    .then(questionsData => {
+      return fetch(`${SCRIPT_URL}?action=getRawResponses`)
+        .then(response => {
+          if (!response.ok) throw new Error('Erreur lors du chargement des réponses');
+          return response.json();
+        })
+        .then(rawData => {
+          console.log('Raw Responses reçues :', rawData);
+          renderOpenResponses(questionsData.values, rawData);
+        });
+    })
+    .catch(error => {
+      console.error("Erreur lors du chargement des réponses ouvertes:", error);
+      showNotification('Erreur dans les réponses ouvertes : ' + error.message, 'error');
+    });
+}
+
+function getEmojiForUser(age, gender) {
+  // On s'assure de nettoyer les valeurs
+  age = age.trim();
+  gender = gender.toLowerCase().trim();
+
+  // Cas particuliers pour non-binaire ou genre fluide
+  if (gender === "non-binaire" || gender === "genre fluide") {
+    return "🧑"; // emoji neutre
+  }
+  
+  // Pour chaque tranche d'âge, on effectue un test exact (en fonction de vos valeurs dans le select)
+  if (age === "18-25") {
+    if (gender === "homme") return "👦";
+    if (gender === "femme") return "👧";
+    return "🧒";
+  }
+  if (age === "26-35") {
+    if (gender === "homme") return "👨";
+    if (gender === "femme") return "👩";
+    return "🧑";
+  }
+  if (age === "36-45") {
+    if (gender === "homme") return "🧔";
+    if (gender === "femme") return "👩‍🦰";
+    return "🧑";
+  }
+  if (age === "46-55") {
+    if (gender === "homme") return "👨‍🦳";
+    if (gender === "femme") return "👩‍🦳";
+    return "🧓";
+  }
+  if (age === "56+") {
+    if (gender === "homme") return "👴";
+    if (gender === "femme") return "👵";
+    return "🧓";
+  }
+  
+  // En cas de valeur non reconnue, retourner un emoji par défaut.
+  return "👤";
+}
+
+// Fonction pour charger et afficher les réponses ouvertes (questions de type text)
+function renderOpenResponses(questions, rawData) {
+  const container = document.getElementById('openResponsesContainer');
+  container.innerHTML = ''; // Réinitialiser le conteneur
+  
+  if (!rawData.headers || !rawData.responses) {
+    console.error("La structure des données brutes n'est pas correcte :", rawData);
+    container.innerHTML = '<p>Aucune donnée trouvée pour les réponses ouvertes.</p>';
+    return;
+  }
+  
+  const headers = rawData.headers;
+  const responses = rawData.responses;
+  
+  // Recherche de la colonne "reponses" (convertie en minuscules)
+  const responsesColIndex = headers.findIndex(h => h.trim().toLowerCase() === 'reponses');
+  if (responsesColIndex === -1) {
+    console.error("Colonne 'Réponses' introuvable dans les en-têtes:", headers);
+    container.innerHTML = '<p>Colonne "Réponses" non trouvée.</p>';
+    return;
+  }
+  
+  // Récupérer les valeurs des filtres
+  const filterGenre = document.getElementById('filterGenre').value.trim().toLowerCase();
+  const filterPoste = document.getElementById('filterPoste').value.trim().toLowerCase();
+  const filterAge = document.getElementById('filterAge').value.trim().toLowerCase();
+  const filterDateFrom = document.getElementById('filterDateFrom').value;
+  const filterDateTo = document.getElementById('filterDateTo').value;
+  
+  // Filtrer les réponses en fonction des filtres appliqués
+  let filteredResponses = responses.filter(row => {
+    let include = true;
+    // Date (index 0)
+    if (filterDateFrom) {
+      const fromDate = new Date(filterDateFrom);
+      const rowDate = new Date(row[0]);
+      if (rowDate < fromDate) include = false;
+    }
+    if (filterDateTo) {
+      const toDate = new Date(filterDateTo);
+      const rowDate = new Date(row[0]);
+      if (rowDate > toDate) include = false;
+    }
+    // Genre (index 1)
+    if (filterGenre) {
+      const rowGenre = row[1] ? row[1].toString().trim().toLowerCase() : "";
+      if (rowGenre !== filterGenre) include = false;
+    }
+    // Poste (index 3)
+    if (filterPoste) {
+      const rowPoste = row[3] ? row[3].toString().trim().toLowerCase() : "";
+      if (rowPoste !== filterPoste) include = false;
+    }
+    // Age (index 2)
+    if (filterAge) {
+      const rowAge = row[2] ? row[2].toString().trim().toLowerCase() : "";
+      if (rowAge !== filterAge) include = false;
+    }
+    return include;
+  });
+  
+  // Filtrer uniquement les questions de type "text"
+  const openQuestions = questions.filter(q => q.type === 'text');
+  if (openQuestions.length === 0) {
+    container.innerHTML = '<p>Aucune question ouverte trouvée.</p>';
+    return;
+  }
+  
+  // Pour chaque question ouverte, collecter et afficher les réponses
+  openQuestions.forEach(question => {
+    // Créer un titre pour la question
+    const questionHeader = document.createElement('h4');
+    questionHeader.classList.add('open-responses-header-inside');
+    questionHeader.innerText = `Question ${question.order} : ${question.question}`;
+    container.appendChild(questionHeader);
+    
+    // Créer une liste pour les réponses
+    const ul = document.createElement('ul');
+    ul.classList.add('open-responses-list');
+    
+    // Parcourir chaque ligne de réponse dans le tableau filtré
+    filteredResponses.forEach(row => {
+      const answerStr = row[responsesColIndex];
+      if (!answerStr) return;
+      
+      // Récupérer le genre (index 1), l'âge (index 2) et le poste (index 3)
+      const genderStr = row[1] ? row[1].toString().trim() : "Inconnu";
+      const ageStr = row[2] ? row[2].toString().trim() : "Inconnu";
+      const posteStr = row[3] ? row[3].toString().trim() : "Inconnu";
+      
+      // Découper la chaîne des réponses avec le séparateur "|"
+      const parts = answerStr.split('|');
+      parts.forEach(part => {
+        const splitIndex = part.indexOf(':');
+        if (splitIndex === -1) return;
+        
+        const key = part.substring(0, splitIndex).trim();
+        const value = part.substring(splitIndex + 1).trim();
+        
+        // Comparer la clé (normalisée) avec le texte de la question
+        if (normalizeString(key) === normalizeString(question.question)) {
+          // Récupérer l'emoji en fonction de l'âge et du genre
+          const emoji = getEmojiForUser(ageStr, genderStr);
+          // Créer un élément de liste avec l'emoji, le texte de la réponse et le détail dans des spans
+          const li = document.createElement('li');
+          li.innerHTML = `<span class="user-icon">${emoji}</span> <span class="response-text">"${value}"</span> <span class="user-details">( <span class="user-gender">${genderStr}</span>, <span class="user-age">${ageStr}</span>, <span class="user-poste">${posteStr}</span> )</span>`;
+          ul.appendChild(li);
+        }
+      });
+    });
+    
+    // Si aucune réponse trouvée pour cette question, afficher un message
+    if (!ul.hasChildNodes()) {
+      const li = document.createElement('li');
+      li.innerText = 'Aucune réponse.';
+      ul.appendChild(li);
+    }
+    
+    container.appendChild(ul);
   });
 }
 
 // Écouteur sur le bouton "Appliquer filtre" (pour relancer les stats)
 document.getElementById('applyFilters').addEventListener('click', function(e) {
   e.preventDefault();
+  const applyFilters = document.getElementById('applyFilters');
+  applyFilters.style.opacity = '0.5';
+  applyFilters.style.cursor = 'not-allowed';
+  applyFilters.disabled = true;
+  applyFilters.textContent = 'Chargement...';
+  setTimeout(() => {
+    applyFilters.style.opacity = '1';
+    applyFilters.style.cursor = 'pointer';
+    applyFilters.disabled = false;
+    applyFilters.textContent = 'Appliquer filtres';
+  }, 3000);
   loadStats();
 });

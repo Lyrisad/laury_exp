@@ -1,5 +1,5 @@
 // Configuration
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby01JYE_cdckYrG_cHLQMcsgkqKb_0JJD_oxlqDf2_-OeKglJMgVOqDGAmFKQ3Pba5OSQ/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2DeyjOF5lfcUIsGTh_viiyQEJvCW76-hf8lxPOcRpKBzBYigosCkVoXO9wIzt5jxJ/exec';
 const ADMIN_CREDENTIALS = {
     username: 'admin',
     password: 'password123' // À changer en production
