@@ -914,8 +914,40 @@
     font-weight: 600;
     transition: all 0.3s;
 }
+
 #toggleStats:hover {
     background-color: #009387;
+}
+
+@media screen and (max-width: 768px) {
+    #toggleStats {
+        bottom: 15px;
+        left: 15px;
+        padding: 0.9rem 1.5rem;
+        font-size: 0.9rem;
+        border-radius: 20px;
+        background-color: #ffffff;
+        color: #00b09b;
+        border: 2px solid #00b09b;
+    }
+
+    #toggleStats:hover {
+        background-color: #00b09b;
+        color: #ffffff;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #toggleStats {
+        bottom: 70px;
+        left: 20px;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        width: calc(100% - 40px); /* Full width minus margins */
+        text-align: center;
+        border-radius: 30px;
+        box-shadow: none;
+    }
 }
 
 /* === Statistiques par question === */
@@ -1137,12 +1169,37 @@
   #closeQuestionnaire{
     background-color: #ffffff;
     color: #ff3333;
-    border: 2px solid #ff3333;
+    border: 1px solid #ff3333;
     margin-left: 10px;
+    padding: 0.9rem 2rem;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-align: center;
   }
 
   #closeQuestionnaire:hover{
     background-color: #ff3333;
     color: #ffffff;
-    border: 2px solid #ff3333;
+    border: 1px solid #ff3333;
   }
+
+  @media screen and (max-width: 768px) {
+    #closeQuestionnaire {
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px 20px;
+      font-size: 1rem;
+    }
+
+    #addQuestion{
+        width: 100% !important;
+        margin: 10px 0;
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+  }
+
+  
