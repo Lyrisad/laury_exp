@@ -90,6 +90,29 @@
         </section>
         <section class="admin-statistics" id="adminStatistics" style="display: none;">
             <h2><span class="admin-stats-icon">📊</span> Statistiques du Questionnaire <button id="extractStats" class="extract-button">Extraire toutes les statistiques</button></h2>
+            <!-- Section d'analyse des clics -->
+            <div class="click-analytics">
+                <h3><span class="admin-stats-icon">🖱️</span> Analyse des Clics</h3>
+                <div class="click-stats-container">
+                    <div class="click-stat-card">
+                        <h4>Total des Clics</h4>
+                        <p id="totalClicks">0</p>
+                    </div>
+                    <div class="click-stat-card">
+                        <h4>Vues de Page</h4>
+                        <p id="totalPageViews">0</p>
+                    </div>
+                    <div class="click-stat-card">
+                        <h4>Taux de Clic (CTR)</h4>
+                        <p id="clickThroughRate">0%</p>
+                    </div>
+                </div>
+                <div class="click-details">
+                    <h4>Détails par Catégorie</h4>
+                    <div id="clickDetailsContainer"></div>
+                </div>
+            </div>
+            <!-- Fin de la section d'analyse des clics -->
             <form id="statsFilters">
               <div>
                 <label for="filterGenre">Filtrer par Genre :</label>
@@ -187,5 +210,6 @@
 
     <script src="admin.js"></script>
     <script src="stats.js"></script>
+    <script src="clickTracker.js"></script>
 </body>
 </html> 

@@ -1,5 +1,5 @@
 // Configuration
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgw7jsDjOOsOOIHP7QiuQhcsujugSL_zh676HN0K6tjuWFSAqXs-wsyRqLq8Nc3nb8cA/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxktrnh2OUpspGSAudenKRGxrIFAiXu4YpHTiVtctz7bC3kSXc9T9HwgNMADjP_5ZE0/exec';
 const ADMIN_CREDENTIALS = {
     username: 'admin',
     password: 'password123' // À changer en production
@@ -221,6 +221,7 @@ function loginUser() {
     document.getElementById('loginForm').style.display = 'none';
     questionsManagement.style.display = 'block';
     logoutButton.style.display = 'block';
+    document.getElementById('toggleStats').style.display = 'block';
     loadQuestions();
     showNotification('Connexion réussie', 'success');
 }
@@ -230,6 +231,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const sessionCookie = getCookie('adminSession');
     if (sessionCookie === 'true') {
         loginUser();
+    } else {
+        document.getElementById('toggleStats').style.display = 'none';
     }
 });
 
@@ -250,6 +253,7 @@ loginForm.addEventListener('submit', function(e) {
 // Gestion de la déconnexion
 logoutButton.addEventListener('click', function() {
     deleteCookie('adminSession');
+    document.getElementById('toggleStats').style.display = 'none';
     window.location.reload();
 });
 
@@ -713,4 +717,61 @@ document.getElementById('closeQuestionnaireConfirm').addEventListener('click', f
             console.error('Erreur détaillée:', error);
             showNotification('Erreur lors de la mise à jour du statut : ' + error.message, 'error');
         });
+});
+
+// Fonction pour mettre à jour les statistiques de clics
+function updateClickStats() {
+    const params = new URLSearchParams({
+        action: 'getClickStats'
+    });
+
+    fetch(`${SCRIPT_URL}?${params.toString()}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            
+            // Mettre à jour les statistiques globales
+            document.getElementById('totalClicks').textContent = data.totalClicks;
+            document.getElementById('totalPageViews').textContent = data.totalPageViews;
+            document.getElementById('clickThroughRate').textContent = `${data.ctr.toFixed(2)}%`;
+            
+            // Mettre à jour les détails par catégorie
+            const detailsContainer = document.getElementById('clickDetailsContainer');
+            detailsContainer.innerHTML = '';
+            
+            for (const [category, items] of Object.entries(data.clickData)) {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'click-detail-item';
+                categoryDiv.innerHTML = `<h5>${category}</h5>`;
+                
+                for (const [elementId, stats] of Object.entries(items)) {
+                    const elementDiv = document.createElement('div');
+                    elementDiv.innerHTML = `
+                        <p><strong>${elementId}:</strong> ${stats.count} clics</p>
+                        <p>Dernier clic: ${new Date(stats.timestamps[stats.timestamps.length - 1]).toLocaleString()}</p>
+                    `;
+                    categoryDiv.appendChild(elementDiv);
+                }
+                
+                detailsContainer.appendChild(categoryDiv);
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération des statistiques de clics:', error);
+        });
+}
+
+// Mettre à jour les statistiques de clics toutes les 30 secondes
+setInterval(updateClickStats, 30000);
+
+// Mettre à jour les statistiques de clics au chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+    updateClickStats();
 }); 
