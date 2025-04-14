@@ -39,13 +39,13 @@ function getFiltersQuery() {
   return params.toString();
 }
 
+let globalStatsData = null;
   
-// Charge toutes les statistiques (globales, par question et réponses ouvertes)
 function loadStats() {
   const filters = getFiltersQuery();
   const url = `${SCRIPT_URL}?action=getStats${filters ? '&' + filters : ''}`;
   
-  // Récupération des stats globales existantes
+  // Retrieve global stats from the API
   fetch(url)
     .then(response => {
       if (!response.ok) throw new Error('Erreur lors du chargement des statistiques');
@@ -53,10 +53,9 @@ function loadStats() {
     })
     .then(data => {
       if (data.error) throw new Error(data.error);
+      globalStatsData = data.stats; // Save for extraction later
       renderStats(data.stats);
-      // Charger les statistiques par question
       loadQuestionStats();
-      // Charger les réponses ouvertes
       loadOpenResponses();
     })
     .catch(error => {
@@ -64,6 +63,7 @@ function loadStats() {
       showNotification('Erreur lors du chargement des statistiques : ' + error.message, 'error');
     });
 }
+
   
 // Vos fonctions renderStats() globales (exemples existants)
 function renderStats(stats) {
@@ -77,7 +77,7 @@ function renderStats(stats) {
     return canvas.getContext('2d');
   }
   
-  // Exemple 1 : Total questionnaires (Doughnut)
+  // Total questionnaires (Doughnut)
   const totalCtx = prepareCanvas('totalQuestionnairesChart');
   if (totalChart) totalChart.destroy();
   totalChart = new Chart(totalCtx, {
@@ -91,11 +91,20 @@ function renderStats(stats) {
     },
     options: {
       responsive: false,
-      plugins: { legend: { display: false } }
+      plugins: { 
+        legend: { display: false },
+        title: {
+          display: true,
+          text: 'Total des Questionnaires',
+          font: {
+            size: 16
+          }
+        }
+      }
     }
   });
     
-  // Exemple 2 : Répartition par genre (Pie)
+  // Répartition par genre (Pie)
   const genres = Object.keys(stats.parGenre);
   const genreValues = Object.values(stats.parGenre);
   const genreCtx = prepareCanvas('genreChart');
@@ -111,11 +120,20 @@ function renderStats(stats) {
     },
     options: {
       responsive: false,
-      plugins: { legend: { position: 'bottom' } }
+      plugins: { 
+        legend: { position: 'bottom' },
+        title: {
+          display: true,
+          text: 'Répartition par Genre',
+          font: {
+            size: 16
+          }
+        }
+      }
     }
   });
     
-  // Exemple 3 : Répartition par poste (Bar Chart)
+  // Répartition par poste (Bar Chart)
   const postes = Object.keys(stats.parPoste);
   const posteValues = Object.values(stats.parPoste);
   const posteCtx = prepareCanvas('posteChart');
@@ -132,11 +150,20 @@ function renderStats(stats) {
     },
     options: {
       responsive: false,
+      plugins: {
+        title: {
+          display: true,
+          text: 'Répartition par Poste',
+          font: {
+            size: 16
+          }
+        }
+      },
       scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
     }
   });
     
-  // Exemple 4 : Satisfaction moyenne (Bar Chart)
+  // Satisfaction moyenne (Bar Chart)
   const satisfactionCtx = prepareCanvas('satisfactionChart');
   if (satisfactionChart) satisfactionChart.destroy();
   satisfactionChart = new Chart(satisfactionCtx, {
@@ -151,11 +178,20 @@ function renderStats(stats) {
     },
     options: {
       responsive: false,
+      plugins: {
+        title: {
+          display: true,
+          text: 'Satisfaction Moyenne',
+          font: {
+            size: 16
+          }
+        }
+      },
       scales: { y: { beginAtZero: true, suggestedMax: 10 } }
     }
   });
     
-  // Exemple 5 : Répartition par tranche d'âge (Pie) – si stats.parAge existe
+  // Répartition par tranche d'âge (Pie)
   if (stats.parAge) {
     const ages = Object.keys(stats.parAge);
     const ageValues = Object.values(stats.parAge);
@@ -167,17 +203,26 @@ function renderStats(stats) {
         labels: ages,
         datasets: [{
           data: ageValues,
-          backgroundColor: ['#f39c12', '#e74c3c', '#3498db']
+          backgroundColor: ['#f39c12', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6']
         }]
       },
       options: {
         responsive: false,
-        plugins: { legend: { position: 'bottom' } }
+        plugins: { 
+          legend: { position: 'bottom' },
+          title: {
+            display: true,
+            text: 'Répartition par Tranche d\'Âge',
+            font: {
+              size: 16
+            }
+          }
+        }
       }
     });
   }
   
-  // Exemple 6 : Distribution des notes de satisfaction (Bar Chart)
+  // Distribution des notes de satisfaction (Bar Chart)
   if (stats.satisfactionDistribution) {
     const satisLabels = Object.keys(stats.satisfactionDistribution);
     const satisValues = Object.values(stats.satisfactionDistribution);
@@ -195,6 +240,15 @@ function renderStats(stats) {
       },
       options: {
         responsive: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Distribution des Notes de Satisfaction',
+            font: {
+              size: 16
+            }
+          }
+        },
         scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
       }
     });
@@ -724,3 +778,317 @@ document.getElementById('applyFilters').addEventListener('click', function(e) {
   }, 3000);
   loadStats();
 });
+
+// Fonction utilitaire pour formater la date
+function getFormattedDate() {
+  const now = new Date();
+  return now.toISOString().split('T')[0].replace(/-/g, '');
+}
+
+// Fonction utilitaire pour créer une cellule avec style
+function createStyledCell(value, isBold = false) {
+  return {
+    v: value,
+    t: 's',
+    s: {
+      font: {
+        bold: isBold,
+        sz: isBold ? 12 : 11,
+        color: { rgb: "000000" }
+      },
+      alignment: {
+        horizontal: "left",
+        vertical: "center"
+      },
+      fill: {
+        fgColor: { rgb: isBold ? "E6E6E6" : "FFFFFF" }
+      }
+    }
+  };
+}
+
+// --- Extraction for ALL stats into one Excel workbook
+function exportAllToExcel() {
+  if (!globalStatsData) {
+    alert("Global statistics are not yet loaded.");
+    return;
+  }
+  
+  // ----------- Global Stats Sheet ---------------
+  let globalSheetData = [];
+  
+  // En-tête avec style
+  globalSheetData.push([createStyledCell("Statistiques Globales - " + new Date().toLocaleDateString(), true)]);
+  globalSheetData.push([]);
+  
+  // Statistiques de base
+  globalSheetData.push([createStyledCell("Statistiques Générales", true)]);
+  globalSheetData.push([createStyledCell("Métrique", true), createStyledCell("Valeur", true)]);
+  globalSheetData.push(["Total des Questionnaires", globalStatsData.totalQuestionnaires]);
+  globalSheetData.push(["Satisfaction Moyenne", globalStatsData.moyenneSatisfaction.toFixed(2)]);
+  globalSheetData.push([]);
+  
+  // Distribution par Genre
+  globalSheetData.push([createStyledCell("Distribution par Genre", true)]);
+  globalSheetData.push([createStyledCell("Genre", true), createStyledCell("Nombre", true), createStyledCell("Pourcentage", true)]);
+  const totalGenre = Object.values(globalStatsData.parGenre).reduce((a, b) => a + b, 0);
+  for (let key in globalStatsData.parGenre) {
+    const count = globalStatsData.parGenre[key];
+    const percentage = ((count / totalGenre) * 100).toFixed(1) + "%";
+    globalSheetData.push([key, count, percentage]);
+  }
+  globalSheetData.push([]);
+  
+  // Distribution par Poste
+  globalSheetData.push([createStyledCell("Distribution par Poste", true)]);
+  globalSheetData.push([createStyledCell("Poste", true), createStyledCell("Nombre", true), createStyledCell("Pourcentage", true)]);
+  const totalPoste = Object.values(globalStatsData.parPoste).reduce((a, b) => a + b, 0);
+  for (let key in globalStatsData.parPoste) {
+    const count = globalStatsData.parPoste[key];
+    const percentage = ((count / totalPoste) * 100).toFixed(1) + "%";
+    globalSheetData.push([key, count, percentage]);
+  }
+  globalSheetData.push([]);
+  
+  // Distribution par Âge
+  globalSheetData.push([createStyledCell("Distribution par Tranche d'Âge", true)]);
+  globalSheetData.push([createStyledCell("Tranche d'Âge", true), createStyledCell("Nombre", true), createStyledCell("Pourcentage", true)]);
+  const totalAge = Object.values(globalStatsData.parAge).reduce((a, b) => a + b, 0);
+  for (let key in globalStatsData.parAge) {
+    const count = globalStatsData.parAge[key];
+    const percentage = ((count / totalAge) * 100).toFixed(1) + "%";
+    globalSheetData.push([key, count, percentage]);
+  }
+  globalSheetData.push([]);
+  
+  // Distribution des Notes de Satisfaction
+  globalSheetData.push([createStyledCell("Distribution des Notes de Satisfaction", true)]);
+  globalSheetData.push([createStyledCell("Note", true), createStyledCell("Nombre", true), createStyledCell("Pourcentage", true)]);
+  const totalSatisfaction = Object.values(globalStatsData.satisfactionDistribution).reduce((a, b) => a + b, 0);
+  for (let key in globalStatsData.satisfactionDistribution) {
+    const count = globalStatsData.satisfactionDistribution[key];
+    const percentage = ((count / totalSatisfaction) * 100).toFixed(1) + "%";
+    globalSheetData.push([key, count, percentage]);
+  }
+  
+  let wsGlobal = XLSX.utils.aoa_to_sheet(globalSheetData);
+  wsGlobal['!cols'] = [{ wch: 25 }, { wch: 15 }, { wch: 15 }];
+  
+  // ----------- Question Stats Sheet ---------------
+  const qsContainer = document.getElementById('questionStatsContainer');
+  let qsSheetData = [[createStyledCell("Statistiques par Question - " + new Date().toLocaleDateString(), true)]];
+  qsSheetData.push([]);
+  
+  if (qsContainer) {
+    const questions = qsContainer.querySelectorAll('.question-stats-wrapper');
+    questions.forEach((question, index) => {
+      const title = question.previousElementSibling.textContent;
+      qsSheetData.push([createStyledCell(title, true)]);
+      qsSheetData.push([createStyledCell("Réponse", true), createStyledCell("Nombre", true), createStyledCell("Pourcentage", true)]);
+      
+      const summaryDiv = question.querySelector('.question-summary');
+      if (summaryDiv) {
+        const responseList = summaryDiv.querySelector('.response-percentage-list');
+        if (responseList) {
+          const responses = responseList.querySelectorAll('li');
+          responses.forEach(response => {
+            const label = response.querySelector('.response-label').textContent.replace(':', '');
+            const count = response.querySelector('.response-count').textContent;
+            const percent = response.querySelector('.response-percent').textContent;
+            qsSheetData.push([label, count, percent]);
+          });
+        }
+      }
+      qsSheetData.push([]);
+    });
+  }
+  
+  let wsQuestions = XLSX.utils.aoa_to_sheet(qsSheetData);
+  wsQuestions['!cols'] = [{ wch: 40 }, { wch: 15 }, { wch: 15 }];
+  
+  // ----------- Open Responses Sheet ---------------
+  const orContainer = document.getElementById('openResponsesContainer');
+  let orSheetData = [[createStyledCell("Réponses Ouvertes - " + new Date().toLocaleDateString(), true)]];
+  orSheetData.push([]);
+  
+  if (orContainer) {
+    const questions = orContainer.querySelectorAll('h4');
+    questions.forEach(question => {
+      orSheetData.push([createStyledCell(question.textContent, true)]);
+      orSheetData.push([createStyledCell("Réponse", true), createStyledCell("Genre", true), createStyledCell("Âge", true), createStyledCell("Poste", true)]);
+      
+      const responses = question.nextElementSibling.querySelectorAll('li');
+      responses.forEach(response => {
+        const text = response.querySelector('.response-text').textContent.replace(/"/g, '');
+        const gender = response.querySelector('.user-gender').textContent;
+        const age = response.querySelector('.user-age').textContent;
+        const poste = response.querySelector('.user-poste').textContent;
+        orSheetData.push([text, gender, age, poste]);
+      });
+      orSheetData.push([]);
+    });
+  }
+  
+  let wsOpen = XLSX.utils.aoa_to_sheet(orSheetData);
+  wsOpen['!cols'] = [{ wch: 50 }, { wch: 15 }, { wch: 15 }, { wch: 25 }];
+  
+  // Créer le workbook et ajouter les feuilles
+  let wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, wsGlobal, "Statistiques Globales");
+  XLSX.utils.book_append_sheet(wb, wsQuestions, "Statistiques Questions");
+  XLSX.utils.book_append_sheet(wb, wsOpen, "Réponses Ouvertes");
+  
+  const dateStr = getFormattedDate();
+  XLSX.writeFile(wb, `Questionnaire_Statistics_${dateStr}.xlsx`);
+}
+
+// --- Extraction for Global Stats individually
+function exportGlobalStatsToExcel() {
+  if (!globalStatsData) {
+    alert("Les statistiques globales ne sont pas chargées.");
+    return;
+  }
+  
+  let data = [];
+  data.push([createStyledCell("Statistiques Globales - " + new Date().toLocaleDateString(), true)]);
+  data.push([]);
+  
+  // Statistiques de base
+  data.push([createStyledCell("Statistiques Générales", true)]);
+  data.push([createStyledCell("Métrique", true), createStyledCell("Valeur", true)]);
+  data.push(["Total des Questionnaires", globalStatsData.totalQuestionnaires]);
+  data.push(["Satisfaction Moyenne", globalStatsData.moyenneSatisfaction.toFixed(2)]);
+  data.push([]);
+  
+  // Distribution par Genre
+  data.push([createStyledCell("Distribution par Genre", true)]);
+  data.push([createStyledCell("Genre", true), createStyledCell("Nombre", true), createStyledCell("Pourcentage", true)]);
+  const totalGenre = Object.values(globalStatsData.parGenre).reduce((a, b) => a + b, 0);
+  for (let key in globalStatsData.parGenre) {
+    const count = globalStatsData.parGenre[key];
+    const percentage = ((count / totalGenre) * 100).toFixed(1) + "%";
+    data.push([key, count, percentage]);
+  }
+  data.push([]);
+  
+  // Distribution par Poste
+  data.push([createStyledCell("Distribution par Poste", true)]);
+  data.push([createStyledCell("Poste", true), createStyledCell("Nombre", true), createStyledCell("Pourcentage", true)]);
+  const totalPoste = Object.values(globalStatsData.parPoste).reduce((a, b) => a + b, 0);
+  for (let key in globalStatsData.parPoste) {
+    const count = globalStatsData.parPoste[key];
+    const percentage = ((count / totalPoste) * 100).toFixed(1) + "%";
+    data.push([key, count, percentage]);
+  }
+  data.push([]);
+  
+  // Distribution par Âge
+  data.push([createStyledCell("Distribution par Tranche d'Âge", true)]);
+  data.push([createStyledCell("Tranche d'Âge", true), createStyledCell("Nombre", true), createStyledCell("Pourcentage", true)]);
+  const totalAge = Object.values(globalStatsData.parAge).reduce((a, b) => a + b, 0);
+  for (let key in globalStatsData.parAge) {
+    const count = globalStatsData.parAge[key];
+    const percentage = ((count / totalAge) * 100).toFixed(1) + "%";
+    data.push([key, count, percentage]);
+  }
+  data.push([]);
+  
+  // Distribution des Notes de Satisfaction
+  data.push([createStyledCell("Distribution des Notes de Satisfaction", true)]);
+  data.push([createStyledCell("Note", true), createStyledCell("Nombre", true), createStyledCell("Pourcentage", true)]);
+  const totalSatisfaction = Object.values(globalStatsData.satisfactionDistribution).reduce((a, b) => a + b, 0);
+  for (let key in globalStatsData.satisfactionDistribution) {
+    const count = globalStatsData.satisfactionDistribution[key];
+    const percentage = ((count / totalSatisfaction) * 100).toFixed(1) + "%";
+    data.push([key, count, percentage]);
+  }
+  
+  let ws = XLSX.utils.aoa_to_sheet(data);
+  ws['!cols'] = [{ wch: 25 }, { wch: 15 }, { wch: 15 }];
+  
+  let wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Statistiques Globales");
+  
+  const dateStr = getFormattedDate();
+  XLSX.writeFile(wb, `Global_Statistics_${dateStr}.xlsx`);
+}
+
+// --- Extraction for Question Stats individually
+function exportQuestionStatsToExcel() {
+  const container = document.getElementById('questionStatsContainer');
+  let data = [[createStyledCell("Statistiques par Question - " + new Date().toLocaleDateString(), true)]];
+  data.push([]);
+  
+  if (container) {
+    const questions = container.querySelectorAll('.question-stats-wrapper');
+    questions.forEach((question, index) => {
+      const title = question.previousElementSibling.textContent;
+      data.push([createStyledCell(title, true)]);
+      data.push([createStyledCell("Réponse", true), createStyledCell("Nombre", true), createStyledCell("Pourcentage", true)]);
+      
+      const summaryDiv = question.querySelector('.question-summary');
+      if (summaryDiv) {
+        const responseList = summaryDiv.querySelector('.response-percentage-list');
+        if (responseList) {
+          const responses = responseList.querySelectorAll('li');
+          responses.forEach(response => {
+            const label = response.querySelector('.response-label').textContent.replace(':', '');
+            const count = response.querySelector('.response-count').textContent;
+            const percent = response.querySelector('.response-percent').textContent;
+            data.push([label, count, percent]);
+          });
+        }
+      }
+      data.push([]);
+    });
+  }
+  
+  let ws = XLSX.utils.aoa_to_sheet(data);
+  ws['!cols'] = [{ wch: 40 }, { wch: 15 }, { wch: 15 }];
+  
+  let wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Statistiques Questions");
+  
+  const dateStr = getFormattedDate();
+  XLSX.writeFile(wb, `Question_Statistics_${dateStr}.xlsx`);
+}
+
+// --- Extraction for Open Responses individually
+function exportOpenResponsesToExcel() {
+  const container = document.getElementById('openResponsesContainer');
+  let data = [[createStyledCell("Réponses Ouvertes - " + new Date().toLocaleDateString(), true)]];
+  data.push([]);
+  
+  if (container) {
+    const questions = container.querySelectorAll('h4');
+    questions.forEach(question => {
+      data.push([createStyledCell(question.textContent, true)]);
+      data.push([createStyledCell("Réponse", true), createStyledCell("Genre", true), createStyledCell("Âge", true), createStyledCell("Poste", true)]);
+      
+      const responses = question.nextElementSibling.querySelectorAll('li');
+      responses.forEach(response => {
+        const text = response.querySelector('.response-text').textContent.replace(/"/g, '');
+        const gender = response.querySelector('.user-gender').textContent;
+        const age = response.querySelector('.user-age').textContent;
+        const poste = response.querySelector('.user-poste').textContent;
+        data.push([text, gender, age, poste]);
+      });
+      data.push([]);
+    });
+  }
+  
+  let ws = XLSX.utils.aoa_to_sheet(data);
+  ws['!cols'] = [{ wch: 50 }, { wch: 15 }, { wch: 15 }, { wch: 25 }];
+  
+  let wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Réponses Ouvertes");
+  
+  const dateStr = getFormattedDate();
+  XLSX.writeFile(wb, `Open_Responses_${dateStr}.xlsx`);
+}
+
+// --- Attach event listeners to extraction buttons
+document.getElementById('extractStats').addEventListener('click', exportAllToExcel);
+document.getElementById('extractGeneralStats').addEventListener('click', exportGlobalStatsToExcel);
+document.getElementById('extractQuestionStats').addEventListener('click', exportQuestionStatsToExcel);
+document.getElementById('extractOpenResponses').addEventListener('click', exportOpenResponsesToExcel);

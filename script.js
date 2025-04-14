@@ -1,5 +1,5 @@
 // Configuration
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2DeyjOF5lfcUIsGTh_viiyQEJvCW76-hf8lxPOcRpKBzBYigosCkVoXO9wIzt5jxJ/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgw7jsDjOOsOOIHP7QiuQhcsujugSL_zh676HN0K6tjuWFSAqXs-wsyRqLq8Nc3nb8cA/exec';
 
 // Éléments du DOM
 let form = null;
@@ -54,9 +54,51 @@ function initQuestionnaire() {
     questionsContainer = document.getElementById('questionsContainer');
     
     if (form && questionsContainer) {
-        loadQuestions();
-        form.addEventListener('submit', submitQuestionnaire);
+        checkQuestionnaireStatus();
     }
+}
+
+// Fonction pour vérifier l'état du questionnaire
+function checkQuestionnaireStatus() {
+    const params = new URLSearchParams({
+        action: 'getQuestionnaireStatus'
+    });
+
+    fetch(`${SCRIPT_URL}?${params.toString()}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            
+            const questionnaireClosed = document.getElementById('questionnaire-closed');
+            const questionnaireForm = document.getElementById('questionnaireForm');
+            
+            if (data.status === "TRUE") {
+                questionnaireClosed.style.display = 'none';
+                questionnaireForm.style.display = 'block';
+                loadQuestions();
+            } else {
+                questionnaireClosed.style.display = 'block';
+                questionnaireForm.style.display = 'none';
+                questionsContainer.innerHTML = '';
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la vérification du statut:', error);
+            showNotification(translations[currentLanguage].notificationStatusError, 'error');
+            
+            const questionnaireClosed = document.getElementById('questionnaire-closed');
+            const questionnaireForm = document.getElementById('questionnaireForm');
+            questionnaireClosed.style.display = 'block';
+            questionnaireForm.style.display = 'none';
+            questionsContainer.innerHTML = '';
+        });
 }
 
 // Charger les questions depuis la Web App (via GET)
@@ -81,89 +123,341 @@ function loadQuestions() {
                 displayQuestions(data.values);
             } else {
                 console.warn('Aucune question trouvée');
-                questionsContainer.innerHTML = '<p>Aucune question trouvée</p>';
+                questionsContainer.innerHTML = `<p>${translations[currentLanguage].notificationNoQuestions}</p>`;
             }
         })
         .catch(error => {
             console.error('Erreur:', error);
-            questionsContainer.innerHTML = `<p class="error">Erreur lors du chargement des questions: ${error.message}</p>`;
+            questionsContainer.innerHTML = `<p class="error">${translations[currentLanguage].notificationLoadingError}: ${error.message}</p>`;
         });
 }
 
-// Afficher les questions dans le formulaire
-function displayQuestions(questions) {
+function autoTranslateText(text, targetLang) {
+    if (targetLang === 'fr') return Promise.resolve(text);
+    const params = new URLSearchParams({
+      action: "translate",
+      text: text,
+      targetLang: targetLang
+    });
+    return fetch(`${SCRIPT_URL}?${params.toString()}`, {
+      method: "GET"
+    })
+    .then(response => {
+      if (!response.ok) {
+        return response.text().then(errText => { 
+          throw new Error("Translation error: " + errText);
+        });
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Server translation result:", data);
+      return data.translatedText;
+    })
+    .catch(error => {
+      console.error("Translation error:", error);
+      return text;
+    });
+  }
+  
+  function displayQuestions(questions) {
+    // Clear container and sort questions by order
     questionsContainer.innerHTML = '';
     questions.sort((a, b) => a.order - b.order);
 
     questions.forEach((question, index) => {
+        // Create a container for each question
         const questionElement = document.createElement('div');
         questionElement.className = 'form-group';
-        questionElement.innerHTML = `
-            <div class="question-separator">Question ${index + 1}</div>
-            <label data-question="Question ${question.order}">${question.question}</label>
-            ${createResponseInput(question.type, question.responses, index)}
-        `;
+
+        // Create and append a separator (e.g. "Question 1")
+        const separator = document.createElement('div');
+        separator.className = 'question-separator';
+        separator.textContent = `Question ${index + 1}`;
+        questionElement.appendChild(separator);
+
+        // Create the label for the question and store the original text
+        const label = document.createElement('label');
+        label.setAttribute('data-original', question.question);
+        label.setAttribute('data-question', `Question ${question.order}`);
+        label.textContent = question.question;
+        // If the current language is not French, translate the text
+        if (typeof currentLanguage !== 'undefined' && currentLanguage !== 'fr') {
+            label.textContent = "translation loading...";
+            autoTranslateText(question.question, currentLanguage)
+                .then(translatedText => {
+                    console.log(`Question ${question.order} translated:`, translatedText);
+                    label.textContent = translatedText;
+                })
+                .catch(error => {
+                    console.error("Error during question translation:", error);
+                    label.textContent = question.question;
+                });
+        }
+        questionElement.appendChild(label);
+
+        // Create the response input element by calling createResponseInput
+        let inputContent = createResponseInput(question.type, question.responses, index);
+        // If inputContent is a string (e.g. for textarea), use innerHTML,
+        // otherwise (for radio, checkbox, barem, nps) it is a DOM node.
+        if (typeof inputContent === "string") {
+            const inputContainer = document.createElement('div');
+            inputContainer.innerHTML = inputContent;
+            questionElement.appendChild(inputContainer);
+        } else {
+            questionElement.appendChild(inputContent);
+        }
+
+        // Append the question element to the container
         questionsContainer.appendChild(questionElement);
     });
 
-    // Initialiser les étoiles de notation
-    initializeRatingStars();
+    // After building the questions, reassign IDs and call initialization for rating and nps events
+    setTimeout(() => {
+        const formGroups = questionsContainer.querySelectorAll('.form-group');
+        formGroups.forEach((group, index) => {
+            const questionName = `q${index + 1}`;
+            const inputs = group.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                if (!input.id) {
+                    input.id = `${questionName}-${input.type || 'text'}`;
+                }
+                if (!input.name) {
+                    input.name = questionName;
+                }
+                input.tabIndex = 0;
+            });
+            const labels = group.querySelectorAll('label');
+            labels.forEach(label => {
+                if (label.htmlFor && !document.getElementById(label.htmlFor)) {
+                    const firstInput = group.querySelector('input, textarea');
+                    if (firstInput) {
+                        label.htmlFor = firstInput.id;
+                    }
+                }
+            });
+        });
+        // Reinitialize rating and nps events for barem and nps types:
+        initializeRatingStars();
+        initializeNps();
+    }, 0);
 }
 
-// Créer l'input approprié selon le type de réponse
+
+// Function to update all question labels (and option labels) when language changes
+function updateTranslatedQuestions() {
+    // Update question labels
+    const questionLabels = document.querySelectorAll('label[data-original]');
+    questionLabels.forEach(label => {
+        const originalText = label.getAttribute('data-original');
+        if (typeof currentLanguage !== 'undefined' && currentLanguage !== 'fr') {
+            label.textContent = "translation loading...";
+            autoTranslateText(originalText, currentLanguage)
+              .then(translatedText => {
+                  console.log(`Translated: ${originalText} -> ${translatedText}`);
+                  label.textContent = translatedText;
+              })
+              .catch(err => {
+                  console.error("Translation error on update:", err);
+                  label.textContent = originalText;
+              });
+        } else {
+            label.textContent = originalText;
+        }
+    });
+    
+    // Update radio and checkbox options, if any
+    const optionLabels = document.querySelectorAll('.checkbox-group label, .rating label');
+    optionLabels.forEach(label => {
+        const originalText = label.getAttribute('data-original');
+        if (originalText) {
+            if (typeof currentLanguage !== 'undefined' && currentLanguage !== 'fr') {
+                label.textContent = "translation loading...";
+                autoTranslateText(originalText, currentLanguage)
+                  .then(translatedText => {
+                      console.log(`Option translated: ${originalText} -> ${translatedText}`);
+                      label.textContent = translatedText;
+                  })
+                  .catch(err => {
+                      console.error("Option translation error:", err);
+                      label.textContent = originalText;
+                  });
+            } else {
+                label.textContent = originalText;
+            }
+        }
+    });
+
+    // Update choice type labels
+    const ratingContainers = document.querySelectorAll('.rating');
+    const checkboxContainers = document.querySelectorAll('.checkbox-group');
+    
+    ratingContainers.forEach(container => {
+        container.setAttribute('data-translate-single-choice', translateText('singleChoice'));
+    });
+    
+    checkboxContainers.forEach(container => {
+        container.setAttribute('data-translate-multiple-choice', translateText('multipleChoice'));
+    });
+}
+
+
 function createResponseInput(type, responses, index) {
-    switch(type) {
-        case 'text':
-            return `<textarea name="q${index}" required></textarea>`;
-        case 'radio':
-            return `
-                <div class="rating">
-                    ${responses.map((option, i) => `
-                        <input type="radio" id="q${index}-${i}" name="q${index}" value="${option}" required>
-                        <label for="q${index}-${i}">${option}</label>
-                    `).join('')}
-                </div>
-            `;
-        case 'checkbox':
-            return `
-                <div class="checkbox-group">
-                    ${responses.map((option, i) => `
-                        <input type="checkbox" id="q${index}-${i}" name="q${index}[]" value="${option}">
-                        <label for="q${index}-${i}">${option}</label>
-                    `).join('')}
-                </div>
-            `;
-        case 'barem':
-            return `
-                <div class="rating-container">
-                    <div class="rating-stars">
-                        ${Array.from({length: 5}, (_, i) => `
-                            <div class="star-container" data-value="${i + 1}">
-                                <div class="star" data-value="${i + 1}">★</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                    <input type="hidden" name="q${index}" class="rating-value" required>
-                </div>
-            `;
-            case 'nps':
-                return `
-                    <div class="nps-container">
-                        <div class="nps-scale">
-                            ${Array.from({length: 11}, (_, i) => `
-                                <div class="nps-item" data-value="${i}">
-                                    <div class="nps-smiley">${getNpsSmiley(i)}</div>
-                                    <div class="nps-number">${i}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <input type="hidden" name="q${index}" class="nps-value" value="-1" required>
-                    </div>
-                `;            
-        default:
-            return '';
+    const questionName = `q${index + 1}`;
+    const baseId = `${questionName}-input`;
+
+    if (type === 'text') {
+        const textarea = document.createElement('textarea');
+        textarea.id = baseId;
+        textarea.name = questionName;
+        textarea.setAttribute('data-translate-placeholder', 'textAnswerPlaceholder');
+        textarea.placeholder = translateText('textAnswerPlaceholder');
+        return textarea;
+    }
+    else if (type === 'radio') {
+        const container = document.createElement('div');
+        container.className = 'rating';
+        container.setAttribute('data-translate-single-choice', translateText('singleChoice'));
+        responses.forEach((option, i) => {
+            const optionId = `${baseId}-${i}`;
+
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.id = optionId;
+            radio.name = questionName;
+            radio.value = option;
+
+            const label = document.createElement('label');
+            label.setAttribute('for', optionId);
+            label.setAttribute('data-original', option);
+            label.textContent = option;
+
+            if (typeof currentLanguage !== 'undefined' && currentLanguage !== 'fr') {
+                label.textContent = "translation loading...";
+                autoTranslateText(option, currentLanguage)
+                    .then(translated => {
+                        console.log(`Option translated: ${option} -> ${translated}`);
+                        label.textContent = translated;
+                    })
+                    .catch(err => {
+                        console.error("Error translating radio option:", err);
+                        label.textContent = option;
+                    });
+            }
+
+            container.appendChild(radio);
+            container.appendChild(label);
+        });
+        return container;
+    } else if (type === 'checkbox') {
+        const container = document.createElement('div');
+        container.className = 'checkbox-group';
+        container.setAttribute('data-translate-multiple-choice', translateText('multipleChoice'));
+        responses.forEach((option, i) => {
+            const optionId = `${baseId}-${i}`;
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = optionId;
+            checkbox.name = questionName + '[]';
+            checkbox.value = option;
+
+            const label = document.createElement('label');
+            label.setAttribute('for', optionId);
+            label.setAttribute('data-original', option);
+            label.textContent = option;
+
+            if (typeof currentLanguage !== 'undefined' && currentLanguage !== 'fr') {
+                label.textContent = "translation loading...";
+                autoTranslateText(option, currentLanguage)
+                    .then(translated => {
+                        console.log(`Checkbox option translated: ${option} -> ${translated}`);
+                        label.textContent = translated;
+                    })
+                    .catch(err => {
+                        console.error("Error translating checkbox option:", err);
+                        label.textContent = option;
+                    });
+            }
+
+            container.appendChild(checkbox);
+            container.appendChild(label);
+        });
+        return container;
+    } else if (type === 'barem') {
+        // Create barem as a DOM node
+        const container = document.createElement('div');
+        container.className = 'rating-container';
+        
+        const starsDiv = document.createElement('div');
+        starsDiv.className = 'rating-stars';
+        
+        for (let i = 0; i < 5; i++) {
+            const starContainer = document.createElement('div');
+            starContainer.className = 'star-container';
+            starContainer.setAttribute('data-value', i + 1);
+            
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.setAttribute('data-value', i + 1);
+            star.textContent = '★';
+            
+            starContainer.appendChild(star);
+            starsDiv.appendChild(starContainer);
+        }
+        container.appendChild(starsDiv);
+        
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.id = baseId;
+        hiddenInput.name = questionName;
+        hiddenInput.className = 'rating-value';
+        container.appendChild(hiddenInput);
+        
+        return container;
+    }
+    else if (type === 'nps') {
+        // Create nps as a DOM node
+        const container = document.createElement('div');
+        container.className = 'nps-container';
+        
+        const scaleDiv = document.createElement('div');
+        scaleDiv.className = 'nps-scale';
+        
+        for (let i = 0; i < 11; i++) {
+            const npsItem = document.createElement('div');
+            npsItem.className = 'nps-item';
+            npsItem.setAttribute('data-value', i);
+            
+            const npsSmiley = document.createElement('div');
+            npsSmiley.className = 'nps-smiley';
+            npsSmiley.textContent = getNpsSmiley(i);
+            
+            const npsNumber = document.createElement('div');
+            npsNumber.className = 'nps-number';
+            npsNumber.textContent = i;
+            
+            npsItem.appendChild(npsSmiley);
+            npsItem.appendChild(npsNumber);
+            scaleDiv.appendChild(npsItem);
+        }
+        container.appendChild(scaleDiv);
+        
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.id = baseId;
+        hiddenInput.name = questionName;
+        hiddenInput.className = 'nps-value';
+        hiddenInput.value = "-1";
+        container.appendChild(hiddenInput);
+        
+        return container;
+    }
+    else {
+        return '';
     }
 }
+
 
 // Fonction pour obtenir le smiley correspondant à la note NPS
 function getNpsSmiley(value) {
@@ -311,78 +605,94 @@ async function submitQuestionnaire(event) {
                          ? document.getElementById('autreGenre').value.trim()
                          : sexe;
     if (!sexe || !age || !poste || (sexe === 'Autre' && !genreFinal)) {
-        showNotification("Veuillez remplir tous les champs obligatoires (Genre, Age, Poste).", "error");
+        showNotification(translations[currentLanguage].notificationPersonalInfo, "error");
         return;
     }
     
     // 2. Validation du questionnaire dynamique
-    // Sélectionner uniquement les groupes de questions situés dans #questionsContainer
     const questionnaireResponses = [];
-    let allQuestionsAnswered = true;
+    let firstEmptyQuestion = null;
     const dynamicQuestionGroups = document.querySelectorAll('#questionsContainer .form-group');
 
     for (const group of dynamicQuestionGroups) {
-        // On ne traite que les groupes possédant un label obligatoire (avec data-question)
         const labelElem = group.querySelector('label[data-question]');
-        if (!labelElem) {
-            continue;
-        }
-        const questionText = labelElem.textContent.trim();
-        let answer = "";
+        if (!labelElem) continue;
 
-        // Gestion des types d'inputs
-        // • Type radio (par exemple, pour les questions à choix unique)
+        // On récupère le texte original en français (stocké dans data-original)
+        const questionText = labelElem.getAttribute('data-original');
+        let answer = "";
+        let hasAnswer = false;
+
+        // Pour une question de type radio, utiliser la valeur (value) de l'input sélectionné (qui reste en français)
         if (group.querySelector('.rating')) {
             const selectedRadio = group.querySelector('input[type="radio"]:checked');
-            answer = selectedRadio ? selectedRadio.nextElementSibling.textContent.trim() : "";
+            hasAnswer = selectedRadio !== null;
+            if (hasAnswer) {
+                answer = selectedRadio.value;
+            }
         }
-        // • Type checkbox (plusieurs réponses possibles)
+        // Pour une question de type checkbox, utiliser les valeurs de chaque checkbox cochée
         else if (group.querySelector('.checkbox-group')) {
-            const checkboxes = group.querySelectorAll('input[type="checkbox"]:checked');
-            const selected = [];
-            checkboxes.forEach(cb => {
-                const txt = cb.nextElementSibling ? cb.nextElementSibling.textContent.trim() : "";
-                if (txt) selected.push(txt);
-            });
-            answer = selected.join(', ');
+            const selectedCheckboxes = group.querySelectorAll('input[type="checkbox"]:checked');
+            hasAnswer = selectedCheckboxes.length > 0;
+            if (hasAnswer) {
+                const selected = Array.from(selectedCheckboxes).map(cb => cb.value).filter(Boolean);
+                answer = selected.join(', ');
+            }
         }
-        // • Zone de texte (pour les réponses écrites)
+        // Pour une question de type text, utiliser la valeur du textarea
         else if (group.querySelector('textarea')) {
-            answer = group.querySelector('textarea').value.trim();
+            const textarea = group.querySelector('textarea');
+            hasAnswer = textarea && textarea.value.trim().length > 0;
+            if (hasAnswer) {
+                answer = textarea.value.trim();
+            }
         }
-        // • Type barem (si présent dans le questionnaire dynamique)
+        // Pour les types barem et nps, on récupère la valeur des inputs cachés
         else if (group.querySelector('.rating-container')) {
             const ratingInput = group.querySelector('.rating-value');
-            answer = ratingInput ? ratingInput.value.trim() : "";
+            hasAnswer = ratingInput && ratingInput.value.trim() && ratingInput.value !== "0";
+            if (hasAnswer) {
+                answer = ratingInput.value.trim();
+            }
         }
-        // • Type NPS (si présent, même si vous ne l'utilisez pas pour la satisfaction finale)
         else if (group.querySelector('.nps-container')) {
             const npsInput = group.querySelector('.nps-value');
-            answer = npsInput ? npsInput.value.trim() : "";
+            hasAnswer = npsInput && npsInput.value.trim() && npsInput.value !== "-1";
+            if (hasAnswer) {
+                answer = npsInput.value.trim();
+            }
         }
-        
-        if (!answer) {
-            allQuestionsAnswered = false;
-            break;
+
+        if (!hasAnswer && !firstEmptyQuestion) {
+            firstEmptyQuestion = group;
+            // On continue la boucle pour collecter les réponses valides
+        } else if (hasAnswer) {
+            // Assemble la réponse en utilisant la question originale (en français)
+            questionnaireResponses.push(`${questionText}: ${answer}`);
         }
-        questionnaireResponses.push(`${questionText}: ${answer}`);
     }
     
-    if (!allQuestionsAnswered) {
-        showNotification("Vous n'avez pas terminé le questionnaire.", "error");
+    if (firstEmptyQuestion) {
+        showNotification(translations[currentLanguage].notificationQuestions, "error");
+        firstEmptyQuestion.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
     }
     
-    // 3. Validation de la note de satisfaction (note sur 5 via étoiles)
+    // 3. Validation de la note de satisfaction (la valeur des inputs rating/nps reste inchangée)
     const satisfactionInput = document.querySelector('input[name="satisfaction"].rating-value');
-    let satisfaction = satisfactionInput ? satisfactionInput.value.trim() : "";
-    // On considère qu'une note non renseignée est "0"
+    const satisfaction = satisfactionInput ? satisfactionInput.value.trim() : "";
+    
     if (!satisfaction || satisfaction === "0") {
-        showNotification("Veuillez sélectionner une note de satisfaction.", "error");
+        showNotification(translations[currentLanguage].notificationSatisfaction, "error");
+        const satisfactionContainer = document.querySelector('.rating-container');
+        if (satisfactionContainer) {
+            satisfactionContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         return;
     }
     
-    // 4. Récupération du commentaire final (optionnel)
+    // 4. Récupération du commentaire final
     const commentairesElem = document.getElementById('commentaires');
     const commentaires = commentairesElem ? (commentairesElem.value.trim() || "Aucun message") : "Aucun message";
     
@@ -391,6 +701,7 @@ async function submitQuestionnaire(event) {
         sexe: genreFinal,
         age: age,
         poste: poste,
+        // On envoie la liste des réponses avec les questions originales (en français)
         questionnaireResponses: questionnaireResponses.join(' | '),
         satisfaction: satisfaction,
         commentaires: commentaires,
@@ -408,11 +719,11 @@ async function submitQuestionnaire(event) {
         timestamp: data.timestamp
     });
     
-    // 6. Envoi des données vers Google Sheets via la Web App
+    // 6. Envoi des données
     try {
         const submitButton = document.querySelector('.submit-button');
         submitButton.disabled = true;
-        submitButton.innerHTML = "Envoi en cours...";
+        submitButton.innerHTML = translations[currentLanguage].notificationSending;
         
         const response = await fetch(`${SCRIPT_URL}?${params.toString()}`);
         if (!response.ok) {
@@ -423,21 +734,20 @@ async function submitQuestionnaire(event) {
             throw new Error(result.error);
         }
         
-        showNotification("Merci pour votre participation ! Votre questionnaire a été envoyé avec succès.", "success");
+        showNotification(translations[currentLanguage].notificationSuccess, "success");
         form.reset();
-
-            // Rafraîchir la page après 2 secondes
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
+            
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
             
     } catch (error) {
         console.error("Erreur:", error);
-        showNotification("Une erreur est survenue lors de l'envoi du questionnaire. Veuillez réessayer.", "error");
+        showNotification(translations[currentLanguage].notificationError, "error");
     } finally {
         const submitButton = document.querySelector('.submit-button');
         submitButton.disabled = false;
-        submitButton.innerHTML = "Envoyer le questionnaire";
+        submitButton.innerHTML = translations[currentLanguage].notificationSubmit;
     }
 }
 
@@ -490,6 +800,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             // Initialiser le questionnaire (si l'élément existe, on l'appelle)
             initQuestionnaire();
+            
+            // Ajouter l'écouteur d'événement de soumission du formulaire
+            questionnaireForm.addEventListener('submit', submitQuestionnaire);
         }
     }
 

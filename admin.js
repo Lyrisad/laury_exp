@@ -1,5 +1,5 @@
 // Configuration
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2DeyjOF5lfcUIsGTh_viiyQEJvCW76-hf8lxPOcRpKBzBYigosCkVoXO9wIzt5jxJ/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgw7jsDjOOsOOIHP7QiuQhcsujugSL_zh676HN0K6tjuWFSAqXs-wsyRqLq8Nc3nb8cA/exec';
 const ADMIN_CREDENTIALS = {
     username: 'admin',
     password: 'password123' // À changer en production
@@ -584,4 +584,133 @@ function setActiveNavLink() {
 document.addEventListener('DOMContentLoaded', function() {
     // Initialiser la navigation active
     setActiveNavLink();
+});
+
+// Modal de confirmation pour la clôture du questionnaire
+const closeQuestionnaireModal = document.createElement('div');
+closeQuestionnaireModal.className = 'modal';
+closeQuestionnaireModal.innerHTML = `
+    <div class="modal-content confirm-modal">
+        <div class="confirm-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 8V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 16H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <h3>Confirmer la clôture du questionnaire</h3>
+        <p>Êtes-vous sûr de vouloir clôturer le questionnaire ? Cette action est réversible.</p>
+        <div class="confirm-buttons">
+            <button id="closeQuestionnaireCancel" class="secondary-button">Annuler</button>
+            <button id="closeQuestionnaireConfirm" class="delete-button">Clôturer</button>
+        </div>
+    </div>
+`;
+document.body.appendChild(closeQuestionnaireModal);
+
+// Gestionnaire d'événements pour le bouton de clôture
+document.getElementById('closeQuestionnaire').addEventListener('click', function() {
+    closeQuestionnaireModal.style.display = 'block';
+});
+
+// Gestionnaire d'événements pour l'annulation de la clôture
+document.getElementById('closeQuestionnaireCancel').addEventListener('click', function() {
+    closeQuestionnaireModal.style.display = 'none';
+});
+
+// Fonction pour mettre à jour l'interface en fonction du statut
+function updateUIForStatus(isOpen) {
+    const closeButton = document.getElementById('closeQuestionnaire');
+    const confirmButton = document.getElementById('closeQuestionnaireConfirm');
+    const modalTitle = closeQuestionnaireModal.querySelector('h3');
+    const modalText = closeQuestionnaireModal.querySelector('p');
+
+    // S'assurer que isOpen est un booléen en comparant avec "TRUE"
+    isOpen = isOpen === true || isOpen === "TRUE";
+
+    if (isOpen) {
+        closeButton.textContent = 'Clôturer le questionnaire';
+        closeButton.className = 'cta-button warning';
+        confirmButton.textContent = 'Clôturer';
+        modalTitle.textContent = 'Confirmer la clôture du questionnaire';
+        modalText.textContent = 'Êtes-vous sûr de vouloir clôturer le questionnaire ? Cette action est réversible.';
+    } else {
+        closeButton.textContent = 'Ouvrir le questionnaire';
+        closeButton.className = 'cta-button success';
+        confirmButton.textContent = 'Ouvrir';
+        modalTitle.textContent = 'Confirmer l\'ouverture du questionnaire';
+        modalText.textContent = 'Êtes-vous sûr de vouloir ouvrir le questionnaire ? Cette action est réversible.';
+    }
+}
+
+// Fonction pour vérifier l'état du questionnaire
+function checkQuestionnaireStatus() {
+    const params = new URLSearchParams({
+        action: 'getQuestionnaireStatus'
+    });
+
+    fetch(`${SCRIPT_URL}?${params.toString()}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            // Convertir explicitement le statut en booléen
+            const isOpen = data.status === "TRUE";
+            updateUIForStatus(isOpen);
+        })
+        .catch(error => {
+            console.error('Erreur lors de la vérification du statut:', error);
+        });
+}
+
+// Appeler checkQuestionnaireStatus au chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+    checkQuestionnaireStatus();
+});
+
+// Gestionnaire d'événements pour la confirmation de la clôture/ouverture
+document.getElementById('closeQuestionnaireConfirm').addEventListener('click', function() {
+    //disable the button for 2 seconds
+    document.getElementById('closeQuestionnaireConfirm').disabled = true;
+    document.getElementById('closeQuestionnaireConfirm').style.opacity = 0.5;
+    document.getElementById('closeQuestionnaireConfirm').style.cursor = 'not-allowed';
+    setTimeout(() => {
+        document.getElementById('closeQuestionnaireConfirm').disabled = false;
+        document.getElementById('closeQuestionnaireConfirm').style.opacity = 1;
+        document.getElementById('closeQuestionnaireConfirm').style.cursor = 'pointer';
+    }, 2000);
+    const params = new URLSearchParams({
+        action: 'toggleQuestionnaireStatus'
+    });
+
+    fetch(`${SCRIPT_URL}?${params.toString()}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            if (data.success) {
+                showNotification('Statut du questionnaire mis à jour avec succès', 'success');
+                closeQuestionnaireModal.style.display = 'none';
+                // Mettre à jour l'interface après le changement de statut
+                checkQuestionnaireStatus();
+            } else {
+                throw new Error('Erreur inconnue lors de la mise à jour du statut');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur détaillée:', error);
+            showNotification('Erreur lors de la mise à jour du statut : ' + error.message, 'error');
+        });
 }); 

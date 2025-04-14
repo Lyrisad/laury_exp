@@ -1121,7 +1121,7 @@
     background-color: #ffffff;
     color: #00b09b;
     border: 2px solid #00b09b;
-    margin-top: 10px;
+    margin-top:5px;
     border-radius: 4px;
     cursor: pointer;
     text-align: center;
@@ -1134,3 +1134,15 @@
     color: #ffffff;
   }
   
+  #closeQuestionnaire{
+    background-color: #ffffff;
+    color: #ff3333;
+    border: 2px solid #ff3333;
+    margin-left: 10px;
+  }
+
+  #closeQuestionnaire:hover{
+    background-color: #ff3333;
+    color: #ffffff;
+    border: 2px solid #ff3333;
+  }

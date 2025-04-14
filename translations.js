@@ -3,15 +3,15 @@ const translations = {
         // Navigation
         home: "Accueil",
         presentation: "Présentation",
-        questionnaire: "Questionnaire",
+        questionnaire: "Sondage",
         admin: "Administration",
         logout: "Déconnexion",
 
         // Index
-        title: "Questionnaire de Satisfaction",
+        title: "Sondage de Satisfaction",
         subtitle: "Votre avis compte pour nous aider à nous améliorer",
-        startQuestionnaire: "Commencer le questionnaire",
-        whyQuestionnaire: "Pourquoi ce questionnaire ?",
+        startQuestionnaire: "Commencer le sondage",
+        whyQuestionnaire: "Pourquoi ce sondage ?",
         dataAnalysis: "Analyse des données",
         dataAnalysisDesc: "Des statistiques précises pour améliorer nos services",
         confidentiality: "Confidentialité",
@@ -20,20 +20,25 @@ const translations = {
         speedDesc: "Un questionnaire simple et rapide à remplir",
 
         // Presentation
-        whyTitle: "Pourquoi ce questionnaire ?",
+        whyTitle: "Pourquoi ce sondage ?",
         objective: "Objectif",
-        objectiveDesc: "Ce questionnaire a pour but de recueillir votre retour d'expérience afin d'améliorer nos services et processus.",
+        objectiveDesc: "Ce sondage a pour but de recueillir votre retour d'expérience afin d'améliorer nos services et processus.",
         confidentialityTitle: "Confidentialité",
         confidentialityDesc: "Vos réponses sont totalement anonymes. Les données collectées seront utilisées uniquement à des fins statistiques.",
         duration: "Durée",
-        durationDesc: "Le questionnaire ne prendra que quelques minutes de votre temps. Vos réponses sont précieuses pour nous.",
+        durationDesc: "Le sondage ne prendra que quelques minutes de votre temps. Vos réponses sont précieuses pour nous.",
 
         // Questionnaire
         generalInfo: "Informations générales",
-        gender: "Sexe",
-        selectGender: "Sélectionnez votre sexe",
+        gender: "Genre",
+        selectGender: "Sélectionnez votre genre",
         male: "Homme",
         female: "Femme",
+        nonBinary: "Non-binaire",
+        genderFluid: "Genre fluide",
+        other: "Autre",
+        preferNotToSay: "Préfère ne pas répondre",
+        specifyGender: "Précisez votre genre",
         age: "Tranche d'âge",
         selectAge: "Sélectionnez votre tranche d'âge",
         age1: "18-25 ans",
@@ -50,24 +55,62 @@ const translations = {
         position5: "Gestion",
         position6: "Agent",
         position7: "Manager",
-        satisfaction: "Questionnaire de satisfaction",
-        submit: "Envoyer le questionnaire",
-        successMessage: "Merci pour votre participation ! Votre questionnaire a été envoyé avec succès.",
-        errorMessage: "Une erreur est survenue lors de l'envoi du questionnaire. Veuillez réessayer."
+        satisfaction: "Sondage de satisfaction",
+        submit: "Envoyer le sondage",
+        successMessage: "Merci pour votre participation ! Votre sondage a été envoyé avec succès.",
+        errorMessage: "Une erreur est survenue lors de l'envoi du sondage. Veuillez réessayer.",
+        questionnaireClosed: "Sondage fermé",
+        questionnaireClosedMessage: "Le sondage est actuellement fermé. Veuillez réessayer ultérieurement.",
+        questionnaireError: "Erreur lors de la vérification du statut du sondage",
+
+        // Disclaimer Modal
+        disclaimerTitle: "Confidentialité et Utilisation des Données",
+        disclaimerText1: "Ce sondage est entièrement anonyme. Aucune information permettant de vous identifier ne sera collectée.",
+        disclaimerText2: "Les données recueillies seront utilisées par le",
+        disclaimerText3: "à des fins statistiques pour :",
+        disclaimerList1: "Améliorer nos services et produits",
+        disclaimerList2: "Analyser les tendances et besoins",
+        disclaimerList3: "Développer de nouvelles idées",
+        disclaimerList4: "Optimiser l'expérience au travail",
+        disclaimerText4: "En participant à ce sondage, vous acceptez que vos réponses soient utilisées dans le cadre de ces analyses statistiques.",
+        disclaimerAccept: "J'accepte et je continue",
+
+        // Form Labels and Placeholders
+        experienceRating: "Comment évaluez-vous votre expérience avec ce sondage ?",
+        commentsLabel: "Avez-vous des commentaires ou suggestions à nous faire partager ?",
+        commentsPlaceholder: "Vos commentaires sont précieux pour nous aider à améliorer ce sondage...",
+        textAnswerPlaceholder: "Écrivez votre réponse ici",
+
+        // Footer
+        copyright: "© 2024 Sondage de Satisfaction crée par Daryl PARISI pour l'entreprise CANDOR. Tous droits réservés.",
+
+        // Messages de notification
+        notificationPersonalInfo: "Veuillez remplir tous les champs obligatoires (Genre, Age, Poste).",
+        notificationQuestions: "Veuillez répondre à toutes les questions du questionnaire.",
+        notificationSatisfaction: "Veuillez sélectionner une note de satisfaction.",
+        notificationSuccess: "Merci pour votre participation ! Votre questionnaire a été envoyé avec succès.",
+        notificationError: "Une erreur est survenue lors de l'envoi du questionnaire. Veuillez réessayer.",
+        notificationSending: "Envoi en cours...",
+        notificationSubmit: "Envoyer le questionnaire",
+        notificationStatusError: "Erreur lors de la vérification du statut du questionnaire",
+        notificationLoadingError: "Erreur lors du chargement des questions",
+        notificationNoQuestions: "Aucune question trouvée",
+        singleChoice: "Choix unique",
+        multipleChoice: "Choix multiple"
     },
     en: {
         // Navigation
         home: "Home",
         presentation: "Presentation",
-        questionnaire: "Questionnaire",
+        questionnaire: "Survey",
         admin: "Administration",
         logout: "Logout",
 
         // Index
         title: "Satisfaction Survey",
         subtitle: "Your opinion matters to help us improve",
-        startQuestionnaire: "Start the questionnaire",
-        whyQuestionnaire: "Why this questionnaire?",
+        startQuestionnaire: "Start the survey",
+        whyQuestionnaire: "Why this survey?",
         dataAnalysis: "Data Analysis",
         dataAnalysisDesc: "Accurate statistics to improve our services",
         confidentiality: "Confidentiality",
@@ -76,13 +119,13 @@ const translations = {
         speedDesc: "A simple and quick questionnaire to fill out",
 
         // Presentation
-        whyTitle: "Why this questionnaire?",
+        whyTitle: "Why this survey?",
         objective: "Objective",
-        objectiveDesc: "This questionnaire aims to collect your feedback to improve our services and processes.",
+        objectiveDesc: "This survey aims to collect your feedback to improve our services and processes.",
         confidentialityTitle: "Confidentiality",
         confidentialityDesc: "Your answers are completely anonymous. The collected data will be used for statistical purposes only.",
         duration: "Duration",
-        durationDesc: "The questionnaire will only take a few minutes of your time. Your answers are valuable to us.",
+        durationDesc: "The survey will only take a few minutes of your time. Your answers are valuable to us.",
 
         // Questionnaire
         generalInfo: "General Information",
@@ -90,6 +133,11 @@ const translations = {
         selectGender: "Select your gender",
         male: "Male",
         female: "Female",
+        nonBinary: "Non-binary",
+        genderFluid: "Gender fluid",
+        other: "Other",
+        preferNotToSay: "Prefer not to say",
+        specifyGender: "Specify your gender",
         age: "Age Range",
         selectAge: "Select your age range",
         age1: "18-25 years",
@@ -107,23 +155,61 @@ const translations = {
         position6: "Agent",
         position7: "Manager",
         satisfaction: "Satisfaction Survey",
-        submit: "Submit questionnaire",
-        successMessage: "Thank you for your participation! Your questionnaire has been successfully submitted.",
-        errorMessage: "An error occurred while submitting the questionnaire. Please try again."
+        submit: "Submit survey",
+        successMessage: "Thank you for your participation! Your survey has been successfully submitted.",
+        errorMessage: "An error occurred while submitting the survey. Please try again.",
+        questionnaireClosed: "Survey Closed",
+        questionnaireClosedMessage: "The survey is currently closed. Please try again later.",
+        questionnaireError: "Error checking survey status",
+
+        // Disclaimer Modal
+        disclaimerTitle: "Confidentiality and Data Usage",
+        disclaimerText1: "This survey is completely anonymous. No information that could identify you will be collected.",
+        disclaimerText2: "The collected data will be used by",
+        disclaimerText3: "for statistical purposes to:",
+        disclaimerList1: "Improve our services and products",
+        disclaimerList2: "Analyze trends and needs",
+        disclaimerList3: "Develop new ideas",
+        disclaimerList4: "Optimize work experience",
+        disclaimerText4: "By participating in this survey, you agree that your responses will be used for these statistical analyses.",
+        disclaimerAccept: "I accept and continue",
+
+        // Form Labels and Placeholders
+        experienceRating: "How do you rate your experience with this survey?",
+        commentsLabel: "Do you have any comments or suggestions to share with us?",
+        commentsPlaceholder: "Your comments are valuable to help us improve this survey...",
+        textAnswerPlaceholder: "Write your answer here",
+
+        // Footer
+        copyright: "© 2024 Satisfaction Survey created by Daryl PARISI for CANDOR company. All rights reserved.",
+
+        // Notification messages
+        notificationPersonalInfo: "Please fill in all required fields (Gender, Age, Position).",
+        notificationQuestions: "Please answer all questions in the questionnaire.",
+        notificationSatisfaction: "Please select a satisfaction rating.",
+        notificationSuccess: "Thank you for your participation! Your Survey has been successfully submitted.",
+        notificationError: "An error occurred while submitting the questionnaire. Please try again.",
+        notificationSending: "Sending...",
+        notificationSubmit: "Submit questionnaire",
+        notificationStatusError: "Error checking questionnaire status",
+        notificationLoadingError: "Error loading questions",
+        notificationNoQuestions: "No questions found",
+        singleChoice: "Single choice",
+        multipleChoice: "Multiple choice"
     },
     es: {
         // Navigation
         home: "Inicio",
         presentation: "Presentación",
-        questionnaire: "Cuestionario",
+        questionnaire: "Encuesta",
         admin: "Administración",
         logout: "Cerrar sesión",
 
         // Index
-        title: "Cuestionario de Satisfacción",
+        title: "Encuesta de Satisfacción",
         subtitle: "Tu opinión es importante para ayudarnos a mejorar",
-        startQuestionnaire: "Comenzar el cuestionario",
-        whyQuestionnaire: "¿Por qué este cuestionario?",
+        startQuestionnaire: "Comenzar la encuesta",
+        whyQuestionnaire: "¿Por qué esta encuesta?",
         dataAnalysis: "Análisis de datos",
         dataAnalysisDesc: "Estadísticas precisas para mejorar nuestros servicios",
         confidentiality: "Confidencialidad",
@@ -132,13 +218,13 @@ const translations = {
         speedDesc: "Un cuestionario simple y rápido de completar",
 
         // Presentation
-        whyTitle: "¿Por qué este cuestionario?",
+        whyTitle: "¿Por qué esta encuesta?",
         objective: "Objetivo",
-        objectiveDesc: "Este cuestionario tiene como objetivo recopilar tu retroalimentación para mejorar nuestros servicios y procesos.",
+        objectiveDesc: "Esta encuesta tiene como objetivo recopilar tu retroalimentación para mejorar nuestros servicios y procesos.",
         confidentialityTitle: "Confidencialidad",
         confidentialityDesc: "Tus respuestas son completamente anónimas. Los datos recopilados se utilizarán únicamente con fines estadísticos.",
         duration: "Duración",
-        durationDesc: "El cuestionario solo tomará unos minutos de tu tiempo. Tus respuestas son valiosas para nosotros.",
+        durationDesc: "La encuesta solo tomará unos minutos de tu tiempo. Tus respuestas son valiosas para nosotros.",
 
         // Questionnaire
         generalInfo: "Información general",
@@ -146,6 +232,11 @@ const translations = {
         selectGender: "Selecciona tu género",
         male: "Hombre",
         female: "Mujer",
+        nonBinary: "No binario",
+        genderFluid: "Género fluido",
+        other: "Otro",
+        preferNotToSay: "Prefiero no decirlo",
+        specifyGender: "Especifica tu género",
         age: "Rango de edad",
         selectAge: "Selecciona tu rango de edad",
         age1: "18-25 años",
@@ -162,24 +253,62 @@ const translations = {
         position5: "Gestión",
         position6: "Agente",
         position7: "Gerente",
-        satisfaction: "Cuestionario de satisfacción",
-        submit: "Enviar cuestionario",
-        successMessage: "¡Gracias por tu participación! Tu cuestionario ha sido enviado con éxito.",
-        errorMessage: "Ocurrió un error al enviar el cuestionario. Por favor, inténtalo de nuevo."
+        satisfaction: "Encuesta de satisfacción",
+        submit: "Enviar encuesta",
+        successMessage: "¡Gracias por tu participación! Tu encuesta ha sido enviada con éxito.",
+        errorMessage: "Ocurrió un error al enviar la encuesta. Por favor, inténtalo de nuevo.",
+        questionnaireClosed: "Encuesta Cerrada",
+        questionnaireClosedMessage: "La encuesta está actualmente cerrada. Por favor, inténtalo más tarde.",
+        questionnaireError: "Error al verificar el estado de la encuesta",
+
+        // Disclaimer Modal
+        disclaimerTitle: "Confidencialidad y Uso de Datos",
+        disclaimerText1: "Esta encuesta es completamente anónima. No se recopilará ninguna información que pueda identificarte.",
+        disclaimerText2: "Los datos recopilados serán utilizados por",
+        disclaimerText3: "con fines estadísticos para:",
+        disclaimerList1: "Mejorar nuestros servicios y productos",
+        disclaimerList2: "Analizar tendencias y necesidades",
+        disclaimerList3: "Desarrollar nuevas ideas",
+        disclaimerList4: "Optimizar la experiencia laboral",
+        disclaimerText4: "Al participar en esta encuesta, aceptas que tus respuestas se utilizarán para estos análisis estadísticos.",
+        disclaimerAccept: "Acepto y continúo",
+
+        // Form Labels and Placeholders
+        experienceRating: "¿Cómo calificas tu experiencia con esta encuesta?",
+        commentsLabel: "¿Tienes algún comentario o sugerencia que compartir con nosotros?",
+        commentsPlaceholder: "Tus comentarios son valiosos para ayudarnos a mejorar esta encuesta...",
+        textAnswerPlaceholder: "Escribe tu respuesta aquí",
+
+        // Footer
+        copyright: "© 2024 Encuesta de Satisfacción creada por Daryl PARISI para la empresa CANDOR. Todos los derechos reservados.",
+
+        // Mensajes de notificación
+        notificationPersonalInfo: "Por favor complete todos los campos obligatorios (Género, Edad, Puesto).",
+        notificationQuestions: "Por favor responda todas las preguntas del cuestionario.",
+        notificationSatisfaction: "Por favor seleccione una calificación de satisfacción.",
+        notificationSuccess: "¡Gracias por su participación! Su cuestionario ha sido enviado con éxito.",
+        notificationError: "Ocurrió un error al enviar el cuestionario. Por favor intente nuevamente.",
+        notificationSending: "Enviando...",
+        notificationSubmit: "Enviar cuestionario",
+        notificationStatusError: "Error al verificar el estado del cuestionario",
+        notificationLoadingError: "Error al cargar las preguntas",
+        notificationNoQuestions: "No se encontraron preguntas",
+        singleChoice: "Elección única",
+        multipleChoice: "Elección múltiple"
     },
     pt: {
         // Navigation
         home: "Início",
         presentation: "Apresentação",
-        questionnaire: "Questionário",
+        questionnaire: "Pesquisa",
         admin: "Administração",
         logout: "Sair",
 
         // Index
-        title: "Questionário de Satisfação",
+        title: "Pesquisa de Satisfação",
         subtitle: "Sua opinião é importante para nos ajudar a melhorar",
-        startQuestionnaire: "Iniciar o questionário",
-        whyQuestionnaire: "Por que este questionário?",
+        startQuestionnaire: "Iniciar a pesquisa",
+        whyQuestionnaire: "Por que esta pesquisa?",
         dataAnalysis: "Análise de dados",
         dataAnalysisDesc: "Estatísticas precisas para melhorar nossos serviços",
         confidentiality: "Confidencialidade",
@@ -188,13 +317,13 @@ const translations = {
         speedDesc: "Um questionário simples e rápido de preencher",
 
         // Presentation
-        whyTitle: "Por que este questionário?",
+        whyTitle: "Por que esta pesquisa?",
         objective: "Objetivo",
-        objectiveDesc: "Este questionário tem como objetivo coletar seu feedback para melhorar nossos serviços e processos.",
+        objectiveDesc: "Esta pesquisa tem como objetivo coletar seu feedback para melhorar nossos serviços e processos.",
         confidentialityTitle: "Confidencialidade",
         confidentialityDesc: "Suas respostas são completamente anônimas. Os dados coletados serão usados apenas para fins estatísticos.",
         duration: "Duração",
-        durationDesc: "O questionário levará apenas alguns minutos do seu tempo. Suas respostas são valiosas para nós.",
+        durationDesc: "A pesquisa levará apenas alguns minutos do seu tempo. Suas respostas são valiosas para nós.",
 
         // Questionnaire
         generalInfo: "Informações gerais",
@@ -202,6 +331,11 @@ const translations = {
         selectGender: "Selecione seu gênero",
         male: "Masculino",
         female: "Feminino",
+        nonBinary: "Não-binário",
+        genderFluid: "Gênero fluido",
+        other: "Outro",
+        preferNotToSay: "Prefiro não dizer",
+        specifyGender: "Especifique seu gênero",
         age: "Faixa etária",
         selectAge: "Selecione sua faixa etária",
         age1: "18-25 anos",
@@ -218,24 +352,62 @@ const translations = {
         position5: "Gestão",
         position6: "Agente",
         position7: "Gerente",
-        satisfaction: "Questionário de satisfação",
-        submit: "Enviar questionário",
-        successMessage: "Obrigado por sua participação! Seu questionário foi enviado com sucesso.",
-        errorMessage: "Ocorreu um erro ao enviar o questionário. Por favor, tente novamente."
+        satisfaction: "Pesquisa de satisfação",
+        submit: "Enviar pesquisa",
+        successMessage: "Obrigado por sua participação! Sua pesquisa foi enviada com sucesso.",
+        errorMessage: "Ocorreu um erro ao enviar a pesquisa. Por favor, tente novamente.",
+        questionnaireClosed: "Pesquisa Fechada",
+        questionnaireClosedMessage: "A pesquisa está atualmente fechada. Por favor, tente novamente mais tarde.",
+        questionnaireError: "Erro ao verificar o status da pesquisa",
+
+        // Disclaimer Modal
+        disclaimerTitle: "Confidencialidade e Uso de Dados",
+        disclaimerText1: "Esta pesquisa é completamente anônima. Nenhuma informação que possa identificá-lo será coletada.",
+        disclaimerText2: "Os dados coletados serão utilizados pela",
+        disclaimerText3: "para fins estatísticos para:",
+        disclaimerList1: "Melhorar nossos serviços e produtos",
+        disclaimerList2: "Analisar tendências e necessidades",
+        disclaimerList3: "Desenvolver novas ideias",
+        disclaimerList4: "Otimizar a experiência de trabalho",
+        disclaimerText4: "Ao participar desta pesquisa, você concorda que suas respostas serão utilizadas para estas análises estatísticas.",
+        disclaimerAccept: "Aceito e continuo",
+
+        // Form Labels and Placeholders
+        experienceRating: "Como você avalia sua experiência com esta pesquisa?",
+        commentsLabel: "Você tem algum comentário ou sugestão para compartilhar conosco?",
+        commentsPlaceholder: "Seus comentários são valiosos para nos ajudar a melhorar esta pesquisa...",
+        textAnswerPlaceholder: "Escreva sua resposta aqui",
+
+        // Footer
+        copyright: "© 2024 Pesquisa de Satisfação criada por Daryl PARISI para a empresa CANDOR. Todos os direitos reservados.",
+
+        // Mensagens de notificação
+        notificationPersonalInfo: "Por favor preencha todos os campos obrigatórios (Gênero, Idade, Cargo).",
+        notificationQuestions: "Por favor responda a todas as perguntas do questionário.",
+        notificationSatisfaction: "Por favor selecione uma nota de satisfação.",
+        notificationSuccess: "Obrigado pela sua participação! Seu questionário foi enviado com sucesso.",
+        notificationError: "Ocorreu um erro ao enviar o questionário. Por favor tente novamente.",
+        notificationSending: "Enviando...",
+        notificationSubmit: "Enviar questionário",
+        notificationStatusError: "Erro ao verificar o status do questionário",
+        notificationLoadingError: "Erro ao carregar as perguntas",
+        notificationNoQuestions: "Nenhuma pergunta encontrada",
+        singleChoice: "Escolha única",
+        multipleChoice: "Escolha múltipla"
     },
     ar: {
         // Navigation
         home: "الرئيسية",
         presentation: "العرض",
-        questionnaire: "الاستبيان",
+        questionnaire: "استطلاع",
         admin: "الإدارة",
         logout: "تسجيل الخروج",
 
         // Index
-        title: "استبيان الرضا",
+        title: "استطلاع الرضا",
         subtitle: "رأيك مهم لمساعدتنا على التحسين",
-        startQuestionnaire: "بدء الاستبيان",
-        whyQuestionnaire: "لماذا هذا الاستبيان؟",
+        startQuestionnaire: "بدء الاستطلاع",
+        whyQuestionnaire: "لماذا هذا الاستطلاع؟",
         dataAnalysis: "تحليل البيانات",
         dataAnalysisDesc: "إحصائيات دقيقة لتحسين خدماتنا",
         confidentiality: "السرية",
@@ -244,13 +416,13 @@ const translations = {
         speedDesc: "استبيان بسيط وسريع للإجابة",
 
         // Presentation
-        whyTitle: "لماذا هذا الاستبيان؟",
+        whyTitle: "لماذا هذا الاستطلاع؟",
         objective: "الهدف",
-        objectiveDesc: "يهدف هذا الاستبيان إلى جمع ملاحظاتك لتحسين خدماتنا وعملياتنا.",
+        objectiveDesc: "يهدف هذا الاستطلاع إلى جمع ملاحظاتك لتحسين خدماتنا وعملياتنا.",
         confidentialityTitle: "السرية",
         confidentialityDesc: "إجاباتك مجهولة تماماً. سيتم استخدام البيانات المجمعة لأغراض إحصائية فقط.",
         duration: "المدة",
-        durationDesc: "سيستغرق الاستبيان بضع دقائق فقط من وقتك. إجاباتك قيمة بالنسبة لنا.",
+        durationDesc: "سيستغرق الاستطلاع بضع دقائق فقط من وقتك. إجاباتك قيمة بالنسبة لنا.",
 
         // Questionnaire
         generalInfo: "معلومات عامة",
@@ -258,6 +430,11 @@ const translations = {
         selectGender: "اختر جنسك",
         male: "ذكر",
         female: "أنثى",
+        nonBinary: "غير ثنائي",
+        genderFluid: "جنس متغير",
+        other: "آخر",
+        preferNotToSay: "أفضل عدم الإجابة",
+        specifyGender: "حدد جنسك",
         age: "الفئة العمرية",
         selectAge: "اختر فئتك العمرية",
         age1: "18-25 سنة",
@@ -274,9 +451,47 @@ const translations = {
         position5: "الإدارة",
         position6: "وكيل",
         position7: "مدير",
-        satisfaction: "استبيان الرضا",
-        submit: "إرسال الاستبيان",
-        successMessage: "شكراً لمشاركتك! تم إرسال استبيانك بنجاح.",
-        errorMessage: "حدث خطأ أثناء إرسال الاستبيان. يرجى المحاولة مرة أخرى."
+        satisfaction: "استطلاع الرضا",
+        submit: "إرسال الاستطلاع",
+        successMessage: "شكراً لمشاركتك! تم إرسال استطلاعك بنجاح.",
+        errorMessage: "حدث خطأ أثناء إرسال الاستطلاع. يرجى المحاولة مرة أخرى.",
+        questionnaireClosed: "الاستطلاع مغلق",
+        questionnaireClosedMessage: "الاستطلاع مغلق حالياً. يرجى المحاولة مرة أخرى لاحقاً.",
+        questionnaireError: "خطأ في التحقق من حالة الاستطلاع",
+
+        // Disclaimer Modal
+        disclaimerTitle: "السرية واستخدام البيانات",
+        disclaimerText1: "هذا الاستطلاع مجهول تماماً. لن يتم جمع أي معلومات يمكن أن تحدد هويتك.",
+        disclaimerText2: "سيتم استخدام البيانات المجمعة من قبل",
+        disclaimerText3: "لأغراض إحصائية من أجل:",
+        disclaimerList1: "تحسين خدماتنا ومنتجاتنا",
+        disclaimerList2: "تحليل الاتجاهات والاحتياجات",
+        disclaimerList3: "تطوير أفكار جديدة",
+        disclaimerList4: "تحسين تجربة العمل",
+        disclaimerText4: "بالمشاركة في هذا الاستطلاع، فإنك توافق على استخدام إجاباتك في هذه التحليلات الإحصائية.",
+        disclaimerAccept: "أوافق وأستمر",
+
+        // Form Labels and Placeholders
+        experienceRating: "كيف تقيم تجربتك مع هذا الاستطلاع؟",
+        commentsLabel: "هل لديك أي تعليقات أو اقتراحات لمشاركتها معنا؟",
+        commentsPlaceholder: "تعليقاتك قيمة لمساعدتنا في تحسين هذا الاستطلاع...",
+        textAnswerPlaceholder: "اكتب إجابتك هنا",
+
+        // Footer
+        copyright: "© 2024 استطلاع الرضا من إنشاء داريل باريزي لشركة كاندور. جميع الحقوق محفوظة.",
+
+        // رسائل الإشعارات
+        notificationPersonalInfo: "يرجى ملء جميع الحقول المطلوبة (الجنس، العمر، المنصب).",
+        notificationQuestions: "يرجى الإجابة على جميع أسئلة الاستبيان.",
+        notificationSatisfaction: "يرجى اختيار درجة الرضا.",
+        notificationSuccess: "شكراً لمشاركتك! تم إرسال استبيانك بنجاح.",
+        notificationError: "حدث خطأ أثناء إرسال الاستبيان. يرجى المحاولة مرة أخرى.",
+        notificationSending: "جاري الإرسال...",
+        notificationSubmit: "إرسال الاستبيان",
+        notificationStatusError: "خطأ في التحقق من حالة الاستبيان",
+        notificationLoadingError: "خطأ في تحميل الأسئلة",
+        notificationNoQuestions: "لم يتم العثور على أسئلة",
+        singleChoice: "اختيار واحد",
+        multipleChoice: "اختيار متعدد"
     }
 }; 

@@ -109,7 +109,7 @@
 }
 
 .rating::before {
-    content: '🔘 Choix unique';
+    content: '🔘 ' attr(data-translate-single-choice);
     display: block;
     color: var(--primary-color);
     font-size: 0.9rem;
@@ -176,7 +176,7 @@
 }
 
 .checkbox-group::before {
-    content: '☑️ Choix multiple';
+    content: '☑️ ' attr(data-translate-multiple-choice);
     display: block;
     color: var(--primary-color);
     font-size: 0.9rem;
@@ -697,7 +697,7 @@
     gap: 5px;
     overflow-x: auto;            /* Permet le défilement horizontal si nécessaire */
     -webkit-overflow-scrolling: touch; /* Défilement fluide sur mobile */
-    scroll-snap-type: x mandatory; /* Optionnel : permet d’aligner les items lors du scroll */
+    scroll-snap-type: x mandatory; /* Optionnel : permet d'aligner les items lors du scroll */
 }
 
 .nps-item {
@@ -796,3 +796,46 @@
         font-size: 10px;
     }
 }
+
+.questionnaire-closed {
+    text-align: center;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 2rem auto;
+    max-width: 600px;
+}
+
+.questionnaire-closed .closed-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #ff5f6d;
+}
+
+.questionnaire-closed h2 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.questionnaire-closed p {
+    color: #666;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+.loader {
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #4a6bffac; /* Couleur principale, modifiez selon votre besoin */
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto; /* centré dans le container */
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

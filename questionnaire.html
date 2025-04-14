@@ -32,22 +32,28 @@
             <!-- Modal de disclaimer -->
             <div id="disclaimerModal" class="disclaimer-modal">
                 <div class="disclaimer-content">
-                    <h2>Confidentialité et Utilisation des Données</h2>
+                    <h2 data-translate="disclaimerTitle">Confidentialité et Utilisation des Données</h2>
                     <div class="disclaimer-text">
-                        <p>Ce questionnaire est entièrement anonyme. Aucune information permettant de vous identifier ne sera collectée.</p>
-                        <p>Les données recueillies seront utilisées par le <span class="strong">Groupe Candor</span> à des fins statistiques pour :</p>
+                        <p data-translate="disclaimerText1">Ce questionnaire est entièrement anonyme. Aucune information permettant de vous identifier ne sera collectée.</p>
+                        <p data-translate="disclaimerText2">Les données recueillies seront utilisées par le <span class="strong">Groupe Candor</span> <span data-translate="disclaimerText3">à des fins statistiques pour :</span></p>
                         <ul>
-                            <li>Améliorer nos services et produits</li>
-                            <li>Analyser les tendances et besoins</li>
-                            <li>Développer de nouvelles idées</li>
-                            <li>Optimiser l'expérience au travail</li>
+                            <li data-translate="disclaimerList1">Améliorer nos services et produits</li>
+                            <li data-translate="disclaimerList2">Analyser les tendances et besoins</li>
+                            <li data-translate="disclaimerList3">Développer de nouvelles idées</li>
+                            <li data-translate="disclaimerList4">Optimiser l'expérience au travail</li>
                         </ul>
-                        <p>En participant à ce questionnaire, vous acceptez que vos réponses soient utilisées dans le cadre de ces analyses statistiques.</p>
+                        <p data-translate="disclaimerText4">En participant à ce questionnaire, vous acceptez que vos réponses soient utilisées dans le cadre de ces analyses statistiques.</p>
                     </div>
                     <div class="disclaimer-actions">
-                        <button id="acceptDisclaimer" class="accept-button">J'accepte et je continue</button>
+                        <button id="acceptDisclaimer" class="accept-button" data-translate="disclaimerAccept">J'accepte et je continue</button>
                     </div>
                 </div>
+            </div>
+
+            <div id="questionnaire-closed" class="questionnaire-closed" style="display: none;">
+                <div class="closed-icon">🔒</div>
+                <h2 data-translate="questionnaireClosed">Questionnaire fermé</h2>
+                <p data-translate="questionnaireClosedMessage">Le questionnaire est actuellement fermé. Veuillez réessayer ultérieurement.</p>
             </div>
 
             <form id="questionnaireForm">
@@ -55,18 +61,18 @@
                     <h2 data-translate="generalInfo">Informations générales</h2>
                     
                     <div class="form-group">
-                        <label for="sexe">Genre</label>
-                        <select id="sexe" name="sexe" required>
-                            <option value="">Sélectionnez votre genre</option>
-                            <option value="Femme">Femme</option>
-                            <option value="Homme">Homme</option>
-                            <option value="Non-binaire">Non-binaire</option>
-                            <option value="Genre fluide">Genre fluide</option>
-                            <option value="Autre">Autre (veuillez préciser)</option>
-                            <option value="Préfère ne pas répondre">Préfère ne pas répondre</option>
+                        <label for="sexe" data-translate="gender">Genre</label>
+                        <select id="sexe" name="sexe" required data-translate-options="gender">
+                            <option value="" data-translate="selectGender">Sélectionnez votre genre</option>
+                            <option value="Femme" data-translate="female">Femme</option>
+                            <option value="Homme" data-translate="male">Homme</option>
+                            <option value="Non-binaire" data-translate="genderNonBinary">Non-binaire</option>
+                            <option value="Genre fluide" data-translate="genderFluid">Genre fluide</option>
+                            <option value="Autre" data-translate="other">Autre (veuillez préciser)</option>
+                            <option value="Préfère ne pas répondre" data-translate="preferNotToSay">Préfère ne pas répondre</option>
                         </select>
                         <div id="autreGenreContainer" style="display: none; margin-top: 10px;">
-                            <input type="text" id="autreGenre" name="autreGenre" placeholder="Précisez votre genre">
+                            <input type="text" id="autreGenre" name="autreGenre" placeholder="Précisez votre genre" data-translate-placeholder="specifyGender">
                         </div>
                     </div>
 
@@ -99,11 +105,13 @@
 
                 <div class="form-section">
                     <h2 data-translate="satisfaction">Questionnaire de satisfaction</h2>
-                    <div id="questionsContainer"></div>
+                    <div id="questionsContainer">
+                        <div class="loader"></div>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Comment évaluez-vous votre expérience avec ce questionnaire ?</label>
+                    <label data-translate="experienceRating">Comment évaluez-vous votre expérience avec ce questionnaire ?</label>
                     <div class="rating-container">
                         <div class="rating-stars">
                             <div class="star-container" data-value="1">
@@ -127,8 +135,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="commentaires">Avez-vous des commentaires ou suggestions à nous faire partager ?</label>
-                    <textarea id="commentaires" name="commentaires" rows="4" placeholder="Vos commentaires sont précieux pour nous aider à améliorer ce questionnaire..."></textarea>
+                    <label for="commentaires" data-translate="commentsLabel">Avez-vous des commentaires ou suggestions à nous faire partager ?</label>
+                    <textarea id="commentaires" name="commentaires" rows="4" placeholder="Vos commentaires sont précieux pour nous aider à améliorer ce questionnaire..." data-translate-placeholder="commentsPlaceholder"></textarea>
                 </div>
 
                 <button type="submit" class="submit-button" data-translate="submit">Envoyer le questionnaire</button>
@@ -137,7 +145,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2024 Questionnaire de Satisfaction crée par Daryl PARISI pour l'entreprise CANDOR. Tous droits réservés.</p>
+        <p data-translate="copyright">&copy; 2024 Questionnaire de Satisfaction crée par Daryl PARISI pour l'entreprise CANDOR. Tous droits réservés.</p>
     </footer>
 
     <script src="translations.js"></script>

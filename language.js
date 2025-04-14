@@ -6,10 +6,17 @@ function changeLanguage(lang) {
     currentLanguage = lang;
     localStorage.setItem('language', lang);
     translatePage();
+    updateTranslatedQuestions();
+}
+
+// Fonction pour traduire un texte spécifique
+function translateText(key) {
+    return translations[currentLanguage][key] || key;
 }
 
 // Fonction pour traduire la page
 function translatePage() {
+    // Traduire les éléments avec data-translate
     const elements = document.querySelectorAll('[data-translate]');
     elements.forEach(element => {
         const key = element.getAttribute('data-translate');
@@ -18,8 +25,8 @@ function translatePage() {
         }
     });
 
-    // Traduire les placeholders des inputs
-    const inputs = document.querySelectorAll('input[data-translate-placeholder]');
+    // Traduire les placeholders des inputs et textareas
+    const inputs = document.querySelectorAll('input[data-translate-placeholder], textarea[data-translate-placeholder]');
     inputs.forEach(input => {
         const key = input.getAttribute('data-translate-placeholder');
         if (translations[currentLanguage][key]) {
@@ -38,6 +45,15 @@ function translatePage() {
             }
         });
     });
+
+    // Traduire les messages dynamiques
+    const questionnaireClosed = document.getElementById('questionnaire-closed');
+    if (questionnaireClosed) {
+        const title = questionnaireClosed.querySelector('h2');
+        const message = questionnaireClosed.querySelector('p');
+        if (title) title.textContent = translateText('questionnaireClosed');
+        if (message) message.textContent = translateText('questionnaireClosedMessage');
+    }
 
     // Mettre à jour la direction du texte pour l'arabe
     if (currentLanguage === 'ar') {
