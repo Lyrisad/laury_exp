@@ -1170,7 +1170,6 @@
     background-color: #ffffff;
     color: #ff3333;
     border: 1px solid #ff3333;
-    margin-left: 10px;
     padding: 0.9rem 2rem;
     font-size: 0.9rem;
     border-radius: 5px;
@@ -1347,5 +1346,370 @@
     .visitor-stat-card {
         margin-bottom: 15px;
     }
+}
+
+#resetClickStats {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    color: #00b09b;
+    border: 2px solid #00b09b;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Poppins', sans-serif;
+}
+
+#resetClickStats:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: #00b09b;
+    color: #ffffff;
+}
+
+#resetClickStats:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#resetClickStats::before {
+    content: "🔄";
+    font-size: 18px;
+}
+
+/* Styles pour les actions des questions */
+.question-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.cta-button.danger {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+}
+
+.cta-button.danger:hover {
+    background-color: #ff3333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cta-button.danger:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cta-button.danger::before {
+    content: "🗑️";
+    margin-right: 0.5rem;
+}
+
+@media (max-width: 1000px) {
+    .question-actions {
+        flex-direction: column;
+    }
+    
+    .question-actions button {
+        margin-top: 5px;
+        width: 100%;
+    }
+}
+
+/* Zone de Danger */
+#dangerZone {
+    margin: 2rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #ff4d4d, #ff1a1a);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #ff0000;
+}
+
+#dangerZone::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 0, 0, 0.1) 10px,
+        rgba(255, 0, 0, 0.1) 20px
+    );
+    pointer-events: none;
+}
+
+#dangerZone h3 {
+    color: white;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 2px solid #ffffff;
+}
+
+#dangerZone .warning-icon {
+    animation: pulse 2s infinite;
+    font-size: 1.8rem;
+}
+
+#dangerZone .cta-button.danger {
+    background: white;
+    color: #ff0000;
+    border: 2px solid #ff0000;
+    font-weight: 600;
+    padding: 0.8rem 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#dangerZone .cta-button.danger:hover {
+    background: #ff0000;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(255, 0, 0, 0.2);
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Styles pour le modal d'ajout de question */
+.question-form {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.question-form .modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: var(--card-shadow);
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+}
+
+.question-form .close-button {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: var(--transition);
+}
+
+.question-form .close-button:hover {
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.question-form h2 {
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.title-icon {
+    font-size: 1.8rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.question-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.question-form .form-input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.question-form .form-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.1);
+}
+
+.question-form textarea.form-input {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.question-form .options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.question-form .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.question-form .form-actions button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    min-width: 120px;
+}
+
+.question-form .form-actions .secondary-button {
+    background-color: #f0f0f0;
+    color: var(--text-color);
+    border: none;
+}
+
+.question-form .form-actions .secondary-button:hover {
+    background-color: #e0e0e0;
+}
+
+.question-form .form-actions .submit-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+.question-form .form-actions .submit-button:hover {
+    background-color: #3955d6;
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow);
+}
+
+/* Animation de chargement pour le formulaire */
+#questionFormElement.loading {
+    position: relative;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+#questionFormElement.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+}
+
+/* Styles pour le textarea de question */
+.question-textarea-container {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 0.5rem;
+    transition: var(--transition);
+}
+
+.question-textarea-container:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.1);
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
+}
+
+.textarea-icon {
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    color: var(--primary-color);
+    background: rgba(74, 107, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    transition: var(--transition);
+}
+
+.question-textarea-container:focus-within .textarea-icon {
+    transform: scale(1.1);
+    background: var(--primary-color);
+    color: white;
+}
+
+.question-form textarea.form-input {
+    min-height: 120px;
+    resize: none;
+    border: none;
+    background: transparent;
+    padding: 0.5rem;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-color);
+    flex: 1;
+}
+
+.question-form textarea.form-input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.question-form textarea.form-input::placeholder {
+    color: #a0a0a0;
+    font-style: italic;
 }
   

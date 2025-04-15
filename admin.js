@@ -1,8 +1,8 @@
 // Configuration
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwy5hppvXQauQA6ffEUCMMaHxjtHgjpPJxj_JugVIaZfBO2hda0A3rH-GjSqrgA8n_p/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw7788WY7kvRAz3TZFFV9OrOgzpRC6lrAfFyUmPbo3ile7Rdpt5vAI0k_N26g5V9piRrQ/exec';
 const ADMIN_CREDENTIALS = {
-    username: 'admin',
-    password: 'password123' // À changer en production
+    username: 'AdminRH',
+    password: 'SondageRH25!' // À changer en production
 };
 
 // Éléments du DOM
@@ -369,6 +369,14 @@ addOptionBtn.addEventListener('click', function() {
 });
 
 addQuestionBtn.addEventListener('click', function() {
+    // Récupérer le nombre de questions existantes
+    const questions = Array.from(questionsContainer.children);
+    const nextOrder = questions.length + 1;
+    
+    // Préremplir le champ d'ordre
+    document.getElementById('questionOrder').value = nextOrder;
+    
+    // Afficher le modal
     questionForm.style.display = 'block';
 });
 
@@ -633,14 +641,13 @@ function updateUIForStatus(isOpen) {
     isOpen = isOpen === true || isOpen === "TRUE";
 
     if (isOpen) {
-        closeButton.textContent = 'Clôturer le questionnaire';
+        closeButton.textContent = '🔒 Clôturer le questionnaire';
         closeButton.className = 'cta-button warning';
         confirmButton.textContent = 'Clôturer';
         modalTitle.textContent = 'Confirmer la clôture du questionnaire';
         modalText.textContent = 'Êtes-vous sûr de vouloir clôturer le questionnaire ? Cette action est réversible.';
     } else {
-        closeButton.textContent = 'Ouvrir le questionnaire';
-        closeButton.className = 'cta-button success';
+        closeButton.textContent = '🔓 Ouvrir le questionnaire';
         confirmButton.textContent = 'Ouvrir';
         modalTitle.textContent = 'Confirmer l\'ouverture du questionnaire';
         modalText.textContent = 'Êtes-vous sûr de vouloir ouvrir le questionnaire ? Cette action est réversible.';
@@ -771,4 +778,180 @@ setInterval(updateClickStats, 30000);
 // Mettre à jour les statistiques de clics au chargement de la page
 document.addEventListener('DOMContentLoaded', function() {
     updateClickStats();
+});
+
+// Gestionnaire d'événements pour le bouton de réinitialisation des statistiques
+document.getElementById('resetClickStats').addEventListener('click', function() {
+    // Afficher le modal de confirmation
+    document.getElementById('resetStatsModal').style.display = 'block';
+});
+
+// Gestionnaire d'événements pour l'annulation de la réinitialisation des statistiques
+document.getElementById('resetStatsCancel').addEventListener('click', function() {
+    document.getElementById('resetStatsModal').style.display = 'none';
+});
+
+// Gestionnaire d'événements pour la confirmation de la réinitialisation des statistiques
+document.getElementById('resetStatsConfirm').addEventListener('click', function() {
+    // Désactiver le bouton pendant 2 secondes
+    document.getElementById('resetStatsConfirm').disabled = true;
+    document.getElementById('resetStatsConfirm').style.opacity = 0.5;
+    document.getElementById('resetStatsConfirm').style.cursor = 'not-allowed';
+
+    const params = new URLSearchParams({
+        action: 'resetClickStats'
+    });
+
+    fetch(`${SCRIPT_URL}?${params.toString()}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            if (data.success) {
+                showNotification('Statistiques de clics réinitialisées avec succès', 'success');
+                document.getElementById('resetStatsModal').style.display = 'none';
+                // Mettre à jour les statistiques affichées
+                updateClickStats();
+            } else {
+                throw new Error('Erreur inconnue lors de la réinitialisation des statistiques');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur détaillée:', error);
+            showNotification('Erreur lors de la réinitialisation des statistiques : ' + error.message, 'error');
+        })
+        .finally(() => {
+            // Réactiver le bouton après 2 secondes
+            setTimeout(() => {
+                document.getElementById('resetStatsConfirm').disabled = false;
+                document.getElementById('resetStatsConfirm').style.opacity = 1;
+                document.getElementById('resetStatsConfirm').style.cursor = 'pointer';
+            }, 2000);
+        });
+});
+
+// Gestionnaire d'événements pour le bouton de suppression de toutes les questions
+document.getElementById('deleteAllQuestions').addEventListener('click', function() {
+    // Afficher le modal de confirmation
+    document.getElementById('deleteAllQuestionsModal').style.display = 'block';
+});
+
+// Gestionnaire d'événements pour l'annulation de la suppression de toutes les questions
+document.getElementById('deleteAllQuestionsCancel').addEventListener('click', function() {
+    document.getElementById('deleteAllQuestionsModal').style.display = 'none';
+});
+
+// Gestionnaire d'événements pour la confirmation de la suppression de toutes les questions
+document.getElementById('deleteAllQuestionsConfirm').addEventListener('click', function() {
+    // Désactiver le bouton pendant 2 secondes
+    document.getElementById('deleteAllQuestionsConfirm').disabled = true;
+    document.getElementById('deleteAllQuestionsConfirm').style.opacity = 0.5;
+    document.getElementById('deleteAllQuestionsConfirm').style.cursor = 'not-allowed';
+
+    // Ajouter la classe loading au conteneur
+    questionsContainer.classList.add('loading');
+
+    const params = new URLSearchParams({
+        action: 'deleteAllQuestions'
+    });
+
+    fetch(`${SCRIPT_URL}?${params.toString()}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            if (data.success) {
+                showNotification('Toutes les questions ont été supprimées avec succès', 'success');
+                document.getElementById('deleteAllQuestionsModal').style.display = 'none';
+                loadQuestions(); // Recharger la liste des questions
+            } else {
+                throw new Error('Erreur inconnue lors de la suppression des questions');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur détaillée:', error);
+            showNotification('Erreur lors de la suppression des questions : ' + error.message, 'error');
+        })
+        .finally(() => {
+            // Retirer la classe loading du conteneur
+            questionsContainer.classList.remove('loading');
+            // Réactiver le bouton après 2 secondes
+            setTimeout(() => {
+                document.getElementById('deleteAllQuestionsConfirm').disabled = false;
+                document.getElementById('deleteAllQuestionsConfirm').style.opacity = 1;
+                document.getElementById('deleteAllQuestionsConfirm').style.cursor = 'pointer';
+            }, 2000);
+        });
+});
+
+// Gestionnaire d'événements pour le bouton de suppression de toutes les réponses
+document.getElementById('deleteAllResponses').addEventListener('click', function() {
+    // Afficher le modal de confirmation
+    document.getElementById('deleteAllResponsesModal').style.display = 'block';
+});
+
+// Gestionnaire d'événements pour l'annulation de la suppression de toutes les réponses
+document.getElementById('deleteAllResponsesCancel').addEventListener('click', function() {
+    document.getElementById('deleteAllResponsesModal').style.display = 'none';
+});
+
+// Gestionnaire d'événements pour la confirmation de la suppression de toutes les réponses
+document.getElementById('deleteAllResponsesConfirm').addEventListener('click', function() {
+    // Désactiver le bouton pendant 2 secondes
+    document.getElementById('deleteAllResponsesConfirm').disabled = true;
+    document.getElementById('deleteAllResponsesConfirm').style.opacity = 0.5;
+    document.getElementById('deleteAllResponsesConfirm').style.cursor = 'not-allowed';
+
+    const params = new URLSearchParams({
+        action: 'deleteAllResponses'
+    });
+
+    fetch(`${SCRIPT_URL}?${params.toString()}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            if (data.success) {
+                showNotification('Toutes les réponses ont été supprimées avec succès', 'success');
+                document.getElementById('deleteAllResponsesModal').style.display = 'none';
+                // Mettre à jour les statistiques
+                updateClickStats();
+                // Recharger les graphiques et statistiques
+                if (typeof loadStats === 'function') {
+                    loadStats();
+                }
+            } else {
+                throw new Error('Erreur inconnue lors de la suppression des réponses');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur détaillée:', error);
+            showNotification('Erreur lors de la suppression des réponses : ' + error.message, 'error');
+        })
+        .finally(() => {
+            // Réactiver le bouton après 2 secondes
+            setTimeout(() => {
+                document.getElementById('deleteAllResponsesConfirm').disabled = false;
+                document.getElementById('deleteAllResponsesConfirm').style.opacity = 1;
+                document.getElementById('deleteAllResponsesConfirm').style.cursor = 'pointer';
+            }, 2000);
+        });
 }); 

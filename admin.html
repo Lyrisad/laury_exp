@@ -52,39 +52,51 @@
                 <div class="questions-list">
                     <h2>Liste des Questions</h2>
                     <div id="questionsContainer"></div>
-                    <button id="addQuestion" class="cta-button">Ajouter une question</button>
-                    <button id="closeQuestionnaire" class="cta-button warning">Clôturer le questionnaire</button>
+                    <div class="question-actions">
+                        <button id="addQuestion" class="cta-button">Ajouter une question</button>
+                        <button id="deleteAllQuestions" class="cta-button danger">Supprimer toutes les questions</button>
+                        <button id="closeQuestionnaire" class="cta-button warning">🔒 Clôturer le questionnaire</button>
+                    </div>
                 </div>
 
                 <div class="question-form" id="questionForm" style="display: none;">
-                    <h2>Nouvelle Question</h2>
-                    <form id="questionFormElement">
-                        <div class="form-group">
-                            <label for="questionOrder">Ordre :</label>
-                            <input type="number" id="questionOrder" required min="1">
-                        </div>
-                        <div class="form-group">
-                            <label for="questionText">Question :</label>
-                            <textarea id="questionText" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="responseType">Type de réponse :</label>
-                            <select id="responseType" required>
-                                <option value="">Sélectionnez un type</option>
-                                <option value="text">Champ texte</option>
-                                <option value="radio">Choix unique</option>
-                                <option value="checkbox">Choix multiple</option>
-                                <option value="barem">Évaluation sur 5</option>
-                                <option value="nps">NPS (0-10)</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="optionsContainer" style="display: none;">
-                            <label>Options de réponse :</label>
-                            <div id="optionsList"></div>
-                            <button type="button" id="addOption" class="secondary-button">Ajouter une option</button>
-                        </div>
-                        <button type="submit" class="submit-button">Enregistrer</button>
-                    </form>
+                    <div class="modal-content">
+                        <span class="close-button" onclick="document.getElementById('questionForm').style.display = 'none'">&times;</span>
+                        <h2><span class="title-icon">📝</span> Nouvelle Question</h2>
+                        <form id="questionFormElement">
+                            <div class="form-group">
+                                <label for="questionOrder">Ordre :</label>
+                                <input type="number" id="questionOrder" required min="1" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="questionText">Question :</label>
+                                <div class="question-textarea-container">
+                                    <span class="textarea-icon">💭</span>
+                                    <textarea id="questionText" required class="form-input" placeholder="Entrez votre question ici..."></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="responseType">Type de réponse :</label>
+                                <select id="responseType" required class="form-input">
+                                    <option value="">Sélectionnez un type</option>
+                                    <option value="text">Champ texte</option>
+                                    <option value="radio">Choix unique</option>
+                                    <option value="checkbox">Choix multiple</option>
+                                    <option value="barem">Évaluation sur 5</option>
+                                    <option value="nps">NPS (0-10)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="optionsContainer" style="display: none;">
+                                <label>Options de réponse :</label>
+                                <div id="optionsList" class="options-list"></div>
+                                <button type="button" id="addOption" class="secondary-button">Ajouter une option</button>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="secondary-button" onclick="document.getElementById('questionForm').style.display = 'none'">Annuler</button>
+                                <button type="submit" class="submit-button">Enregistrer</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </section>
@@ -117,6 +129,7 @@
                         <p id="totalResponses">0</p>
                     </div>
                 </div>
+                <button id="resetClickStats" class="cta-button warning">Réinitialiser les statistiques de clics et de visiteurs</button>
             </div>
             <!-- Fin de la section d'analyse des clics -->
             <form id="statsFilters">
@@ -187,6 +200,10 @@
                 <h4 class="loading-text">Chargement des réponses ouvertes par question...</h4>
                 <div class="loader"></div>
             </div>
+            <div id="dangerZone" class="danger-zone">
+                <h3><span class="warning-icon">⚠️</span> Zone de Danger</h3>
+                <button id="deleteAllResponses" class="cta-button danger">Supprimer toutes les réponses</button>
+            </div>
           </section>
           <button id="toggleStats" class="cta-button">📊 Statistiques et Réponses</button>          
     </main>
@@ -210,6 +227,63 @@
             <div class="confirm-buttons">
                 <button id="confirmCancel" class="secondary-button">Annuler</button>
                 <button id="confirmDelete" class="delete-button">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmation pour la suppression de toutes les questions -->
+    <div id="deleteAllQuestionsModal" class="modal">
+        <div class="modal-content confirm-modal">
+            <div class="confirm-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 8V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 16H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h3>Confirmer la suppression de toutes les questions</h3>
+            <p>Êtes-vous sûr de vouloir supprimer toutes les questions ? Cette action est irréversible et le questionnaire sera vide. Pensez à clôturer le questionnaire avant de procéder à cette action.</p>
+            <div class="confirm-buttons">
+                <button id="deleteAllQuestionsCancel" class="secondary-button">Annuler</button>
+                <button id="deleteAllQuestionsConfirm" class="delete-button">Supprimer toutes les questions</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmation pour la réinitialisation des statistiques -->
+    <div id="resetStatsModal" class="modal">
+        <div class="modal-content confirm-modal">
+            <div class="confirm-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 8V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 16H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h3>Confirmer la réinitialisation des statistiques</h3>
+            <p>Êtes-vous sûr de vouloir réinitialiser toutes les statistiques de clics et de visiteurs ? Cette action est irréversible.</p>
+            <div class="confirm-buttons">
+                <button id="resetStatsCancel" class="secondary-button">Annuler</button>
+                <button id="resetStatsConfirm" class="delete-button">Réinitialiser</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmation pour la suppression de toutes les réponses -->
+    <div id="deleteAllResponsesModal" class="modal">
+        <div class="modal-content confirm-modal">
+            <div class="confirm-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 8V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 16H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h3>Confirmer la suppression de toutes les réponses</h3>
+            <p>Êtes-vous sûr de vouloir supprimer toutes les réponses du questionnaire ? Cette action est irréversible et effacera définitivement toutes les données collectées. Pensez à exporter les données avant de procéder à cette action.</p>
+            <div class="confirm-buttons">
+                <button id="deleteAllResponsesCancel" class="secondary-button">Annuler</button>
+                <button id="deleteAllResponsesConfirm" class="delete-button">Supprimer toutes les réponses</button>
             </div>
         </div>
     </div>
