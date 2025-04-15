@@ -1303,4 +1303,49 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Styles pour les statistiques des visiteurs */
+.visitor-stats {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.visitor-stat-card {
+    flex: 1;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.visitor-stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.visitor-stat-card h4 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.visitor-stat-card p {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #00b09b;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .visitor-stats {
+        flex-direction: column;
+    }
+    
+    .visitor-stat-card {
+        margin-bottom: 15px;
+    }
+}
   

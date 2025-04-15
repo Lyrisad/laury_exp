@@ -1,5 +1,5 @@
 // Configuration
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxktrnh2OUpspGSAudenKRGxrIFAiXu4YpHTiVtctz7bC3kSXc9T9HwgNMADjP_5ZE0/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwy5hppvXQauQA6ffEUCMMaHxjtHgjpPJxj_JugVIaZfBO2hda0A3rH-GjSqrgA8n_p/exec';
 const ADMIN_CREDENTIALS = {
     username: 'admin',
     password: 'password123' // À changer en production
@@ -742,29 +742,26 @@ function updateClickStats() {
             document.getElementById('totalPageViews').textContent = data.totalPageViews;
             document.getElementById('clickThroughRate').textContent = `${data.ctr.toFixed(2)}%`;
             
-            // Mettre à jour les détails par catégorie
-            const detailsContainer = document.getElementById('clickDetailsContainer');
-            detailsContainer.innerHTML = '';
+            // Mettre à jour les statistiques des visiteurs et réponses
+            document.getElementById('totalVisitors').textContent = data.totalVisitors || 0;
             
-            for (const [category, items] of Object.entries(data.clickData)) {
-                const categoryDiv = document.createElement('div');
-                categoryDiv.className = 'click-detail-item';
-                categoryDiv.innerHTML = `<h5>${category}</h5>`;
-                
-                for (const [elementId, stats] of Object.entries(items)) {
-                    const elementDiv = document.createElement('div');
-                    elementDiv.innerHTML = `
-                        <p><strong>${elementId}:</strong> ${stats.count} clics</p>
-                        <p>Dernier clic: ${new Date(stats.timestamps[stats.timestamps.length - 1]).toLocaleString()}</p>
-                    `;
-                    categoryDiv.appendChild(elementDiv);
-                }
-                
-                detailsContainer.appendChild(categoryDiv);
+            // Récupérer le nombre de réponses au questionnaire
+            return fetch(`${SCRIPT_URL}?action=getTotalResponses`);
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            document.getElementById('totalResponses').textContent = data.totalResponses || 0;
         })
         .catch(error => {
-            console.error('Erreur lors de la récupération des statistiques de clics:', error);
+            console.error('Erreur lors de la récupération des statistiques:', error);
         });
 }
 

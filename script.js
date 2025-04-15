@@ -1,5 +1,5 @@
 // Configuration
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxktrnh2OUpspGSAudenKRGxrIFAiXu4YpHTiVtctz7bC3kSXc9T9HwgNMADjP_5ZE0/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwy5hppvXQauQA6ffEUCMMaHxjtHgjpPJxj_JugVIaZfBO2hda0A3rH-GjSqrgA8n_p/exec';
 
 // Éléments du DOM
 let form = null;
@@ -58,7 +58,16 @@ function initQuestionnaire() {
     }
 }
 
-// Fonction pour vérifier l'état du questionnaire
+// Fonction pour envoyer une requête de suivi sans bloquer la navigation
+function sendTrackingRequest(params) {
+    const img = new Image();
+    const queryString = Object.entries(params)
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+        .join('&');
+    img.src = `${SCRIPT_URL}?${queryString}`;
+}
+
+// Fonction pour vérifier le statut du questionnaire
 function checkQuestionnaireStatus() {
     const params = new URLSearchParams({
         action: 'getQuestionnaireStatus'
