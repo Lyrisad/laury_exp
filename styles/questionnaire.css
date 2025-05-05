@@ -1291,8 +1291,8 @@
 .section-header::before {
     content: attr(data-question-count);
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: -0.5rem;
+    right: -0.5rem;
     background-color: var(--primary-color);
     color: white;
     padding: 0.3rem 0.8rem;
@@ -1401,8 +1401,14 @@
     .section-header {
         padding: 1.2rem 1.5rem 2rem;
     }
+
+    .section-header::before {
+        font-size: 0.7rem;
+        top: -0.8rem;
+        right: -0.1rem;
+    }
     
-    .section-title {
+    .section-title h3{
         font-size: 1.5rem;
     }
     

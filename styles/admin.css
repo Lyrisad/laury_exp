@@ -692,12 +692,16 @@
 }
 
 .confirm-buttons button {
-    padding: 0.8rem 1.5rem;
+    padding: 12px 20px;
     border-radius: 8px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
     min-width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .confirm-buttons .secondary-button {
@@ -708,6 +712,8 @@
 
 .confirm-buttons .secondary-button:hover {
     background-color: #e0e0e0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .confirm-buttons .delete-button {
@@ -719,7 +725,7 @@
 .confirm-buttons .delete-button:hover {
     background-color: #ff3333;
     transform: translateY(-2px);
-    box-shadow: var(--card-shadow);
+    box-shadow: 0 4px 8px rgba(255, 77, 77, 0.3);
 }
 
 /* Animation du modal */
@@ -1146,7 +1152,7 @@
   }
   
   .extract-button {
-    display: inline-block;
+    display: inline-flex;
     font-family: 'Poppins', sans-serif;
     font-size: 0.9rem;
     padding: 8px 16px;
@@ -1159,11 +1165,21 @@
     text-align: center;
     float: right; 
     transition: background-color 0.3s ease;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
   
   .extract-button:hover {
     background-color: #00b09b;
     color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .extract-button::before {
+    content: "📊";
+    margin-right: 6px;
   }
   
   #closeQuestionnaire{
@@ -1390,6 +1406,22 @@
     justify-content: space-between;
     margin-top: 2rem;
     flex-wrap: wrap;
+    gap: 12px;
+}
+
+.question-actions button {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .cta-button.danger {
@@ -1414,15 +1446,65 @@
     margin-right: 0.5rem;
 }
 
+.title-icon {
+    margin-right: 8px;
+}
+
 @media (max-width: 1000px) {
     .question-actions {
         flex-direction: column;
+        gap: 10px;
     }
     
     .question-actions button {
-        margin-top: 5px;
         width: 100%;
+        margin: 0;
     }
+}
+
+/* Harmonize all admin buttons */
+.cta-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cta-button:hover {
+    background-color: #3955d6;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cta-button.warning {
+    background-color: #ffffff;
+    color: #ff3333;
+    border: 1px solid #ff3333;
+}
+
+.cta-button.warning:hover {
+    background-color: #ff3333;
+    color: #ffffff;
+}
+
+.cta-button.section-button {
+    background-color: #8e44ad;
+    color: white;
+}
+
+.cta-button.section-button:hover {
+    background-color: #7d3c98;
+    box-shadow: 0 4px 8px rgba(142, 68, 173, 0.3);
 }
 
 /* Zone de Danger */
@@ -1601,12 +1683,16 @@
 }
 
 .question-form .form-actions button {
-    padding: 0.8rem 1.5rem;
+    padding: 12px 20px;
     border-radius: 8px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
     min-width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .question-form .form-actions .secondary-button {
@@ -1617,6 +1703,8 @@
 
 .question-form .form-actions .secondary-button:hover {
     background-color: #e0e0e0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .question-form .form-actions .submit-button {
@@ -1628,7 +1716,7 @@
 .question-form .form-actions .submit-button:hover {
     background-color: #3955d6;
     transform: translateY(-2px);
-    box-shadow: var(--card-shadow);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* Animation de chargement pour le formulaire */
@@ -2034,5 +2122,45 @@
     display: flex;
     align-items: center;
     margin: 0.75rem 0;
+}
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(245, 245, 245, 0.7);
+    backdrop-filter: blur(5px);
+    border-radius: 12px;
+    margin: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--primary-color), #5d7eff);
+    border-radius: 12px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #3955d6, #7e94ff);
+    border-width: 1px;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(135deg, #304bc2, #5d7eff);
+}
+
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
+
+/* Firefox scrollbar */
+* {
+    scrollbar-color: var(--primary-color) rgba(245, 245, 245, 0.7);
+    scrollbar-width: thin;
 }
   
