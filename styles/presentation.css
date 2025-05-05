@@ -102,6 +102,62 @@
     background-color: #3955d6;
 }
 
+/* Styles pour la case de consentement */
+.consent-container {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border-left: 4px solid var(--primary-color);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.consent-label {
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+}
+
+.consent-label input[type="checkbox"] {
+    margin-top: 0.2rem;
+    margin-right: 1rem;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.consent-label span {
+    color: var(--text-color);
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+/* Style pour le bouton désactivé */
+.cta-button.disabled {
+    background-color: #d1d1d1;
+    color: #777;
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Animation pour le bouton qui devient actif */
+@keyframes enableButton {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.cta-button.enabled {
+    animation: enableButton 0.5s ease;
+    pointer-events: auto;
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .presentation {
@@ -114,6 +170,14 @@
 
     .info-card {
         padding: 1.5rem;
+    }
+
+    .consent-container {
+        padding: 1.2rem;
+    }
+    
+    .consent-label span {
+        font-size: 0.95rem;
     }
 }
 
@@ -133,5 +197,18 @@
     .cta-button {
         width: 100%;
         max-width: 300px;
+    }
+
+    .consent-container {
+        padding: 1rem;
+    }
+    
+    .consent-label input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .consent-label span {
+        font-size: 0.9rem;
     }
 } 

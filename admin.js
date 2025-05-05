@@ -1,5 +1,5 @@
 // Configuration
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw7788WY7kvRAz3TZFFV9OrOgzpRC6lrAfFyUmPbo3ile7Rdpt5vAI0k_N26g5V9piRrQ/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygLRqkAa4FFFwUJ11XsewgnIPD_mFp7VuvdtSaBbBJ7y3ouGMak0K8gGpKY7ZHq-rWPA/exec';
 const ADMIN_CREDENTIALS = {
     username: 'AdminRH',
     password: 'SondageRH25!' // À changer en production
@@ -17,6 +17,15 @@ const optionsList = document.getElementById('optionsList');
 const addOptionBtn = document.getElementById('addOption');
 const addQuestionBtn = document.getElementById('addQuestion');
 const logoutButton = document.getElementById('logoutButton');
+
+// Éléments DOM pour les sections
+const addSectionBtn = document.getElementById('addSection');
+const sectionModal = document.getElementById('sectionModal');
+const closeSectionModal = document.getElementById('closeSectionModal');
+const cancelSectionBtn = document.getElementById('cancelSection');
+const sectionForm = document.getElementById('sectionForm');
+const sectionStartQuestion = document.getElementById('sectionStartQuestion');
+const sectionEndQuestion = document.getElementById('sectionEndQuestion');
 
 // Ajout des éléments pour le modal d'édition
 const editModal = document.createElement('div');
@@ -48,6 +57,17 @@ editModal.innerHTML = `
                 <h3>Options de réponse</h3>
                 <div id="editOptionsList"></div>
                 <button type="button" id="editAddOption">Ajouter une option</button>
+                <div id="editMaxResponsesContainer" style="display: none; margin-top: 15px;">
+                    <label for="editMaxResponses">Nombre de réponses attendues :</label>
+                    <select id="editMaxResponses">
+                        <option value="0">Illimité</option>
+                        <option value="1">1 réponse</option>
+                        <option value="2">2 réponses</option>
+                        <option value="3">3 réponses</option>
+                        <option value="4">4 réponses</option>
+                        <option value="5">5 réponses</option>
+                    </select>
+                </div>
             </div>
             <button type="submit">Enregistrer les modifications</button>
         </form>
@@ -75,6 +95,8 @@ document.getElementById('editAddOption').addEventListener('click', function() {
 document.getElementById('editResponseType').addEventListener('change', function() {
     // Afficher le container d'options uniquement pour 'radio' ou 'checkbox'
     document.getElementById('editOptionsContainer').style.display = (this.value === 'radio' || this.value === 'checkbox') ? 'block' : 'none';
+    // Afficher le container de max responses uniquement pour 'checkbox'
+    document.getElementById('editMaxResponsesContainer').style.display = this.value === 'checkbox' ? 'block' : 'none';
 });
 
 // Fonction pour afficher des notifications stylées
@@ -82,7 +104,8 @@ function showNotification(message, type = 'success') {
     const colors = {
         success: 'linear-gradient(to right, #00b09b, #96c93d)',
         error: 'linear-gradient(to right, #ff5f6d, #ffc371)',
-        warning: 'linear-gradient(to right, #f7b733, #fc4a1a)'
+        warning: 'linear-gradient(to right, #f7b733, #fc4a1a)',
+        info: 'linear-gradient(to right, #00b09b, #96c93d)'
     };
 
     Toastify({
@@ -116,7 +139,9 @@ document.getElementById('editQuestionForm').addEventListener('submit', function(
     }
     
     let responses = [];
-    if (type !== 'text') {
+    let maxResponses = 0;
+    
+    if (type === 'radio' || type === 'checkbox') {
         responses = Array.from(document.getElementById('editOptionsList').children).map(option => 
             option.querySelector('input').value
         ).filter(value => value.trim() !== '');
@@ -124,6 +149,11 @@ document.getElementById('editQuestionForm').addEventListener('submit', function(
         if (responses.length === 0) {
             showNotification('Veuillez ajouter au moins une option de réponse', 'error');
             return;
+        }
+        
+        // Get maxResponses value if question type is checkbox
+        if (type === 'checkbox') {
+            maxResponses = parseInt(document.getElementById('editMaxResponses').value);
         }
     }
 
@@ -136,7 +166,8 @@ document.getElementById('editQuestionForm').addEventListener('submit', function(
         order: order,
         question: text,
         type: type,
-        responses: JSON.stringify(responses)
+        responses: JSON.stringify(responses),
+        maxResponses: maxResponses
     });
 
     fetch(`${SCRIPT_URL}?${params.toString()}`)
@@ -264,6 +295,11 @@ function loadQuestions() {
     // Afficher le skeleton loading
     createSkeletonLoading();
     
+    // Enregistrer le moment de début du chargement
+    const loadStartTime = Date.now();
+    // Définir une durée minimale pour le skeleton loading (en ms)
+    const minLoadingTime = 2500; // Augmenté à 2.5 secondes
+    
     fetch(url)
         .then(response => {
             if (!response.ok) {
@@ -275,65 +311,232 @@ function loadQuestions() {
             if (data.error) {
                 throw new Error(data.error);
             }
-            if (data.values) {
-                displayQuestions(data.values);
-            } else {
-                console.warn('Aucune question trouvée');
-                questionsContainer.innerHTML = '<p>Aucune question trouvée</p>';
-            }
+            
+            // Calculer le temps écoulé depuis le début du chargement
+            const elapsedTime = Date.now() - loadStartTime;
+            // Déterminer le délai restant pour atteindre la durée minimale
+            const remainingDelay = Math.max(0, minLoadingTime - elapsedTime);
+            
+            // Afficher les questions après le délai minimum
+            setTimeout(() => {
+                if (data.values) {
+                    displayQuestions(data.values, true); // Ajouter un paramètre pour indiquer le chargement initial
+                } else {
+                    console.warn('Aucune question trouvée');
+                    questionsContainer.innerHTML = '<p>Aucune question trouvée</p>';
+                }
+            }, remainingDelay);
         })
         .catch(error => {
             console.error('Erreur lors du chargement des questions:', error);
-            questionsContainer.innerHTML = `<p class="error">Erreur lors du chargement des questions: ${error.message}</p>`;
+            
+            // Calculer le temps écoulé depuis le début du chargement
+            const elapsedTime = Date.now() - loadStartTime;
+            // Déterminer le délai restant pour atteindre la durée minimale
+            const remainingDelay = Math.max(0, minLoadingTime - elapsedTime);
+            
+            // Afficher l'erreur après le délai minimum
+            setTimeout(() => {
+                questionsContainer.innerHTML = `<p class="error">Erreur lors du chargement des questions: ${error.message}</p>`;
+            }, remainingDelay);
         });
 }
 
-function displayQuestions(questions) {
-    questionsContainer.innerHTML = '';
+function displayQuestions(questions, isInitialLoad = false) {
+    // Ne pas effacer le skeleton pendant le chargement initial
+    if (!isInitialLoad) {
+        questionsContainer.innerHTML = '';
+    }
+    
+    // Trier les questions par ordre
     questions.sort((a, b) => a.order - b.order);
+    
+    // Récupérer les sections (ajout d'une nouvelle requête)
+    const params = new URLSearchParams({
+        action: 'getSections'
+    });
+    
+    fetch(`${SCRIPT_URL}?${params.toString()}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                // Check if the error is related to the sheet not existing
+                if (data.error.includes("Sheet not found") || data.error.includes("Sections")) {
+                    throw new Error("La feuille 'Sections' n'existe pas. Elle sera créée la prochaine fois que vous ajouterez une section.");
+                }
+                // Check for spreadsheet access errors
+                if (data.error.includes("openById") || data.error.includes("accéder à la feuille de calcul")) {
+                    throw new Error("Impossible d'accéder à la feuille de calcul Google. Vérifiez l'ID et les permissions du script.");
+                }
+                throw new Error(data.error);
+            }
+            
+            // Maintenant que nous avons les sections, effacer le contenu du conteneur
+            questionsContainer.innerHTML = '';
+            
+            const sections = data.sections || [];
+            
+            // Afficher les questions avec les sections
+            let currentOrder = 0;
+            
+            sections.forEach(section => {
+                // Vérifier si la section doit être affichée ici
+                if (parseInt(section.startQuestion) > currentOrder) {
+                    // Afficher les questions avant la section
+                    for (let i = currentOrder; i < parseInt(section.startQuestion); i++) {
+                        const questionToDisplay = questions.find(q => q.order === i);
+                        if (questionToDisplay) {
+                            appendQuestionElement(questionToDisplay);
+                        }
+                    }
+                }
+                
+                // Afficher la section
+                appendSectionElement(section);
+                
+                // Afficher les questions contenues dans cette section
+                for (let i = parseInt(section.startQuestion); i <= parseInt(section.endQuestion); i++) {
+                    const questionToDisplay = questions.find(q => q.order === i);
+                    if (questionToDisplay) {
+                        appendQuestionElement(questionToDisplay);
+                    }
+                }
+                
+                // Mettre à jour l'ordre actuel
+                currentOrder = parseInt(section.endQuestion) + 1;
+            });
+            
+            // Afficher les questions restantes
+            for (let i = currentOrder; i <= questions.length; i++) {
+                const questionToDisplay = questions.find(q => q.order === i);
+                if (questionToDisplay) {
+                    appendQuestionElement(questionToDisplay);
+                }
+            }
+            
+            // S'il n'y a aucune section, afficher toutes les questions normalement
+            if (sections.length === 0) {
+                questions.forEach(question => {
+                    appendQuestionElement(question);
+                });
+            }
+            
+            // Ajouter une animation de fade-in au contenu
+            fadeInContent();
+        })
+        .catch(error => {
+            console.error('Erreur lors du chargement des sections:', error);
+            
+            // Maintenant que nous savons qu'il y a une erreur, effacer le contenu du conteneur
+            questionsContainer.innerHTML = '';
+            
+            // Afficher un message plus convivial selon le type d'erreur
+            if (error.message.includes("n'existe pas")) {
+                showNotification("La feuille 'Sections' n'existe pas encore. Elle sera créée automatiquement lorsque vous ajouterez votre première section.", 'info');
+            } else if (error.message.includes("Impossible d'accéder")) {
+                showNotification("Impossible d'accéder à la feuille de calcul Google. Vérifiez l'ID de la feuille et les permissions du script Apps Script.", 'error');
+            } else {
+                showNotification("Erreur lors du chargement des sections: " + error.message, 'error');
+            }
+            
+            // En cas d'erreur, afficher simplement les questions
+            questions.forEach(question => {
+                appendQuestionElement(question);
+            });
+            
+            // Ajouter une animation de fade-in au contenu
+            fadeInContent();
+        });
+}
 
-    questions.forEach((question, index) => {
-        const questionElement = document.createElement('div');
-        questionElement.className = 'question-item';
-        
-        // Création de la section des réponses possibles
-        let responsesHtml = '';
-        if (question.type === 'radio' || question.type === 'checkbox') {
-            responsesHtml = `
-                <div class="responses-list">
-                    <h4>Réponses possibles :</h4>
-                    <ul>
-                        ${question.responses.map(response => `
-                            <li>${response}</li>
-                        `).join('')}
-                    </ul>
-                </div>
-            `;
-        }
+// Fonction pour animer l'apparition du contenu
+function fadeInContent() {
+    // Sélectionner tous les éléments récemment ajoutés
+    const elements = questionsContainer.querySelectorAll('.question-item, .section-item');
+    
+    // Ajouter une classe pour déclencher l'animation de fade-in
+    elements.forEach((element, index) => {
+        // Retarder chaque élément pour créer un effet de cascade
+        setTimeout(() => {
+            element.classList.add('fade-in');
+        }, 50 * index);
+    });
+}
 
-        questionElement.innerHTML = `
-            <div class="header">
-                <h3>Question ${question.order}</h3>
-                <span class="type-indicator">${question.type === 'text' ? 'Champ texte' : 
-                    question.type === 'radio' ? 'Choix unique' : 
-                    question.type === 'checkbox' ? 'Choix multiple' :
-                    question.type === 'barem' ? 'Barem' : 
-                    question.type === 'nps' ? 'NPS (0-10)' :  
-                    question.type
-                }</span>
-
-            </div>
-            <div class="content">
-                <p>${question.question}</p>
-                ${responsesHtml}
-            </div>
-            <div class="actions">
-                <button class="edit-button" onclick="editQuestion(${question.order})">Modifier</button>
-                <button class="delete-button" onclick="deleteQuestion(${question.order})">Supprimer</button>
+// Fonction pour ajouter un élément de question au conteneur
+function appendQuestionElement(question) {
+    const questionElement = document.createElement('div');
+    questionElement.className = 'question-item';
+    
+    // Création de la section des réponses possibles
+    let responsesHtml = '';
+    if (question.type === 'radio' || question.type === 'checkbox') {
+        responsesHtml = `
+            <div class="responses-list">
+                <h4>Réponses possibles :</h4>
+                <ul>
+                    ${question.responses.map(response => `
+                        <li>${response}</li>
+                    `).join('')}
+                </ul>
             </div>
         `;
-        questionsContainer.appendChild(questionElement);
-    });
+    }
+
+    questionElement.innerHTML = `
+        <div class="header">
+            <h3>Question ${question.order}</h3>
+            <span class="type-indicator">${question.type === 'text' ? 'Champ texte' : 
+                question.type === 'radio' ? 'Choix unique' : 
+                question.type === 'checkbox' ? 'Choix multiple' :
+                question.type === 'barem' ? 'Barem' : 
+                question.type === 'nps' ? 'NPS (0-10)' :  
+                question.type
+            }</span>
+        </div>
+        <div class="content">
+            <p>${question.question}</p>
+            ${responsesHtml}
+        </div>
+        <div class="actions">
+            <button class="edit-button" onclick="editQuestion(${question.order})">Modifier</button>
+            <button class="delete-button" onclick="deleteQuestion(${question.order})">Supprimer</button>
+        </div>
+    `;
+    questionsContainer.appendChild(questionElement);
+}
+
+// Fonction pour ajouter un élément de section au conteneur
+function appendSectionElement(section) {
+    const sectionElement = document.createElement('div');
+    sectionElement.className = 'section-item';
+    sectionElement.dataset.sectionId = section.id;
+    
+    // Calculer le nombre de questions dans cette section
+    const questionsCount = parseInt(section.endQuestion) - parseInt(section.startQuestion) + 1;
+    
+    sectionElement.innerHTML = `
+        <h3>${section.title}</h3>
+        ${section.description ? `<p>${section.description}</p>` : ''}
+        <div class="section-range-display">
+            <span class="questions-count-badge">${questionsCount} ${questionsCount > 1 ? 'questions' : 'question'}</span>
+            Questions ${section.startQuestion} à ${section.endQuestion}
+        </div>
+        <div class="section-info">
+            <i>Les questions de cette section apparaissent ci-dessous</i>
+        </div>
+        <div class="actions">
+            <button class="edit-button" onclick="editSection('${section.id}')">Modifier</button>
+            <button class="delete-button" onclick="deleteSection('${section.id}')">Supprimer</button>
+        </div>
+    `;
+    
+    questionsContainer.appendChild(sectionElement);
 }
 
 // Gestion du formulaire de question
@@ -341,6 +544,8 @@ responseType.addEventListener('change', function() {
     const selectedType = this.value;
     // Afficher les options uniquement pour 'radio' ou 'checkbox'
     optionsContainer.style.display = (selectedType === 'radio' || selectedType === 'checkbox') ? 'block' : 'none';
+    // Afficher le container de max responses uniquement pour 'checkbox'
+    document.getElementById('maxResponsesContainer').style.display = selectedType === 'checkbox' ? 'block' : 'none';
     
     // Ajuster le placeholder du texte de la question selon le type
     const questionText = document.getElementById('questionText');
@@ -393,6 +598,7 @@ questionFormElement.addEventListener('submit', function(e) {
     }
     
     let responses = [];
+    let maxResponses = 0;
     if (type !== 'text' && type !== 'barem' && type !== 'nps') {
         responses = Array.from(optionsList.children).map(option => 
             option.querySelector('input').value
@@ -401,6 +607,11 @@ questionFormElement.addEventListener('submit', function(e) {
         if (responses.length === 0) {
             showNotification('Veuillez ajouter au moins une option de réponse', 'error');
             return;
+        }
+        
+        // Get maxResponses value if question type is checkbox
+        if (type === 'checkbox') {
+            maxResponses = parseInt(document.getElementById('maxResponses').value);
         }
     }
 
@@ -412,7 +623,8 @@ questionFormElement.addEventListener('submit', function(e) {
         order: order,
         question: text,
         type: type,
-        responses: JSON.stringify(responses)
+        responses: JSON.stringify(responses),
+        maxResponses: maxResponses
     });
 
     fetch(`${SCRIPT_URL}?${params.toString()}`)
@@ -476,7 +688,7 @@ function editQuestion(order) {
                 const optionsList = document.getElementById('editOptionsList');
                 optionsList.innerHTML = '';
                 
-                if (question.type !== 'text' && question.responses) {
+                if ((question.type === 'radio' || question.type === 'checkbox') && question.responses) {
                     question.responses.forEach(response => {
                         const optionInput = document.createElement('div');
                         optionInput.className = 'option-input';
@@ -490,7 +702,19 @@ function editQuestion(order) {
                 
                 // Afficher/masquer le conteneur d'options
                 document.getElementById('editOptionsContainer').style.display = 
-                    question.type !== 'text' ? 'block' : 'none';
+                    (question.type === 'radio' || question.type === 'checkbox') ? 'block' : 'none';
+                
+                // Afficher/masquer et définir la valeur du conteneur maxResponses
+                const editMaxResponsesContainer = document.getElementById('editMaxResponsesContainer');
+                editMaxResponsesContainer.style.display = question.type === 'checkbox' ? 'block' : 'none';
+                
+                // Set maxResponses value if present
+                if (question.type === 'checkbox' && question.maxResponses !== undefined) {
+                    document.getElementById('editMaxResponses').value = question.maxResponses;
+                } else {
+                    // Default to unlimited (0) if not specified
+                    document.getElementById('editMaxResponses').value = '0';
+                }
                 
                 // Stocker l'ordre original pour la mise à jour
                 document.getElementById('editQuestionForm').dataset.originalOrder = order;
@@ -954,4 +1178,236 @@ document.getElementById('deleteAllResponsesConfirm').addEventListener('click', f
                 document.getElementById('deleteAllResponsesConfirm').style.cursor = 'pointer';
             }, 2000);
         });
-}); 
+});
+
+// Ajout du gestionnaire d'événement pour le bouton d'ajout de section
+if (addSectionBtn) {
+    addSectionBtn.addEventListener('click', function() {
+        // Mettre à jour les listes déroulantes des questions
+        updateQuestionSelects();
+        // Réinitialiser le formulaire
+        sectionForm.reset();
+        // Modifier le titre du modal pour l'ajout
+        document.querySelector('#sectionModal h2').innerHTML = '<span class="title-icon">📑</span> Ajouter une section';
+        // Afficher le modal
+        sectionModal.style.display = 'block';
+    });
+}
+
+// Fermer le modal de section
+if (closeSectionModal) {
+    closeSectionModal.addEventListener('click', function() {
+        sectionModal.style.display = 'none';
+    });
+}
+
+// Annuler la création/édition de section
+if (cancelSectionBtn) {
+    cancelSectionBtn.addEventListener('click', function() {
+        sectionModal.style.display = 'none';
+    });
+}
+
+// Fonction pour mettre à jour les listes déroulantes des questions
+function updateQuestionSelects() {
+    if (!sectionStartQuestion || !sectionEndQuestion) return;
+    
+    // Vider les listes
+    sectionStartQuestion.innerHTML = '<option value="">Sélectionnez...</option>';
+    sectionEndQuestion.innerHTML = '<option value="">Sélectionnez...</option>';
+    
+    // Récupérer les questions existantes
+    const params = new URLSearchParams({
+        action: 'getQuestions'
+    });
+    
+    fetch(`${SCRIPT_URL}?${params.toString()}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            if (data.values) {
+                // Trier les questions par ordre
+                const questions = data.values.sort((a, b) => a.order - b.order);
+                
+                // Ajouter les options aux listes déroulantes
+                questions.forEach(question => {
+                    const option = document.createElement('option');
+                    option.value = question.order;
+                    option.textContent = `Question ${question.order}: ${question.question.substring(0, 40)}${question.question.length > 40 ? '...' : ''}`;
+                    
+                    sectionStartQuestion.appendChild(option.cloneNode(true));
+                    sectionEndQuestion.appendChild(option);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors du chargement des questions :', error);
+            showNotification('Erreur lors du chargement des questions : ' + error.message, 'error');
+        });
+}
+
+// Événement de soumission du formulaire de section
+if (sectionForm) {
+    sectionForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const title = document.getElementById('sectionTitle').value;
+        const description = document.getElementById('sectionDescription').value;
+        const startQuestion = sectionStartQuestion.value;
+        const endQuestion = sectionEndQuestion.value;
+        const sectionId = this.dataset.sectionId || '';
+        
+        if (!title || !startQuestion || !endQuestion) {
+            showNotification('Veuillez remplir tous les champs obligatoires', 'error');
+            return;
+        }
+        
+        if (parseInt(startQuestion) > parseInt(endQuestion)) {
+            showNotification('La question de début doit être avant la question de fin', 'error');
+            return;
+        }
+        
+        // Ajouter un indicateur de chargement
+        this.classList.add('loading');
+        
+        // Préparer les paramètres de la requête
+        const params = new URLSearchParams({
+            action: sectionId ? 'editSection' : 'addSection',
+            sectionId: sectionId,
+            title: title,
+            description: description,
+            startQuestion: startQuestion,
+            endQuestion: endQuestion
+        });
+        
+        fetch(`${SCRIPT_URL}?${params.toString()}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                if (data.success) {
+                    showNotification(sectionId ? 'Section modifiée avec succès' : 'Section ajoutée avec succès', 'success');
+                    sectionModal.style.display = 'none';
+                    loadQuestions(); // Recharger les questions et sections
+                } else {
+                    throw new Error('Erreur inconnue lors de la ' + (sectionId ? 'modification' : 'création') + ' de la section');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur détaillée:', error);
+                showNotification('Erreur: ' + error.message, 'error');
+            })
+            .finally(() => {
+                // Retirer l'indicateur de chargement
+                this.classList.remove('loading');
+            });
+    });
+}
+
+// Fonction pour éditer une section
+function editSection(sectionId) {
+    // Récupérer les informations de la section
+    const params = new URLSearchParams({
+        action: 'getSection',
+        sectionId: sectionId
+    });
+    
+    fetch(`${SCRIPT_URL}?${params.toString()}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            if (data.section) {
+                // Mettre à jour les champs du formulaire
+                document.getElementById('sectionTitle').value = data.section.title;
+                document.getElementById('sectionDescription').value = data.section.description || '';
+                
+                // Mettre à jour les listes déroulantes avant de sélectionner les valeurs
+                updateQuestionSelects();
+                
+                // Sélectionner les bonnes options après un court délai pour laisser le temps aux options d'être chargées
+                setTimeout(() => {
+                    sectionStartQuestion.value = data.section.startQuestion;
+                    sectionEndQuestion.value = data.section.endQuestion;
+                }, 500);
+                
+                // Stocker l'ID de la section
+                sectionForm.dataset.sectionId = sectionId;
+                
+                // Modifier le titre du modal pour l'édition
+                document.querySelector('#sectionModal h2').innerHTML = '<span class="title-icon">📑</span> Modifier la section';
+                
+                // Afficher le modal
+                sectionModal.style.display = 'block';
+            } else {
+                throw new Error('Section non trouvée');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur détaillée:', error);
+            showNotification('Erreur lors du chargement de la section: ' + error.message, 'error');
+        });
+}
+
+// Fonction pour supprimer une section
+function deleteSection(sectionId) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cette section ?')) {
+        return;
+    }
+    
+    // Ajouter un indicateur de chargement
+    const sectionItem = document.querySelector(`.section-item[data-section-id="${sectionId}"]`);
+    if (sectionItem) {
+        sectionItem.classList.add('loading');
+    }
+    
+    const params = new URLSearchParams({
+        action: 'deleteSection',
+        sectionId: sectionId
+    });
+    
+    fetch(`${SCRIPT_URL}?${params.toString()}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            if (data.success) {
+                showNotification('Section supprimée avec succès', 'success');
+                loadQuestions(); // Recharger les questions et sections
+            } else {
+                throw new Error('Erreur inconnue lors de la suppression de la section');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur détaillée:', error);
+            showNotification('Erreur lors de la suppression de la section: ' + error.message, 'error');
+            if (sectionItem) {
+                sectionItem.classList.remove('loading');
+            }
+        });
+} 

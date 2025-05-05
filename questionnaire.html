@@ -26,7 +26,17 @@
     </header>
 
     <main>
-        <section class="questionnaire">
+        <!-- Section d'accès refusé qui s'affiche si le consentement n'a pas été donné -->
+        <section id="consent-check" class="consent-check" style="display: none;">
+            <div class="consent-message-container">
+                <div class="consent-icon">🔒</div>
+                <h2 data-translate="accessDenied">Accès au questionnaire</h2>
+                <p data-translate="consentRequired">Veuillez consulter la présentation et cocher la case de consentement pour accéder au questionnaire.</p>
+                <a href="presentation.html" class="cta-button" data-translate="goToPresentation">Aller à la présentation</a>
+            </div>
+        </section>
+        
+        <section class="questionnaire" id="questionnaire-content">
             <h1 data-translate="questionnaire">Questionnaire de Satisfaction</h1>
             
             <!-- Modal de disclaimer -->
@@ -56,6 +66,16 @@
                 <p data-translate="questionnaireClosedMessage">Le questionnaire est actuellement fermé. Veuillez réessayer ultérieurement.</p>
             </div>
 
+            <!-- Barre de progression sticky à droite -->
+            <div class="progress-sticky" id="progressSticky">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div id="progressPercentage">0%</div>
+                </div>
+            </div>
+
             <form id="questionnaireForm">
                 <div class="form-section">
                     <h2 data-translate="generalInfo">Informations générales</h2>
@@ -64,41 +84,32 @@
                         <label for="sexe" data-translate="gender">Genre</label>
                         <select id="sexe" name="sexe" required data-translate-options="gender">
                             <option value="" data-translate="selectGender">Sélectionnez votre genre</option>
-                            <option value="Femme" data-translate="female">Femme</option>
                             <option value="Homme" data-translate="male">Homme</option>
-                            <option value="Non-binaire" data-translate="genderNonBinary">Non-binaire</option>
-                            <option value="Genre fluide" data-translate="genderFluid">Genre fluide</option>
-                            <option value="Autre" data-translate="other">Autre (veuillez préciser)</option>
-                            <option value="Préfère ne pas répondre" data-translate="preferNotToSay">Préfère ne pas répondre</option>
+                            <option value="Femme" data-translate="female">Femme</option>
+                            <option value="Non genré" data-translate="nonGendered">Non genré</option>
                         </select>
-                        <div id="autreGenreContainer" style="display: none; margin-top: 10px;">
-                            <input type="text" id="autreGenre" name="autreGenre" placeholder="Précisez votre genre" data-translate-placeholder="specifyGender">
-                        </div>
                     </div>
 
                     <div class="form-group">
                         <label for="age" data-translate="age">Tranche d'âge :</label>
                         <select id="age" name="age" required data-translate-options="age">
                             <option value="" data-translate="selectAge">Sélectionnez votre tranche d'âge</option>
-                            <option value="18-25" data-translate="age1">18-25 ans</option>
-                            <option value="26-35" data-translate="age2">26-35 ans</option>
-                            <option value="36-45" data-translate="age3">36-45 ans</option>
-                            <option value="46-55" data-translate="age4">46-55 ans</option>
-                            <option value="56+" data-translate="age5">56+</option>
+                            <option value="Moins de 20 ans" data-translate="age1">Moins de 20 ans</option>
+                            <option value="20-29 ans" data-translate="age2">20-29 ans</option>
+                            <option value="30-39 ans" data-translate="age3">30-39 ans</option>
+                            <option value="40-49 ans" data-translate="age4">40-49 ans</option>
+                            <option value="50-59 ans" data-translate="age5">50-59 ans</option>
+                            <option value="Plus de 60 ans" data-translate="age6">Plus de 60 ans</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="poste" data-translate="position">Poste :</label>
+                        <label for="poste" data-translate="position">Fonction :</label>
                         <select id="poste" name="poste" required data-translate-options="position">
-                            <option value="" data-translate="selectPosition">Sélectionnez votre poste</option>
-                            <option value="paie" data-translate="position1">Paie</option>
-                            <option value="compta" data-translate="position2">Comptabilité</option>
-                            <option value="rh" data-translate="position3">Ressources Humaines</option>
-                            <option value="dev" data-translate="position4">Développement</option>
-                            <option value="gestion" data-translate="position5">Gestion</option>
-                            <option value="agent" data-translate="position6">Agent</option>
-                            <option value="manager" data-translate="position7">Manager</option>
+                            <option value="" data-translate="selectPosition">Sélectionnez votre fonction</option>
+                            <option value="Fonctions supports" data-translate="position8">Fonctions supports</option>
+                            <option value="Managers Quadri" data-translate="position9">Managers Quadri</option>
+                            <option value="Exploitation" data-translate="position10">Exploitation</option>
                         </select>
                     </div>
                 </div>
@@ -135,19 +146,31 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="commentaires" data-translate="commentsLabel">Avez-vous des commentaires ou suggestions à nous faire partager ?</label>
+                    <label for="commentaires" data-translate="commentsLabel">Avez-vous des commentaires/suggestions à nous partager ?</label>
                     <textarea id="commentaires" name="commentaires" rows="4" placeholder="Vos commentaires sont précieux pour nous aider à améliorer ce questionnaire..." data-translate-placeholder="commentsPlaceholder"></textarea>
                 </div>
 
                 <button type="submit" class="submit-button" data-translate="submit">Envoyer le questionnaire</button>
             </form>
         </section>
+
+        <!-- Modal de succès -->
+        <div id="successModal" class="success-modal">
+            <div class="success-modal-content">
+                <div class="success-icon">🎉</div>
+                <h2 data-translate="successTitle">Félicitations!</h2>
+                <p data-translate="successMessage">Merci pour votre participation! Votre questionnaire a été envoyé avec succès.</p>
+                <p data-translate="successAppreciation">Vos réponses sont précieuses pour nous et nous aideront à améliorer nos services.</p>
+                <button id="finishButton" class="finish-button" data-translate="finishButton">Terminer</button>
+            </div>
+        </div>
     </main>
 
     <footer>
         <p data-translate="copyright">&copy; 2024 Questionnaire de Satisfaction crée par Daryl PARISI pour l'entreprise CANDOR. Tous droits réservés.</p>
     </footer>
 
+    <!-- Charger les scripts dans l'ordre approprié -->
     <script src="translations.js"></script>
     <script src="language.js"></script>
     <script src="script.js"></script>

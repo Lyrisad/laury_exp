@@ -3,16 +3,55 @@ let currentLanguage = localStorage.getItem('language') || 'fr';
 
 // Fonction pour changer la langue
 function changeLanguage(lang) {
+    console.log(`Changing language from ${currentLanguage} to ${lang}`);
     currentLanguage = lang;
     localStorage.setItem('language', lang);
     translatePage();
-    updateTranslatedQuestions();
+    
+    // Première tentative de mise à jour après un court délai
+    setTimeout(() => {
+        console.log('First update attempt for translated questions');
+        if (typeof updateTranslatedQuestions === 'function') {
+            updateTranslatedQuestions();
+        }
+        
+        // Vérifier spécifiquement les éléments de section
+        updateSectionTranslations();
+    }, 100);
+    
+    // Deuxième tentative avec un délai plus long pour s'assurer que tout est chargé
+    setTimeout(() => {
+        console.log('Second update attempt for translated questions');
+        if (typeof updateTranslatedQuestions === 'function') {
+            updateTranslatedQuestions();
+        }
+        
+        // Deuxième vérification des éléments de section
+        updateSectionTranslations();
+    }, 500);
 }
 
 // Fonction pour traduire un texte spécifique
 function translateText(key) {
-    return translations[currentLanguage][key] || key;
+    if (typeof translations === 'undefined' || typeof currentLanguage === 'undefined') {
+        return key; // Si les traductions ne sont pas chargées, retourner la clé
+    }
+    
+    if (translations[currentLanguage] && translations[currentLanguage][key]) {
+        return translations[currentLanguage][key];
+    }
+    
+    // Si la traduction n'existe pas pour cette langue, essayer avec le français
+    if (translations.fr && translations.fr[key]) {
+        return translations.fr[key];
+    }
+    
+    // Si aucune traduction n'est trouvée, retourner la clé
+    return key;
 }
+
+// Exposer la fonction translateText globalement
+window.translateText = translateText;
 
 // Fonction pour traduire la page
 function translatePage() {
@@ -61,6 +100,59 @@ function translatePage() {
     } else {
         document.body.style.direction = 'ltr';
     }
+}
+
+// Fonction spécifique pour mettre à jour les traductions des sections
+function updateSectionTranslations() {
+    // Mettre à jour les titres des sections
+    const sectionTitles = document.querySelectorAll('.section-title[data-original]');
+    sectionTitles.forEach(title => {
+        const originalText = title.getAttribute('data-original');
+        if (originalText && currentLanguage !== 'fr') {
+            autoTranslateText(originalText, currentLanguage)
+                .then(translatedText => {
+                    title.textContent = translatedText;
+                })
+                .catch(err => {
+                    console.error("Section title translation error:", err);
+                    title.textContent = originalText;
+                });
+        } else if (originalText) {
+            title.textContent = originalText;
+        }
+    });
+
+    // Mettre à jour les descriptions des sections
+    const sectionDescriptions = document.querySelectorAll('.section-description[data-original]');
+    sectionDescriptions.forEach(description => {
+        const originalText = description.getAttribute('data-original');
+        if (originalText && currentLanguage !== 'fr') {
+            autoTranslateText(originalText, currentLanguage)
+                .then(translatedText => {
+                    description.textContent = translatedText;
+                })
+                .catch(err => {
+                    console.error("Section description translation error:", err);
+                    description.textContent = originalText;
+                });
+        } else if (originalText) {
+            description.textContent = originalText;
+        }
+    });
+
+    // Mettre à jour les badges du nombre de questions
+    const sectionHeaders = document.querySelectorAll('.section-header[data-question-count]');
+    sectionHeaders.forEach(header => {
+        const countText = header.getAttribute('data-question-count');
+        if (countText) {
+            const countMatch = countText.match(/^(\d+)\s+/);
+            if (countMatch && countMatch[1]) {
+                const count = parseInt(countMatch[1]);
+                const questionWord = count > 1 ? translateText('questions') : translateText('question');
+                header.setAttribute('data-question-count', `${count} ${questionWord}`);
+            }
+        }
+    });
 }
 
 // Créer le sélecteur de langue

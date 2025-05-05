@@ -53,7 +53,12 @@
                     <h2>Liste des Questions</h2>
                     <div id="questionsContainer"></div>
                     <div class="question-actions">
-                        <button id="addQuestion" class="cta-button">Ajouter une question</button>
+                        <button id="addQuestion" class="cta-button">
+                            <span class="title-icon">➕</span> Ajouter une question
+                        </button>
+                        <button id="addSection" class="cta-button section-button">
+                            <span class="title-icon">📑</span> Ajouter une section
+                        </button>
                         <button id="deleteAllQuestions" class="cta-button danger">Supprimer toutes les questions</button>
                         <button id="closeQuestionnaire" class="cta-button warning">🔒 Clôturer le questionnaire</button>
                     </div>
@@ -90,6 +95,17 @@
                                 <label>Options de réponse :</label>
                                 <div id="optionsList" class="options-list"></div>
                                 <button type="button" id="addOption" class="secondary-button">Ajouter une option</button>
+                                <div id="maxResponsesContainer" style="display: none; margin-top: 15px;">
+                                    <label for="maxResponses">Nombre de réponses attendues :</label>
+                                    <select id="maxResponses" class="form-input">
+                                        <option value="0">Illimité</option>
+                                        <option value="1">1 réponse</option>
+                                        <option value="2">2 réponses</option>
+                                        <option value="3">3 réponses</option>
+                                        <option value="4">4 réponses</option>
+                                        <option value="5">5 réponses</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="form-actions">
                                 <button type="button" class="secondary-button" onclick="document.getElementById('questionForm').style.display = 'none'">Annuler</button>
@@ -137,11 +153,9 @@
                 <label for="filterGenre">Filtrer par Genre :</label>
                 <select id="filterGenre">
                   <option value="">Tous</option>
-                  <option value="Femme">Femme</option>
                   <option value="Homme">Homme</option>
-                  <option value="Non-binaire">Non-binaire</option>
-                  <option value="Genre fluide">Genre fluide</option>
-                  <option value="Autre">Autre</option>
+                  <option value="Femme">Femme</option>
+                  <option value="Non genré">Non genré</option>
                 </select>
               </div>
               <div>
@@ -285,6 +299,43 @@
                 <button id="deleteAllResponsesCancel" class="secondary-button">Annuler</button>
                 <button id="deleteAllResponsesConfirm" class="delete-button">Supprimer toutes les réponses</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmation pour la création/édition d'une section -->
+    <div id="sectionModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeSectionModal">&times;</span>
+            <h2><span class="title-icon">📑</span> Ajouter une section</h2>
+            <form id="sectionForm">
+                <div class="form-group">
+                    <label for="sectionTitle">Titre de la section :</label>
+                    <input type="text" id="sectionTitle" class="form-input" required placeholder="Ex: Satisfaction générale">
+                </div>
+                <div class="form-group">
+                    <label for="sectionDescription">Description (optionnelle) :</label>
+                    <textarea id="sectionDescription" class="form-input" rows="3" placeholder="Décrivez brièvement cette section..."></textarea>
+                </div>
+                <div class="form-group section-range">
+                    <div class="range-group">
+                        <label for="sectionStartQuestion">De la question :</label>
+                        <select id="sectionStartQuestion" class="form-input" required>
+                            <option value="">Sélectionnez...</option>
+                            <!-- Options générées dynamiquement -->
+                        </select>
+                    </div>
+                    <div class="range-group">
+                        <label for="sectionEndQuestion">À la question :</label>
+                        <select id="sectionEndQuestion" class="form-input" required>
+                            <option value="">Sélectionnez...</option>
+                            <!-- Options générées dynamiquement -->
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="submit-button">Enregistrer la section</button>
+                </div>
+            </form>
         </div>
     </div>
 

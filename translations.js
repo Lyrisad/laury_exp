@@ -27,6 +27,8 @@ const translations = {
         confidentialityDesc: "Vos réponses sont totalement anonymes. Les données collectées seront utilisées uniquement à des fins statistiques.",
         duration: "Durée",
         durationDesc: "Le sondage ne prendra que quelques minutes de votre temps. Vos réponses sont précieuses pour nous.",
+        consentText: "J'ai pris connaissance des informations ci-dessus et j'accepte de participer au questionnaire.",
+        consentRequired: "Veuillez consulter la présentation et cocher la case de consentement pour accéder au questionnaire.",
 
         // Questionnaire
         generalInfo: "Informations générales",
@@ -34,20 +36,17 @@ const translations = {
         selectGender: "Sélectionnez votre genre",
         male: "Homme",
         female: "Femme",
-        nonBinary: "Non-binaire",
-        genderFluid: "Genre fluide",
-        other: "Autre",
-        preferNotToSay: "Préfère ne pas répondre",
-        specifyGender: "Précisez votre genre",
+        nonGendered: "Non genré",
         age: "Tranche d'âge",
         selectAge: "Sélectionnez votre tranche d'âge",
-        age1: "18-25 ans",
-        age2: "26-35 ans",
-        age3: "36-45 ans",
-        age4: "46-55 ans",
-        age5: "56+",
-        position: "Poste",
-        selectPosition: "Sélectionnez votre poste",
+        age1: "Moins de 20 ans",
+        age2: "20-29 ans",
+        age3: "30-39 ans",
+        age4: "40-49 ans",
+        age5: "50-59 ans",
+        age6: "Plus de 60 ans",
+        position: "Fonction",
+        selectPosition: "Sélectionnez votre fonction",
         position1: "Paie",
         position2: "Comptabilité",
         position3: "Ressources Humaines",
@@ -55,6 +54,9 @@ const translations = {
         position5: "Gestion",
         position6: "Agent",
         position7: "Manager",
+        position8: "Fonctions supports",
+        position9: "Managers Quadri",
+        position10: "Exploitation",
         satisfaction: "Sondage de satisfaction",
         submit: "Envoyer le sondage",
         successMessage: "Merci pour votre participation ! Votre sondage a été envoyé avec succès.",
@@ -77,7 +79,7 @@ const translations = {
 
         // Form Labels and Placeholders
         experienceRating: "Comment évaluez-vous votre expérience avec ce sondage ?",
-        commentsLabel: "Avez-vous des commentaires ou suggestions à nous faire partager ?",
+        commentsLabel: "Avez-vous des commentaires/suggestions à nous partager ?",
         commentsPlaceholder: "Vos commentaires sont précieux pour nous aider à améliorer ce sondage...",
         textAnswerPlaceholder: "Écrivez votre réponse ici",
 
@@ -85,7 +87,7 @@ const translations = {
         copyright: "© 2024 Sondage de Satisfaction crée par Daryl PARISI pour l'entreprise CANDOR. Tous droits réservés.",
 
         // Messages de notification
-        notificationPersonalInfo: "Veuillez remplir tous les champs obligatoires (Genre, Age, Poste).",
+        notificationPersonalInfo: "Veuillez remplir tous les champs obligatoires (Genre, Age, Fonction).",
         notificationQuestions: "Veuillez répondre à toutes les questions du questionnaire.",
         notificationSatisfaction: "Veuillez sélectionner une note de satisfaction.",
         notificationSuccess: "Merci pour votre participation ! Votre questionnaire a été envoyé avec succès.",
@@ -96,7 +98,38 @@ const translations = {
         notificationLoadingError: "Erreur lors du chargement des questions",
         notificationNoQuestions: "Aucune question trouvée",
         singleChoice: "Choix unique",
-        multipleChoice: "Choix multiple"
+        multipleChoice: "Choix multiple",
+        requiredResponses: "réponses obligatoires",
+        maxResponsesExceeded: "Vous ne pouvez sélectionner que {max} réponses maximum",
+        exactResponsesRequired: "Veuillez sélectionner exactement {count} réponses",
+
+        // Notifications et messages
+        notificationRequired: "Veuillez répondre à toutes les questions obligatoires.",
+        notificationCheckboxLimit: "Veuillez sélectionner exactement {0} réponses.",
+        notificationCheckboxMin: "Veuillez sélectionner au moins {0} réponses.",
+        notificationCheckboxMax: "Veuillez sélectionner au maximum {0} réponses.",
+        required: "obligatoire",
+        requiredAnswers: "réponses obligatoires",
+        
+        // Éléments de progression
+        progressText: "Progression",
+
+        // NPS
+        nps: "NPS",
+
+        // Questions (pour les badges du nombre de questions dans les sections)
+        question: "question",
+        questions: "questions",
+
+        // Messages de succès
+        successTitle: "Félicitations !",
+        successMessage: "Merci pour votre participation ! Votre questionnaire a été envoyé avec succès.",
+        successAppreciation: "Vos réponses sont précieuses pour nous et nous aideront à améliorer nos services.",
+        finishButton: "Terminer",
+
+        // Accès au questionnaire
+        accessDenied: "Accès au questionnaire",
+        goToPresentation: "Aller à la présentation"
     },
     en: {
         // Navigation
@@ -126,6 +159,8 @@ const translations = {
         confidentialityDesc: "Your answers are completely anonymous. The collected data will be used for statistical purposes only.",
         duration: "Duration",
         durationDesc: "The survey will only take a few minutes of your time. Your answers are valuable to us.",
+        consentText: "I have read the information above and agree to participate in the survey.",
+        consentRequired: "Please review the presentation and check the consent box to access the questionnaire.",
 
         // Questionnaire
         generalInfo: "General Information",
@@ -133,20 +168,17 @@ const translations = {
         selectGender: "Select your gender",
         male: "Male",
         female: "Female",
-        nonBinary: "Non-binary",
-        genderFluid: "Gender fluid",
-        other: "Other",
-        preferNotToSay: "Prefer not to say",
-        specifyGender: "Specify your gender",
+        nonGendered: "Non-gendered",
         age: "Age Range",
         selectAge: "Select your age range",
-        age1: "18-25 years",
-        age2: "26-35 years",
-        age3: "36-45 years",
-        age4: "46-55 years",
-        age5: "56+",
-        position: "Position",
-        selectPosition: "Select your position",
+        age1: "Under 20 years",
+        age2: "20-29 years",
+        age3: "30-39 years",
+        age4: "40-49 years",
+        age5: "50-59 years",
+        age6: "Over 60 years",
+        position: "Function",
+        selectPosition: "Select your function",
         position1: "Payroll",
         position2: "Accounting",
         position3: "Human Resources",
@@ -154,6 +186,9 @@ const translations = {
         position5: "Management",
         position6: "Agent",
         position7: "Manager",
+        position8: "Support Functions",
+        position9: "Quadri Managers",
+        position10: "Operations",
         satisfaction: "Satisfaction Survey",
         submit: "Submit survey",
         successMessage: "Thank you for your participation! Your survey has been successfully submitted.",
@@ -195,7 +230,38 @@ const translations = {
         notificationLoadingError: "Error loading questions",
         notificationNoQuestions: "No questions found",
         singleChoice: "Single choice",
-        multipleChoice: "Multiple choice"
+        multipleChoice: "Multiple choice",
+        requiredResponses: "required answers",
+        maxResponsesExceeded: "You can select a maximum of {max} answers",
+        exactResponsesRequired: "Please select exactly {count} answers",
+
+        // Notifications et messages
+        notificationRequired: "Please answer all required questions.",
+        notificationCheckboxLimit: "Please select exactly {0} answers.",
+        notificationCheckboxMin: "Please select at least {0} answers.",
+        notificationCheckboxMax: "Please select at most {0} answers.",
+        required: "required",
+        requiredAnswers: "required answers",
+        
+        // Éléments de progression
+        progressText: "Progress",
+
+        // NPS
+        nps: "NPS",
+
+        // Questions (pour les badges du nombre de questions dans les sections)
+        question: "question",
+        questions: "questions",
+
+        // Messages de succès
+        successTitle: "Congratulations!",
+        successMessage: "Thank you for your participation! Your questionnaire has been successfully submitted.",
+        successAppreciation: "Your answers are valuable to us and will help us improve our services.",
+        finishButton: "Finish",
+
+        // Questionnaire access
+        accessDenied: "Questionnaire Access",
+        goToPresentation: "Go to presentation"
     },
     es: {
         // Navigation
@@ -225,6 +291,8 @@ const translations = {
         confidentialityDesc: "Tus respuestas son completamente anónimas. Los datos recopilados se utilizarán únicamente con fines estadísticos.",
         duration: "Duración",
         durationDesc: "La encuesta solo tomará unos minutos de tu tiempo. Tus respuestas son valiosas para nosotros.",
+        consentText: "He leído la información anterior y acepto participar en la encuesta.",
+        consentRequired: "Por favor, revise la presentación y marque la casilla de consentimiento para acceder al cuestionario.",
 
         // Questionnaire
         generalInfo: "Información general",
@@ -232,20 +300,17 @@ const translations = {
         selectGender: "Selecciona tu género",
         male: "Hombre",
         female: "Mujer",
-        nonBinary: "No binario",
-        genderFluid: "Género fluido",
-        other: "Otro",
-        preferNotToSay: "Prefiero no decirlo",
-        specifyGender: "Especifica tu género",
+        nonGendered: "No género",
         age: "Rango de edad",
         selectAge: "Selecciona tu rango de edad",
-        age1: "18-25 años",
-        age2: "26-35 años",
-        age3: "36-45 años",
-        age4: "46-55 años",
-        age5: "56+",
-        position: "Puesto",
-        selectPosition: "Selecciona tu puesto",
+        age1: "Menos de 20 años",
+        age2: "20-29 años",
+        age3: "30-39 años",
+        age4: "40-49 años",
+        age5: "50-59 años",
+        age6: "Más de 60 años",
+        position: "Función",
+        selectPosition: "Selecciona tu función",
         position1: "Nómina",
         position2: "Contabilidad",
         position3: "Recursos Humanos",
@@ -253,6 +318,9 @@ const translations = {
         position5: "Gestión",
         position6: "Agente",
         position7: "Gerente",
+        position8: "Funciones de Apoyo",
+        position9: "Gerentes Quadri",
+        position10: "Explotación",
         satisfaction: "Encuesta de satisfacción",
         submit: "Enviar encuesta",
         successMessage: "¡Gracias por tu participación! Tu encuesta ha sido enviada con éxito.",
@@ -283,7 +351,7 @@ const translations = {
         copyright: "© 2024 Encuesta de Satisfacción creada por Daryl PARISI para la empresa CANDOR. Todos los derechos reservados.",
 
         // Mensajes de notificación
-        notificationPersonalInfo: "Por favor complete todos los campos obligatorios (Género, Edad, Puesto).",
+        notificationPersonalInfo: "Por favor complete todos los campos obligatorios (Género, Edad, Función).",
         notificationQuestions: "Por favor responda todas las preguntas del cuestionario.",
         notificationSatisfaction: "Por favor seleccione una calificación de satisfacción.",
         notificationSuccess: "¡Gracias por su participación! Su cuestionario ha sido enviado con éxito.",
@@ -294,7 +362,38 @@ const translations = {
         notificationLoadingError: "Error al cargar las preguntas",
         notificationNoQuestions: "No se encontraron preguntas",
         singleChoice: "Elección única",
-        multipleChoice: "Elección múltiple"
+        multipleChoice: "Elección múltiple",
+        requiredResponses: "respuestas requeridas",
+        maxResponsesExceeded: "Puede seleccionar un máximo de {max} respuestas",
+        exactResponsesRequired: "Por favor seleccione exactamente {count} respuestas",
+
+        // Notifications et messages
+        notificationRequired: "Por favor responda todas las preguntas obligatorias.",
+        notificationCheckboxLimit: "Por favor seleccione exactamente {0} respuestas.",
+        notificationCheckboxMin: "Por favor seleccione al menos {0} respuestas.",
+        notificationCheckboxMax: "Por favor seleccione como máximo {0} respuestas.",
+        required: "obligatorio",
+        requiredAnswers: "respuestas requeridas",
+        
+        // Éléments de progression
+        progressText: "Progreso",
+
+        // NPS
+        nps: "NPS",
+
+        // Questions (pour les badges du nombre de questions dans les sections)
+        question: "pregunta",
+        questions: "preguntas",
+
+        // Messages de succès
+        successTitle: "¡Felicidades!",
+        successMessage: "¡Gracias por su participación! Su cuestionario ha sido enviado con éxito.",
+        successAppreciation: "Sus respuestas son valiosas para nosotros y nos ayudarán a mejorar nuestros servicios.",
+        finishButton: "Terminar",
+
+        // Acceso al cuestionario
+        accessDenied: "Acceso al cuestionario",
+        goToPresentation: "Ir a la presentación"
     },
     pt: {
         // Navigation
@@ -324,6 +423,8 @@ const translations = {
         confidentialityDesc: "Suas respostas são completamente anônimas. Os dados coletados serão usados apenas para fins estatísticos.",
         duration: "Duração",
         durationDesc: "A pesquisa levará apenas alguns minutos do seu tempo. Suas respostas são valiosas para nós.",
+        consentText: "Li as informações acima e concordo em participar da pesquisa.",
+        consentRequired: "Por favor, revise a apresentação e marque a caixa de consentimento para acessar o questionário.",
 
         // Questionnaire
         generalInfo: "Informações gerais",
@@ -331,20 +432,17 @@ const translations = {
         selectGender: "Selecione seu gênero",
         male: "Masculino",
         female: "Feminino",
-        nonBinary: "Não-binário",
-        genderFluid: "Gênero fluido",
-        other: "Outro",
-        preferNotToSay: "Prefiro não dizer",
-        specifyGender: "Especifique seu gênero",
+        nonGendered: "Não-gênero",
         age: "Faixa etária",
         selectAge: "Selecione sua faixa etária",
-        age1: "18-25 anos",
-        age2: "26-35 anos",
-        age3: "36-45 anos",
-        age4: "46-55 anos",
-        age5: "56+",
-        position: "Cargo",
-        selectPosition: "Selecione seu cargo",
+        age1: "Menos de 20 anos",
+        age2: "20-29 anos",
+        age3: "30-39 anos",
+        age4: "40-49 anos",
+        age5: "50-59 anos",
+        age6: "Mais de 60 anos",
+        position: "Função",
+        selectPosition: "Selecione sua função",
         position1: "Folha de pagamento",
         position2: "Contabilidade",
         position3: "Recursos Humanos",
@@ -352,6 +450,9 @@ const translations = {
         position5: "Gestão",
         position6: "Agente",
         position7: "Gerente",
+        position8: "Funções de Suporte",
+        position9: "Gerentes Quadri",
+        position10: "Operações",
         satisfaction: "Pesquisa de satisfação",
         submit: "Enviar pesquisa",
         successMessage: "Obrigado por sua participação! Sua pesquisa foi enviada com sucesso.",
@@ -382,7 +483,7 @@ const translations = {
         copyright: "© 2024 Pesquisa de Satisfação criada por Daryl PARISI para a empresa CANDOR. Todos os direitos reservados.",
 
         // Mensagens de notificação
-        notificationPersonalInfo: "Por favor preencha todos os campos obrigatórios (Gênero, Idade, Cargo).",
+        notificationPersonalInfo: "Por favor preencha todos os campos obrigatórios (Gênero, Idade, Função).",
         notificationQuestions: "Por favor responda a todas as perguntas do questionário.",
         notificationSatisfaction: "Por favor selecione uma nota de satisfação.",
         notificationSuccess: "Obrigado pela sua participação! Seu questionário foi enviado com sucesso.",
@@ -393,7 +494,38 @@ const translations = {
         notificationLoadingError: "Erro ao carregar as perguntas",
         notificationNoQuestions: "Nenhuma pergunta encontrada",
         singleChoice: "Escolha única",
-        multipleChoice: "Escolha múltipla"
+        multipleChoice: "Escolha múltipla",
+        requiredResponses: "respostas obrigatórias",
+        maxResponsesExceeded: "Você pode selecionar um máximo de {max} respostas",
+        exactResponsesRequired: "Por favor selecione exatamente {count} respostas",
+
+        // Notifications et messages
+        notificationRequired: "Por favor responda a todas as perguntas obrigatórias.",
+        notificationCheckboxLimit: "Por favor selecione exatamente {0} respostas.",
+        notificationCheckboxMin: "Por favor selecione ao menos {0} respostas.",
+        notificationCheckboxMax: "Por favor selecione no máximo {0} respostas.",
+        required: "obrigatório",
+        requiredAnswers: "respostas obrigatórias",
+        
+        // Éléments de progression
+        progressText: "Progresso",
+
+        // NPS
+        nps: "NPS",
+
+        // Questions (pour les badges du nombre de questions dans les sections)
+        question: "pergunta",
+        questions: "perguntas",
+
+        // Messages de succès
+        successTitle: "Parabéns!",
+        successMessage: "Obrigado pela sua participação! Seu questionário foi enviado com sucesso.",
+        successAppreciation: "Suas respostas são valiosas para nós e nos ajudarão a melhorar nossos serviços.",
+        finishButton: "Finalizar",
+
+        // Acesso ao questionário
+        accessDenied: "Acesso ao questionário",
+        goToPresentation: "Ir para a apresentação"
     },
     ar: {
         // Navigation
@@ -423,6 +555,8 @@ const translations = {
         confidentialityDesc: "إجاباتك مجهولة تماماً. سيتم استخدام البيانات المجمعة لأغراض إحصائية فقط.",
         duration: "المدة",
         durationDesc: "سيستغرق الاستطلاع بضع دقائق فقط من وقتك. إجاباتك قيمة بالنسبة لنا.",
+        consentText: "لقد قرأت المعلومات أعلاه وأوافق على المشاركة في الاستبيان.",
+        consentRequired: "يرجى مراجعة العرض التقديمي والتحقق من مربع الموافقة للوصول إلى الاستبيان.",
 
         // Questionnaire
         generalInfo: "معلومات عامة",
@@ -430,20 +564,17 @@ const translations = {
         selectGender: "اختر جنسك",
         male: "ذكر",
         female: "أنثى",
-        nonBinary: "غير ثنائي",
-        genderFluid: "جنس متغير",
-        other: "آخر",
-        preferNotToSay: "أفضل عدم الإجابة",
-        specifyGender: "حدد جنسك",
+        nonGendered: "غير محدد الجنس",
         age: "الفئة العمرية",
         selectAge: "اختر فئتك العمرية",
-        age1: "18-25 سنة",
-        age2: "26-35 سنة",
-        age3: "36-45 سنة",
-        age4: "46-55 سنة",
-        age5: "56+",
-        position: "المنصب",
-        selectPosition: "اختر منصبك",
+        age1: "أقل من 20 سنة",
+        age2: "20-29 سنة",
+        age3: "30-39 سنة",
+        age4: "40-49 سنة",
+        age5: "50-59 سنة",
+        age6: "أكثر من 60 سنة",
+        position: "الوظيفة",
+        selectPosition: "اختر وظيفتك",
         position1: "الرواتب",
         position2: "المحاسبة",
         position3: "الموارد البشرية",
@@ -451,6 +582,9 @@ const translations = {
         position5: "الإدارة",
         position6: "وكيل",
         position7: "مدير",
+        position8: "وظائف الدعم",
+        position9: "مديرو كوادري",
+        position10: "التشغيل",
         satisfaction: "استطلاع الرضا",
         submit: "إرسال الاستطلاع",
         successMessage: "شكراً لمشاركتك! تم إرسال استطلاعك بنجاح.",
@@ -481,7 +615,7 @@ const translations = {
         copyright: "© 2024 استطلاع الرضا من إنشاء داريل باريزي لشركة كاندور. جميع الحقوق محفوظة.",
 
         // رسائل الإشعارات
-        notificationPersonalInfo: "يرجى ملء جميع الحقول المطلوبة (الجنس، العمر، المنصب).",
+        notificationPersonalInfo: "يرجى ملء جميع الحقول المطلوبة (الجنس، العمر، الوظيفة).",
         notificationQuestions: "يرجى الإجابة على جميع أسئلة الاستبيان.",
         notificationSatisfaction: "يرجى اختيار درجة الرضا.",
         notificationSuccess: "شكراً لمشاركتك! تم إرسال استبيانك بنجاح.",
@@ -492,6 +626,37 @@ const translations = {
         notificationLoadingError: "خطأ في تحميل الأسئلة",
         notificationNoQuestions: "لم يتم العثور على أسئلة",
         singleChoice: "اختيار واحد",
-        multipleChoice: "اختيار متعدد"
+        multipleChoice: "اختيار متعدد",
+        requiredResponses: "إجابات مطلوبة",
+        maxResponsesExceeded: "يمكنك اختيار أقصى عدد {max} إجابات",
+        exactResponsesRequired: "يرجى اختيار مباشرة {count} إجابات",
+
+        // Notifications et messages
+        notificationRequired: "يرجى الإجابة على جميع أسئلة المطلوبة.",
+        notificationCheckboxLimit: "يرجى اختيار مباشرة {0} إجابات.",
+        notificationCheckboxMin: "يرجى اختيار على الأقل {0} إجابات.",
+        notificationCheckboxMax: "يرجى اختيار على الأكثر {0} إجابات.",
+        required: "مطلوب",
+        requiredAnswers: "إجابات مطلوبة",
+        
+        // Éléments de progression
+        progressText: "التقدم",
+
+        // NPS
+        nps: "NPS",
+
+        // Questions (pour les badges du nombre de questions dans les sections)
+        question: "سؤال",
+        questions: "أسئلة",
+
+        // Messages de succès
+        successTitle: "تهانينا!",
+        successMessage: "شكرا على مشاركتك! تم إرسال الاستبيان الخاص بك بنجاح.",
+        successAppreciation: "إجاباتك قيمة بالنسبة لنا وستساعدنا على تحسين خدماتنا.",
+        finishButton: "إنهاء",
+
+        // الوصول إلى الاستبيان
+        accessDenied: "الوصول إلى الاستبيان",
+        goToPresentation: "الذهاب إلى العرض التقديمي"
     }
 }; 

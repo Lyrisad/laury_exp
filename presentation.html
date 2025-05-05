@@ -42,7 +42,14 @@
                 <p data-translate="durationDesc">Le questionnaire ne prendra que quelques minutes de votre temps. Vos réponses sont précieuses pour nous.</p>
             </div>
 
-            <a href="questionnaire.html" class="cta-button" data-translate="startQuestionnaire">Commencer le questionnaire</a>
+            <div class="consent-container">
+                <label class="consent-label">
+                    <input type="checkbox" id="consentCheckbox">
+                    <span data-translate="consentText">J'ai pris connaissance des informations ci-dessus et j'accepte de participer au questionnaire.</span>
+                </label>
+            </div>
+
+            <a href="questionnaire.html" class="cta-button disabled" id="startButton" data-translate="startQuestionnaire">Commencer le questionnaire</a>
         </section>
     </main>
 
@@ -53,6 +60,7 @@
     <script src="translations.js"></script>
     <script src="language.js"></script>
     <script src="script.js"></script>
+    <script src="presentation.js"></script>
     <script src="clickTracker.js"></script>
 </body>
 </html> 
