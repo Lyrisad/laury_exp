@@ -129,7 +129,11 @@ const translations = {
 
         // Accès au questionnaire
         accessDenied: "Accès au questionnaire",
-        goToPresentation: "Aller à la présentation"
+        goToPresentation: "Aller à la présentation",
+
+        // Ajouter les traductions pour les messages de questionnaire déjà complété
+        questionnaireCompleted: "Questionnaire déjà complété",
+        questionnaireCompletedMessage: "Vous avez déjà réalisé ce questionnaire. Merci pour votre participation!"
     },
     en: {
         // Navigation
@@ -261,7 +265,11 @@ const translations = {
 
         // Questionnaire access
         accessDenied: "Questionnaire Access",
-        goToPresentation: "Go to presentation"
+        goToPresentation: "Go to presentation",
+
+        // Ajouter les traductions pour les messages de questionnaire déjà complété
+        questionnaireCompleted: "Survey already completed",
+        questionnaireCompletedMessage: "You have already completed this survey. Thank you for your participation!"
     },
     es: {
         // Navigation
@@ -393,7 +401,11 @@ const translations = {
 
         // Acceso al cuestionario
         accessDenied: "Acceso al cuestionario",
-        goToPresentation: "Ir a la presentación"
+        goToPresentation: "Ir a la presentación",
+
+        // Ajouter les traductions pour les messages de questionnaire déjà complété
+        questionnaireCompleted: "Cuestionario ya completado",
+        questionnaireCompletedMessage: "Ya has realizado este cuestionario. ¡Gracias por tu participación!"
     },
     pt: {
         // Navigation
@@ -525,7 +537,11 @@ const translations = {
 
         // Acesso ao questionário
         accessDenied: "Acesso ao questionário",
-        goToPresentation: "Ir para a apresentação"
+        goToPresentation: "Ir para a apresentação",
+
+        // Ajouter les traductions pour les messages de questionnaire déjà complété
+        questionnaireCompleted: "Questionario già completato",
+        questionnaireCompletedMessage: "Hai già compilato questo questionario. Grazie per la tua partecipazione!"
     },
     ar: {
         // Navigation
@@ -657,6 +673,10 @@ const translations = {
 
         // الوصول إلى الاستبيان
         accessDenied: "الوصول إلى الاستبيان",
-        goToPresentation: "الذهاب إلى العرض التقديمي"
+        goToPresentation: "الذهاب إلى العرض التقديمي",
+
+        // Ajouter les traductions pour les messages de questionnaire déjà complété
+        questionnaireCompleted: "Questionnaire déjà complété",
+        questionnaireCompletedMessage: "Vous avez déjà réalisé ce questionnaire. Merci pour votre participation!"
     }
 }; 

@@ -7,6 +7,29 @@ let questionsContainer = null;
 let progressBar = null;
 let progressPercentage = null;
 
+// Fonction pour définir un cookie
+function setCookie(name, value, days) {
+    let expires = '';
+    if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+
+// Fonction pour récupérer un cookie
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+
 // Fonction pour afficher des notifications stylées
 function showNotification(message, type = 'success') {
     const colors = {
@@ -175,6 +198,33 @@ function initQuestionnaire() {
     questionsContainer = document.getElementById('questionsContainer');
     progressBar = document.getElementById('progressFill');
     progressPercentage = document.getElementById('progressPercentage');
+    
+    // Vérifier si l'utilisateur a déjà soumis le questionnaire
+    const hasCompletedQuestionnaire = getCookie('questionnaireCompleted');
+    
+    if (hasCompletedQuestionnaire) {
+        // L'utilisateur a déjà rempli le questionnaire
+        const questionnaireContent = document.getElementById('questionnaire-content');
+        
+        // Créer un message personnalisé
+        const completedMessage = document.createElement('div');
+        completedMessage.className = 'questionnaire-completed';
+        completedMessage.innerHTML = `
+            <div class="completed-icon">✅</div>
+            <h2 data-translate="questionnaireCompleted">${translateText('questionnaireCompleted') || 'Questionnaire déjà complété'}</h2>
+            <p data-translate="questionnaireCompletedMessage">${translateText('questionnaireCompletedMessage') || 'Vous avez déjà réalisé ce questionnaire. Merci pour votre participation!'}</p>
+        `;
+        
+        // Remplacer le contenu du questionnaire par le message
+        if (questionnaireContent) {
+            // Garder le titre principal
+            const title = questionnaireContent.querySelector('h1');
+            questionnaireContent.innerHTML = '';
+            if (title) questionnaireContent.appendChild(title);
+            questionnaireContent.appendChild(completedMessage);
+        }
+        return; // Arrêter l'initialisation du questionnaire
+    }
     
     // Vérifier le consentement
     const consentGiven = localStorage.getItem('consentGiven') === 'true';
@@ -1294,6 +1344,9 @@ async function submitQuestionnaire(event) {
         
         // Afficher la notification de succès
         showNotification(translations[currentLanguage].successMessage, "success");
+        
+        // Définir un cookie pour indiquer que le questionnaire a été complété
+        setCookie('questionnaireCompleted', 'true', 7); // Cookie valide pendant 1 semaine
         
         // Réinitialiser le formulaire
         form.reset();
