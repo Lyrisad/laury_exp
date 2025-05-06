@@ -18,6 +18,8 @@ const translations = {
         confidentialityDesc: "Vos réponses sont totalement anonymes",
         speed: "Rapidité",
         speedDesc: "Un questionnaire simple et rapide à remplir, cela prendra seulement quelques minutes de votre temps.",
+        adaptability: "Adaptabilité",
+        adaptabilityDesc: "Pas d'ordinateur ? Pas de téléphone ? Ce sondage est accessible sur ordinateur, tablette et smartphone.",
 
         // Section Comment ça marche
         howItWorks: "Comment ça marche",
@@ -34,7 +36,7 @@ const translations = {
         clickForMoreInfo: "Cliquez pour plus d'infos",
         
         // Modals
-        step0ModalInfo: "La page de présentation vous explique en détail pourquoi nous avons besoin de vos retours et comment nous allons les utiliser pour améliorer nos services. Comprendre l'objectif du questionnaire vous aide à fournir des réponses plus précises et pertinentes.",
+        step0ModalInfo: "La page de présentation vous explique en détail pourquoi nous avons besoin de vos retours et comment nous allons les utiliser pour améliorer nos services.",
         step1ModalInfo: "Le questionnaire a été conçu pour être intuitif et facile à utiliser. Vous pouvez y accéder depuis n'importe quel appareil avec une connexion internet, que ce soit un ordinateur, une tablette ou un smartphone.",
         step2ModalInfo: "Les questions sont organisées par thèmes pour faciliter votre réflexion. Pour chaque question, prenez le temps de réfléchir à votre expérience. N'hésitez pas à être honnête dans vos réponses - c'est ce qui nous aidera le plus à nous améliorer.",
         step3ModalInfo: "Avant de soumettre, vous aurez l'occasion de revoir et modifier vos réponses si nécessaire. Une fois soumises, vos réponses sont immédiatement enregistrées dans notre base de données sécurisée. Vous recevrez une confirmation à l'écran une fois l'envoi réussi.",
@@ -181,6 +183,8 @@ const translations = {
         confidentialityDesc: "Your answers are completely anonymous",
         speed: "Speed",
         speedDesc: "A simple and quick questionnaire to fill out, it will only take a few minutes of your time.",
+        adaptability: "Adaptability",
+        adaptabilityDesc: "No computer? No phone? This survey is accessible on computer, tablet and smartphone.",
 
         // Section How it works
         howItWorks: "How it works",
@@ -197,7 +201,7 @@ const translations = {
         clickForMoreInfo: "Click for more info",
         
         // Modals
-        step0ModalInfo: "The presentation page explains in detail why we need your feedback and how we will use it to improve our services. Understanding the purpose of the survey helps you provide more precise and relevant answers.",
+        step0ModalInfo: "The presentation page explains in detail why we need your feedback and how we will use it to improve our services.",
         step1ModalInfo: "The survey has been designed to be intuitive and easy to use. You can access it from any device with an internet connection, whether it's a computer, tablet, or smartphone.",
         step2ModalInfo: "The questions are organized by themes to facilitate your reflection. For each question, take the time to think about your experience. Don't hesitate to be honest in your answers - that's what will help us improve the most.",
         step3ModalInfo: "Before submitting, you will have the opportunity to review and modify your answers if necessary. Once submitted, your answers are immediately recorded in our secure database. You will receive on-screen confirmation once the submission is successful.",
@@ -344,6 +348,8 @@ const translations = {
         confidentialityDesc: "Tus respuestas son completamente anónimas",
         speed: "Rapidez",
         speedDesc: "Un cuestionario simple y rápido de completar, solo tomará unos pocos minutos de tu tiempo.",
+        adaptability: "Adaptabilidad",
+        adaptabilityDesc: "¿No tienes ordenador? ¿No tienes teléfono? Esta encuesta es accesible en ordenador, tableta y smartphone.",
 
         // Section Cómo funciona
         howItWorks: "Cómo funciona",
@@ -351,7 +357,7 @@ const translations = {
         step0Desc: "Consulta la página de presentación para comprender el objetivo y la importancia de esta encuesta de satisfacción.",
         step1Title: "🚀 Comienza la encuesta",
         step1Desc: "Haz clic en el botón \"Comenzar la encuesta\" para iniciar el proceso con facilidad.",
-        step2Title: "✍️ Responde a las preguntas",
+        step2Title: "✍️ Responda a las preguntas",
         step2Desc: "Tómate unos minutos para responder a las preguntas sobre tu experiencia.",
         step3Title: "📮 Envía tus respuestas",
         step3Desc: "Una vez completadas, envía tus respuestas para ayudarnos a mejorar nuestros servicios.",
@@ -360,7 +366,7 @@ const translations = {
         clickForMoreInfo: "Haz clic para más información",
         
         // Modals
-        step0ModalInfo: "La página de presentación explica en detalle por qué necesitamos tus comentarios y cómo los utilizaremos para mejorar nuestros servicios. Comprender el propósito de la encuesta te ayuda a proporcionar respuestas más precisas y relevantes.",
+        step0ModalInfo: "La página de presentación explica en detalle por qué necesitamos tus comentarios y cómo los utilizaremos para mejorar nuestros servicios.",
         step1ModalInfo: "La encuesta ha sido diseñada para ser intuitiva y fácil de usar. Puedes acceder a ella desde cualquier dispositivo con conexión a Internet, ya sea un ordenador, tableta o smartphone.",
         step2ModalInfo: "Las preguntas están organizadas por temas para facilitar tu reflexión. Para cada pregunta, tómate el tiempo de pensar en tu experiencia. No dudes en ser honesto en tus respuestas - eso es lo que más nos ayudará a mejorar.",
         step3ModalInfo: "Antes de enviar, tendrás la oportunidad de revisar y modificar tus respuestas si es necesario. Una vez enviadas, tus respuestas se registran inmediatamente en nuestra base de datos segura. Recibirás una confirmación en pantalla una vez que el envío sea exitoso.",
@@ -389,15 +395,15 @@ const translations = {
         disclaimerText2: "Los datos recopilados serán utilizados por",
         disclaimerText3: "con fines estadísticos para:",
         disclaimerList1: "Mejorar nuestros servicios y productos",
-        disclaimerList2: "Analizar tendencias y necesidades",
+        disclaimerList2: "Analisar tendencias y necesidades",
         disclaimerList3: "Desarrollar nuevas ideas",
         disclaimerList4: "Optimizar la experiencia laboral",
-        disclaimerText4: "Al participar en esta encuesta, aceptas que tus respuestas se utilizarán para estos análisis estadísticos.",
-        disclaimerAccept: "Acepto y continúo",
+        disclaimerText4: "Ao participar en esta encuesta, você concorda que suas respostas serão utilizadas para estas análises estatísticas.",
+        disclaimerAccept: "Acepto y continuo",
 
         // Form Labels and Placeholders
         experienceRating: "¿Cómo calificas tu experiencia con esta encuesta?",
-        commentsLabel: "¿Tienes algún comentario o sugerencia que compartir con nosotros?",
+        commentsLabel: "¿Tienes algún comentario o sugestión que compartir con nosotros?",
         commentsPlaceholder: "Tus comentarios son valiosos para ayudarnos a mejorar esta encuesta...",
         textAnswerPlaceholder: "Escribe tu respuesta aquí",
 
@@ -470,6 +476,8 @@ const translations = {
         confidentialityDesc: "Suas respostas são completamente anônimas",
         speed: "Rapidez",
         speedDesc: "Um questionário simples e rápido de preencher, levará apenas alguns minutos do seu tempo.",
+        adaptability: "Adaptabilidade",
+        adaptabilityDesc: "Sem computador? Sem telefone? Esta pesquisa é acessível em computador, tablet e smartphone.",
 
         // Section Como funciona
         howItWorks: "Como funciona",
@@ -486,7 +494,7 @@ const translations = {
         clickForMoreInfo: "Clique para mais informações",
         
         // Modals
-        step0ModalInfo: "A página de apresentação explica em detalhes por que precisamos do seu feedback e como o utilizaremos para melhorar nossos serviços. Entender o propósito da pesquisa ajuda você a fornecer respostas mais precisas e relevantes.",
+        step0ModalInfo: "A página de apresentação explica em detalhes por que precisamos do seu feedback e como o utilizaremos para melhorar nossos serviços.",
         step1ModalInfo: "A pesquisa foi projetada para ser intuitiva e fácil de usar. Você pode acessá-la de qualquer dispositivo com conexão à internet, seja um computador, tablet ou smartphone.",
         step2ModalInfo: "As perguntas estão organizadas por temas para facilitar sua reflexão. Para cada pergunta, tire um tempo para pensar sobre sua experiência. Não hesite em ser honesto em suas respostas - isso é o que mais nos ajudará a melhorar.",
         step3ModalInfo: "Antes de enviar, você terá a oportunidade de revisar e modificar suas respostas, se necessário. Uma vez enviadas, suas respostas são imediatamente registradas em nosso banco de dados seguro. Você receberá uma confirmação na tela assim que o envio for bem-sucedido.",
@@ -631,6 +639,8 @@ const translations = {
         confidentialityDesc: "إجاباتك مجهولة تماماً",
         speed: "السرعة",
         speedDesc: "استبيان بسيط وسريع للإجابة، سيستغرق بضع دقائق فقط من وقتك.",
+        adaptability: "التكيف",
+        adaptabilityDesc: "لا يوجد كمبيوتر؟ لا يوجد هاتف؟ هذا الاستطلاع متاح على الكمبيوتر والجهاز اللوحي والهاتف الذكي.",
 
         // Section كيف يعمل
         howItWorks: "كيف يعمل",
@@ -647,7 +657,7 @@ const translations = {
         clickForMoreInfo: "انقر لمزيد من المعلومات",
         
         // Modals
-        step0ModalInfo: "تشرح صفحة العرض بالتفصيل سبب حاجتنا إلى ملاحظاتك وكيف سنستخدمها لتحسين خدماتنا. فهم الغرض من الاستطلاع يساعدك على تقديم إجابات أكثر دقة وملاءمة.",
+        step0ModalInfo: "تشرح صفحة العرض بالتفصيل سبب حاجتنا إلى ملاحظاتك وكيف سنستخدمها لتحسين خدماتنا.",
         step1ModalInfo: "تم تصميم الاستطلاع ليكون بديهيًا وسهل الاستخدام. يمكنك الوصول إليه من أي جهاز متصل بالإنترنت، سواء كان جهاز كمبيوتر أو جهاز لوحي أو هاتف ذكي.",
         step2ModalInfo: "الأسئلة منظمة حسب المواضيع لتسهيل تفكيرك. لكل سؤال، خذ وقتك للتفكير في تجربتك. لا تتردد في أن تكون صادقًا في إجاباتك - هذا ما سيساعدنا على التحسن أكثر.",
         step3ModalInfo: "قبل الإرسال، ستتاح لك الفرصة لمراجعة وتعديل إجاباتك إذا لزم الأمر. بمجرد الإرسال، يتم تسجيل إجاباتك فورًا في قاعدة بياناتنا الآمنة. ستتلقى تأكيدًا على الشاشة بمجرد نجاح الإرسال.",
@@ -770,7 +780,7 @@ const translations = {
         goToPresentation: "الذهاب إلى العرض التقديمي",
 
         // Ajouter les traductions pour les messages de questionnaire déjà complété
-        questionnaireCompleted: "Questionnaire déjà complété",
-        questionnaireCompletedMessage: "Vous avez déjà réalisé ce questionnaire. Merci pour votre participation!"
+        questionnaireCompleted: "الاستبيان مكتمل بالفعل",
+        questionnaireCompletedMessage: "لقد أكملت هذا الاستبيان بالفعل. شكرا لمشاركتك!"
     }
 }; 
