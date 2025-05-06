@@ -113,7 +113,10 @@ const translations = {
         textAnswerPlaceholder: "Écrivez votre réponse ici",
 
         // Footer
-        copyright: "© 2024 Sondage de Satisfaction crée par Daryl PARISI pour l'entreprise CANDOR. Tous droits réservés.",
+        footerDescription: "Votre satisfaction est notre priorité. Merci de contribuer à l'amélioration continue de nos services.",
+        footerNavigation: "Navigation", 
+        footerContact: "Contact",
+        copyright: "© 2024 Sondage de Satisfaction créé par Daryl PARISI pour l'entreprise CANDOR. Tous droits réservés.",
 
         // Messages de notification
         notificationPersonalInfo: "Veuillez remplir tous les champs obligatoires (Genre, Age, Fonction).",
@@ -278,6 +281,9 @@ const translations = {
         textAnswerPlaceholder: "Write your answer here",
 
         // Footer
+        footerDescription: "Your satisfaction is our priority. Thank you for contributing to the continuous improvement of our services.",
+        footerNavigation: "Navigation", 
+        footerContact: "Contact",
         copyright: "© 2024 Satisfaction Survey created by Daryl PARISI for CANDOR company. All rights reserved.",
 
         // Notification messages
@@ -301,7 +307,7 @@ const translations = {
         notificationRequired: "Please answer all required questions.",
         notificationCheckboxLimit: "Please select exactly {0} answers.",
         notificationCheckboxMin: "Please select at least {0} answers.",
-        notificationCheckboxMax: "Please select at most {0} answers.",
+        notificationCheckboxMax: "Please select as many answers as you like.",
         required: "required",
         requiredAnswers: "required answers",
         
@@ -389,25 +395,63 @@ const translations = {
         consentText: "He leído la información anterior y acepto participar en la encuesta.",
         consentRequired: "Por favor, revise la presentación y marque la casilla de consentimiento para acceder al cuestionario.",
 
+        // Questionnaire
+        generalInfo: "Información general",
+        gender: "Género",
+        selectGender: "Seleccione su género",
+        male: "Masculino",
+        female: "Femenino",
+        nonGendered: "No binario",
+        age: "Rango de edad",
+        selectAge: "Seleccione su rango de edad",
+        age1: "Menos de 20 años",
+        age2: "20-29 años",
+        age3: "30-39 años",
+        age4: "40-49 años",
+        age5: "50-59 años",
+        age6: "Más de 60 años",
+        position: "Función",
+        selectPosition: "Seleccione su función",
+        position1: "Nómina",
+        position2: "Contabilidad",
+        position3: "Recursos Humanos",
+        position4: "Desarrollo",
+        position5: "Gestión",
+        position6: "Agente",
+        position7: "Gerente",
+        position8: "Funciones de Soporte",
+        position9: "Gerentes Quadri",
+        position10: "Operaciones",
+        satisfaction: "Encuesta de satisfacción",
+        submit: "Enviar encuesta",
+        successMessage: "¡Gracias por su participación! Su encuesta ha sido enviada con éxito.",
+        errorMessage: "Ha ocurrido un error al enviar la encuesta. Por favor, inténtelo de nuevo.",
+        questionnaireClosed: "Encuesta cerrada",
+        questionnaireClosedMessage: "La encuesta está actualmente cerrada. Por favor, inténtelo de nuevo más tarde.",
+        questionnaireError: "Error al verificar el estado de la encuesta",
+
         // Disclaimer Modal
         disclaimerTitle: "Confidencialidad y Uso de Datos",
         disclaimerText1: "Esta encuesta es completamente anónima. No se recopilará ninguna información que pueda identificarte.",
         disclaimerText2: "Los datos recopilados serán utilizados por",
         disclaimerText3: "con fines estadísticos para:",
         disclaimerList1: "Mejorar nuestros servicios y productos",
-        disclaimerList2: "Analisar tendencias y necesidades",
+        disclaimerList2: "Analizar tendencias y necesidades",
         disclaimerList3: "Desarrollar nuevas ideas",
         disclaimerList4: "Optimizar la experiencia laboral",
-        disclaimerText4: "Ao participar en esta encuesta, você concorda que suas respostas serão utilizadas para estas análises estatísticas.",
-        disclaimerAccept: "Acepto y continuo",
+        disclaimerText4: "Al participar en esta encuesta, aceptas que tus respuestas serán utilizadas para estos análisis estadísticos.",
+        disclaimerAccept: "Acepto y continúo",
 
         // Form Labels and Placeholders
         experienceRating: "¿Cómo calificas tu experiencia con esta encuesta?",
-        commentsLabel: "¿Tienes algún comentario o sugestión que compartir con nosotros?",
+        commentsLabel: "¿Tienes algún comentario o sugerencia que compartir con nosotros?",
         commentsPlaceholder: "Tus comentarios son valiosos para ayudarnos a mejorar esta encuesta...",
         textAnswerPlaceholder: "Escribe tu respuesta aquí",
 
         // Footer
+        footerDescription: "Tu satisfacción es nuestra prioridad. Gracias por contribuir a la mejora continua de nuestros servicios.",
+        footerNavigation: "Navegación", 
+        footerContact: "Contacto",
         copyright: "© 2024 Encuesta de Satisfacción creada por Daryl PARISI para la empresa CANDOR. Todos los derechos reservados.",
 
         // Notifications and messages
@@ -426,7 +470,7 @@ const translations = {
         requiredResponses: "respuestas requeridas",
         maxResponsesExceeded: "Puede seleccionar un máximo de {max} respuestas",
         exactResponsesRequired: "Por favor seleccione exactamente {count} respuestas",
-        notificationRequired: "Por favor responda todas las preguntas obligatorias.",
+        notificationRequired: "Por favor responda a todas las preguntas obligatorias.",
         notificationCheckboxLimit: "Por favor seleccione exactamente {0} respuestas.",
         notificationCheckboxMin: "Por favor seleccione al menos {0} respuestas.",
         notificationCheckboxMax: "Por favor seleccione como máximo {0} respuestas.",
@@ -561,7 +605,7 @@ const translations = {
         disclaimerList2: "Analisar tendências e necessidades",
         disclaimerList3: "Desenvolver novas ideias",
         disclaimerList4: "Otimizar a experiência de trabalho",
-        disclaimerText4: "Ao participar desta pesquisa, você concorda que suas respostas serão utilizadas para estas análises estatísticas.",
+        disclaimerText4: "Ao participar desta pesquisa, você concorda que suas respostas serão utilizadas para estos análises estatísticas.",
         disclaimerAccept: "Aceito e continuo",
 
         // Form Labels and Placeholders
@@ -571,6 +615,9 @@ const translations = {
         textAnswerPlaceholder: "Escreva sua resposta aqui",
 
         // Footer
+        footerDescription: "Sua satisfação é nossa prioridade. Obrigado por contribuir para a melhoria contínua de nossos serviços.",
+        footerNavigation: "Navegação", 
+        footerContact: "Contato",
         copyright: "© 2024 Pesquisa de Satisfação criada por Daryl PARISI para a empresa CANDOR. Todos os direitos reservados.",
 
         // Notifications and messages
@@ -734,6 +781,9 @@ const translations = {
         textAnswerPlaceholder: "اكتب إجابتك هنا",
 
         // Footer
+        footerDescription: "رضاك هو أولويتنا. شكراً لمساهمتك في التحسين المستمر لخدماتنا.",
+        footerNavigation: "التنقل", 
+        footerContact: "اتصل بنا",
         copyright: "© 2024 استطلاع الرضا من إنشاء داريل باريزي لشركة كاندور. جميع الحقوق محفوظة.",
 
         // رسائل الإشعارات
