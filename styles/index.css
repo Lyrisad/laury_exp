@@ -171,13 +171,36 @@ nav a.active {
     padding: 5rem;
     margin: 0 auto;
     justify-content: center;
+    position: relative;
+    margin-bottom: 0;
+    border-bottom: 2px solid #4a6bff96;
+    z-index: 1;
+}
+
+.features::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-image: url('../images/hero.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    z-index: -1;
+    /* Pour les navigateurs desktop qui supportent fixed */
     background-attachment: fixed;
-    margin-bottom: 0;
-    border-bottom: 2px solid #4a6bff96;
+}
+
+/* Correction pour iOS */
+@supports (-webkit-touch-callout: none) {
+    .features::before {
+        background-attachment: scroll;
+        /* Astuce pour simuler un effet fixe sur iOS */
+        background-position: center center;
+        background-size: cover;
+    }
 }
 
 .arrow-down {
@@ -255,6 +278,7 @@ nav a.active {
     transition: all 0.3s ease;
     animation: float 3s ease-in-out infinite;
     animation-play-state: paused;
+    z-index: 2;
 }
 
 .feature-card:nth-child(1) {
@@ -304,6 +328,7 @@ nav a.active {
 /* Footer */
 footer {
     text-align: center;
+    z-index: 1000;
     padding: 2rem;
     background-color: white;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);

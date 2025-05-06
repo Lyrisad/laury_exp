@@ -17,7 +17,7 @@ const translations = {
         confidentiality: "Confidentialité",
         confidentialityDesc: "Vos réponses sont totalement anonymes",
         speed: "Rapidité",
-        speedDesc: "Un questionnaire simple et rapide à remplir",
+        speedDesc: "Un questionnaire simple et rapide à remplir, cela prendra seulement quelques minutes de votre temps.",
 
         // Section Comment ça marche
         howItWorks: "Comment ça marche",
@@ -180,7 +180,7 @@ const translations = {
         confidentiality: "Confidentiality",
         confidentialityDesc: "Your answers are completely anonymous",
         speed: "Speed",
-        speedDesc: "A simple and quick questionnaire to fill out",
+        speedDesc: "A simple and quick questionnaire to fill out, it will only take a few minutes of your time.",
 
         // Section How it works
         howItWorks: "How it works",
@@ -343,7 +343,7 @@ const translations = {
         confidentiality: "Confidencialidad",
         confidentialityDesc: "Tus respuestas son completamente anónimas",
         speed: "Rapidez",
-        speedDesc: "Un cuestionario simple y rápido de completar",
+        speedDesc: "Un cuestionario simple y rápido de completar, solo tomará unos pocos minutos de tu tiempo.",
 
         // Section Cómo funciona
         howItWorks: "Cómo funciona",
@@ -383,41 +383,6 @@ const translations = {
         consentText: "He leído la información anterior y acepto participar en la encuesta.",
         consentRequired: "Por favor, revise la presentación y marque la casilla de consentimiento para acceder al cuestionario.",
 
-        // Questionnaire
-        generalInfo: "Información general",
-        gender: "Género",
-        selectGender: "Selecciona tu género",
-        male: "Hombre",
-        female: "Mujer",
-        nonGendered: "No género",
-        age: "Rango de edad",
-        selectAge: "Selecciona tu rango de edad",
-        age1: "Menos de 20 años",
-        age2: "20-29 años",
-        age3: "30-39 años",
-        age4: "40-49 años",
-        age5: "50-59 años",
-        age6: "Más de 60 años",
-        position: "Función",
-        selectPosition: "Selecciona tu función",
-        position1: "Nómina",
-        position2: "Contabilidad",
-        position3: "Recursos Humanos",
-        position4: "Desarrollo",
-        position5: "Gestión",
-        position6: "Agente",
-        position7: "Gerente",
-        position8: "Funciones de Apoyo",
-        position9: "Gerentes Quadri",
-        position10: "Explotación",
-        satisfaction: "Encuesta de satisfacción",
-        submit: "Enviar encuesta",
-        successMessage: "¡Gracias por tu participación! Tu encuesta ha sido enviada con éxito.",
-        errorMessage: "Ocurrió un error al enviar la encuesta. Por favor, inténtalo de nuevo.",
-        questionnaireClosed: "Encuesta Cerrada",
-        questionnaireClosedMessage: "La encuesta está actualmente cerrada. Por favor, inténtalo más tarde.",
-        questionnaireError: "Error al verificar el estado de la encuesta",
-
         // Disclaimer Modal
         disclaimerTitle: "Confidencialidad y Uso de Datos",
         disclaimerText1: "Esta encuesta es completamente anónima. No se recopilará ninguna información que pueda identificarte.",
@@ -439,24 +404,22 @@ const translations = {
         // Footer
         copyright: "© 2024 Encuesta de Satisfacción creada por Daryl PARISI para la empresa CANDOR. Todos los derechos reservados.",
 
-        // Mensajes de notificación
+        // Notifications and messages
         notificationPersonalInfo: "Por favor complete todos los campos obligatorios (Género, Edad, Función).",
         notificationQuestions: "Por favor responda todas las preguntas del cuestionario.",
         notificationSatisfaction: "Por favor seleccione una calificación de satisfacción.",
         notificationSuccess: "¡Gracias por su participación! Su cuestionario ha sido enviado con éxito.",
-        notificationError: "Ocurrió un error al enviar el cuestionario. Por favor tente novamente.",
+        notificationError: "Ocurrió un error al enviar el cuestionario. Por favor intente nuevamente.",
         notificationSending: "Enviando...",
         notificationSubmit: "Enviar cuestionario",
         notificationStatusError: "Error al verificar el estado del cuestionario",
-        notificationLoadingError: "Error al carregar as perguntas",
+        notificationLoadingError: "Error al cargar las preguntas",
         notificationNoQuestions: "No se encontraron preguntas",
         singleChoice: "Elección única",
-        multipleChoice: "Elección múltipla",
+        multipleChoice: "Elección múltiple",
         requiredResponses: "respuestas requeridas",
         maxResponsesExceeded: "Puede seleccionar un máximo de {max} respuestas",
         exactResponsesRequired: "Por favor seleccione exactamente {count} respuestas",
-
-        // Notifications et messages
         notificationRequired: "Por favor responda todas las preguntas obligatorias.",
         notificationCheckboxLimit: "Por favor seleccione exactamente {0} respuestas.",
         notificationCheckboxMin: "Por favor seleccione al menos {0} respuestas.",
@@ -464,27 +427,27 @@ const translations = {
         required: "obligatorio",
         requiredAnswers: "respuestas requeridas",
         
-        // Éléments de progression
+        // Progress elements
         progressText: "Progreso",
 
         // NPS
         nps: "NPS",
 
-        // Questions (pour les badges du nombre de questions dans les sections)
+        // Questions (for section badges)
         question: "pregunta",
         questions: "preguntas",
 
-        // Messages de succès
+        // Success messages
         successTitle: "¡Felicidades!",
         successMessage: "¡Gracias por su participación! Su cuestionario ha sido enviado con éxito.",
         successAppreciation: "Sus respuestas son valiosas para nosotros y nos ayudarán a mejorar nuestros servicios.",
         finishButton: "Terminar",
 
-        // Acceso al cuestionario
+        // Questionnaire access
         accessDenied: "Acceso al cuestionario",
         goToPresentation: "Ir a la presentación",
 
-        // Ajouter les traductions pour les messages de questionnaire déjà complété
+        // Questionnaire already completed
         questionnaireCompleted: "Cuestionario ya completado",
         questionnaireCompletedMessage: "Ya has realizado este cuestionario. ¡Gracias por tu participación!"
     },
@@ -506,7 +469,7 @@ const translations = {
         confidentiality: "Confidencialidade",
         confidentialityDesc: "Suas respostas são completamente anônimas",
         speed: "Rapidez",
-        speedDesc: "Um questionário simples e rápido de preencher",
+        speedDesc: "Um questionário simples e rápido de preencher, levará apenas alguns minutos do seu tempo.",
 
         // Section Como funciona
         howItWorks: "Como funciona",
@@ -602,7 +565,7 @@ const translations = {
         // Footer
         copyright: "© 2024 Pesquisa de Satisfação criada por Daryl PARISI para a empresa CANDOR. Todos os direitos reservados.",
 
-        // Mensagens de notificação
+        // Notifications and messages
         notificationPersonalInfo: "Por favor preencha todos os campos obrigatórios (Gênero, Idade, Função).",
         notificationQuestions: "Por favor responda a todas as perguntas do questionário.",
         notificationSatisfaction: "Por favor selecione uma nota de satisfação.",
@@ -618,8 +581,6 @@ const translations = {
         requiredResponses: "respostas obrigatórias",
         maxResponsesExceeded: "Você pode selecionar um máximo de {max} respostas",
         exactResponsesRequired: "Por favor selecione exatamente {count} respostas",
-
-        // Notifications et messages
         notificationRequired: "Por favor responda a todas as perguntas obrigatórias.",
         notificationCheckboxLimit: "Por favor selecione exatamente {0} respostas.",
         notificationCheckboxMin: "Por favor selecione ao menos {0} respostas.",
@@ -627,27 +588,27 @@ const translations = {
         required: "obrigatório",
         requiredAnswers: "respostas obrigatórias",
         
-        // Éléments de progression
+        // Progress elements
         progressText: "Progresso",
 
         // NPS
         nps: "NPS",
 
-        // Questions (pour les badges du nombre de questions dans les sections)
+        // Questions (for section badges)
         question: "pergunta",
         questions: "perguntas",
 
-        // Messages de succès
+        // Success messages
         successTitle: "Parabéns!",
         successMessage: "Obrigado pela sua participação! Seu questionário foi enviado com sucesso.",
         successAppreciation: "Suas respostas são valiosas para nós e nos ajudarão a melhorar nossos serviços.",
         finishButton: "Finalizar",
 
-        // Acesso ao questionário
+        // Questionnaire access
         accessDenied: "Acesso ao questionário",
         goToPresentation: "Ir para a apresentação",
 
-        // Ajouter les traductions pour les messages de questionnaire déjà complété
+        // Questionnaire already completed
         questionnaireCompleted: "Questionário já completo",
         questionnaireCompletedMessage: "Você já completou este questionário. Obrigado pela sua participação!"
     },
@@ -669,7 +630,7 @@ const translations = {
         confidentiality: "السرية",
         confidentialityDesc: "إجاباتك مجهولة تماماً",
         speed: "السرعة",
-        speedDesc: "استبيان بسيط وسريع للإجابة",
+        speedDesc: "استبيان بسيط وسريع للإجابة، سيستغرق بضع دقائق فقط من وقتك.",
 
         // Section كيف يعمل
         howItWorks: "كيف يعمل",
