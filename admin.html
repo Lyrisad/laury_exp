@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-translate="admin">Administration - Questionnaire de Satisfaction</title>
+    <title data-translate="admin">Administration - Baromètre Social</title>
     <link rel="icon" href="images/Médaillon_Candor_Logo.png" type="image/png">
     <link rel="stylesheet" href="styles/admin.css">
     <link rel="stylesheet" href="style.css">
@@ -22,7 +22,7 @@
             <ul>
                 <li><a href="index.html">Accueil</a></li>
                 <li><a href="presentation.html">Présentation</a></li>
-                <li><a href="questionnaire.html">Sondage</a></li>
+                <li><a href="questionnaire.html">Baromètre</a></li>
                 <li><a href="admin.html">Administration</a></li>
                 <button id="logoutButton" class="logout-button" style="display: none;">Déconnexion</button>
             </ul>
@@ -234,13 +234,13 @@
                 <ul class="footer-links">
                     <li><a href="index.html" data-translate="home">Accueil</a></li>
                     <li><a href="presentation.html" data-translate="presentation">Présentation</a></li>
-                    <li><a href="questionnaire.html" data-translate="questionnaire">Sondage</a></li>
+                    <li><a href="questionnaire.html" data-translate="questionnaire">Baromètre</a></li>
                     <li><a href="admin.html" data-translate="admin">Administration</a></li>
                 </ul>
             </div>
             <div class="footer-column">
                 <h3 data-translate="footerContact">Contact</h3>
-                <p><strong>CANDOR</strong></p>
+                <p><strong>GROUPE CANDOR</strong></p>
                 <p><i class="footer-icon">📧</i> dparisi@groupecandor.fr</p>
                 <p><i class="footer-icon">📱</i> +33 02 32 63 43 10</p>
             </div>
@@ -362,7 +362,11 @@
             </form>
         </div>
     </div>
-
+    <script>
+        document.getElementById("addSection").addEventListener('click', function() {
+            document.getElementById("sectionModal").style.display = 'flex';
+        });
+    </script>
     <script src="admin.js"></script>
     <script src="stats.js"></script>
     <script src="clickTracker.js"></script>

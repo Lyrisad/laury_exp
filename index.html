@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-translate="title">Questionnaire de Satisfaction</title>
+    <title data-translate="title">Baromètre Social</title>
     <link rel="icon" href="images/Médaillon_Candor_Logo.png" type="image/png">
     <link rel="stylesheet" href="styles/index.css">
     <link rel="stylesheet" href="style.css">
@@ -18,7 +18,7 @@
             <ul>
                 <li><a href="index.html" data-translate="home">Accueil</a></li>
                 <li><a href="presentation.html" data-translate="presentation">Présentation</a></li>
-                <li><a href="questionnaire.html" data-translate="questionnaire">Sondage</a></li>
+                <li><a href="questionnaire.html" data-translate="questionnaire">Baromètre</a></li>
                 <li><a href="admin.html" data-translate="admin">Administration</a></li>
             </ul>
         </nav>
@@ -29,7 +29,7 @@
             <div class="big-logo-container">
                 <img src="images/LOGO copie.png" alt="Big Logo Candor" class="big-logo">
             </div>
-            <h1 data-translate="title">Questionnaire de Satisfaction</h1>
+            <h1 data-translate="title">Baromètre Social Candor</h1>
             <p data-translate="subtitle">Votre avis compte pour nous aider à nous améliorer</p>
             
             <div class="action-buttons">
@@ -54,7 +54,7 @@
                 </div>
                 <div class="feature-card">
                     <h2><span>📱</span> <span data-translate="adaptability">Adaptabilité</span></h2>
-                    <p data-translate="adaptabilityDesc">Ce sondage est accessible sur ordinateur, tablette et smartphone.</p>
+                    <p data-translate="adaptabilityDesc">Ce baromètre social est accessible sur ordinateur, tablette et smartphone.</p>
                 </div>
             </section>
             <div class="arrow-down" data-tooltip="Voir comment ça marche" data-translate-tooltip="scrollToHow">↓</div>
@@ -67,14 +67,14 @@
                     <div class="step-number">1</div>
                     <div class="step-content">
                         <h3 data-translate="step0Title">📚 Prendre connaissance de la page de présentation</h3>
-                        <p data-translate="step0Desc">Consultez la page de présentation pour comprendre l'objectif et l'importance de ce questionnaire de satisfaction.</p>
+                        <p data-translate="step0Desc">Consultez la page de présentation pour comprendre l'objectif et l'importance de ce baromètre social.</p>
                     </div>
                 </div>
                 <div class="step-card" data-modal-id="step2" data-click-message="Cliquez pour plus d'infos">
                     <div class="step-number">2</div>
                     <div class="step-content">
                         <h3 data-translate="step1Title">🚀 Commencez le questionnaire</h3>
-                        <p data-translate="step1Desc">Cliquez sur le bouton "Commencer le sondage" pour débuter le processus en toute simplicité.</p>
+                        <p data-translate="step1Desc">Cliquez sur le bouton "Commencer le baromètre social" pour débuter le processus en toute simplicité.</p>
                     </div>
                 </div>
                 <div class="step-card" data-modal-id="step3" data-click-message="Cliquez pour plus d'infos">
@@ -95,7 +95,7 @@
                     <div class="step-number">5</div>
                     <div class="step-content">
                         <h3 data-translate="step4Title">📊 Nous analysons vos retours</h3>
-                        <p data-translate="step4Desc">Notre équipe analyse attentivement tous les retours pour identifier les points d'amélioration.</p>
+                        <p data-translate="step4Desc">Notre équipe analyse attentivement tous les retours pour identifier les points d'amélioration. Nous vous informerons des résultats dans les plus brefs délais.</p>
                     </div>
                 </div>
             </div>
@@ -113,13 +113,13 @@
                 <ul class="footer-links">
                     <li><a href="index.html" data-translate="home">Accueil</a></li>
                     <li><a href="presentation.html" data-translate="presentation">Présentation</a></li>
-                    <li><a href="questionnaire.html" data-translate="questionnaire">Sondage</a></li>
+                    <li><a href="questionnaire.html" data-translate="questionnaire">Baromètre</a></li>
                     <li><a href="admin.html" data-translate="admin">Administration</a></li>
                 </ul>
             </div>
             <div class="footer-column">
                 <h3 data-translate="footerContact">Contact</h3>
-                <p><strong>CANDOR</strong></p>
+                <p><strong>GROUPE CANDOR</strong></p>
                 <p><i class="footer-icon">📧</i> dparisi@groupecandor.fr</p>
                 <p><i class="footer-icon">📱</i> +33 02 32 63 43 10</p>
             </div>
@@ -137,29 +137,29 @@
     <!-- Modals pour les étapes -->
     <div class="modal-overlay"></div>
     
-    <div id="step1" class="modal">
+    <div id="step1" class="modal-home">
         <div class="modal-content">
             <span class="close-modal" title="Fermer">&times;</span>
             <div class="modal-step-number">1</div>
             <h3 data-translate="step0Title">📚 Prendre connaissance de la page de présentation</h3>
-            <p data-translate="step0Desc">Consultez la page de présentation pour comprendre l'objectif et l'importance de ce questionnaire de satisfaction.</p>
+            <p data-translate="step0Desc">Consultez la page de présentation pour comprendre l'objectif et l'importance de ce baromètre social.</p>
             <p class="modal-extra-info" data-translate="step0ModalInfo">La page de présentation vous explique en détail pourquoi nous avons besoin de vos retours et comment nous allons les utiliser pour améliorer nos services.</p>
             <a href="presentation.html" class="action-button" data-translate="gotoPresentation">Aller à la page de présentation</a>
         </div>
     </div>
 
-    <div id="step2" class="modal">
+    <div id="step2" class="modal-home">
         <div class="modal-content">
             <span class="close-modal" title="Fermer">&times;</span>
             <div class="modal-step-number">2</div>
             <h3 data-translate="step1Title">🚀 Commencez le questionnaire</h3>
-            <p data-translate="step1Desc">Cliquez sur le bouton "Commencer le sondage" pour débuter le processus en toute simplicité.</p>
+            <p data-translate="step1Desc">Cliquez sur le bouton "Commencer le baromètre social" pour débuter le processus en toute simplicité.</p>
             <p class="modal-extra-info" data-translate="step1ModalInfo">Le questionnaire a été conçu pour être intuitif et facile à utiliser. Vous pouvez y accéder depuis n'importe quel appareil avec une connexion internet, que ce soit un ordinateur, une tablette ou un smartphone.</p>
-            <a href="questionnaire.html" class="action-button" data-translate="startSurvey">Commencer le sondage</a>
+            <a href="questionnaire.html" class="action-button" data-translate="startSurvey">Commencer le baromètre social</a>
         </div>
     </div>
 
-    <div id="step3" class="modal">
+    <div id="step3" class="modal-home">
         <div class="modal-content">
             <span class="close-modal" title="Fermer">&times;</span>
             <div class="modal-step-number">3</div>
@@ -169,7 +169,7 @@
         </div>
     </div>
 
-    <div id="step4" class="modal">
+    <div id="step4" class="modal-home">
         <div class="modal-content">
             <span class="close-modal" title="Fermer">&times;</span>
             <div class="modal-step-number">4</div>
@@ -179,13 +179,13 @@
         </div>
     </div>
 
-    <div id="step5" class="modal">
+    <div id="step5" class="modal-home">
         <div class="modal-content">
             <span class="close-modal" title="Fermer">&times;</span>
             <div class="modal-step-number">5</div>
             <h3 data-translate="step4Title">📊 Nous analysons vos retours</h3>
             <p data-translate="step4Desc">Notre équipe analyse attentivement tous les retours pour identifier les points d'amélioration.</p>
-            <p class="modal-extra-info" data-translate="step4ModalInfo">Nous analyserons vos réponses avec attention pour pouvoir adapter nos services à vos besoins. Vos retours sont essentiels pour faire évoluer notre offre et améliorer la qualité de nos prestations. Ce sondage permettra d'identifier les tendances et de mettre en place des actions concrètes pour répondre au mieux à vos attentes.</p>
+            <p class="modal-extra-info" data-translate="step4ModalInfo">Nous analyserons vos réponses avec attention pour pouvoir adapter nos services à vos besoins. Vos retours sont essentiels pour faire évoluer notre offre et améliorer la qualité de nos prestations. Ce baromètre social permettra d'identifier les tendances et de mettre en place des actions concrètes pour répondre au mieux à vos attentes.</p>
         </div>
     </div>
 
@@ -220,7 +220,7 @@
             
             // Fonction pour fermer les modals
             function closeModal() {
-                const activeModals = document.querySelectorAll('.modal.active');
+                const activeModals = document.querySelectorAll('.modal-home.active');
                 activeModals.forEach(modal => {
                     modal.classList.remove('active');
                 });

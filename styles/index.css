@@ -591,7 +591,7 @@ footer {
     display: block;
 }
 
-.modal {
+.modal-home {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -608,7 +608,7 @@ footer {
     transition: all 0.3s ease;
 }
 
-.modal.active {
+.modal-home.active {
     display: block;
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
@@ -657,14 +657,14 @@ footer {
     box-shadow: 0 4px 8px rgba(74, 107, 255, 0.3);
 }
 
-.modal h3 {
+.modal-home h3 {
     color: var(--primary-color);
     margin-bottom: 1rem;
     font-size: 1.6rem;
     text-align: center;
 }
 
-.modal p {
+.modal-home p {
     margin-bottom: 1.5rem;
     line-height: 1.7;
     color: #555;
@@ -678,7 +678,7 @@ footer {
     margin: 1.5rem 0;
 }
 
-.modal .action-button {
+.modal-home .action-button {
     display: block;
     width: fit-content;
     margin: 2rem auto 0;
@@ -686,7 +686,7 @@ footer {
 
 /* Responsive pour les modals */
 @media (max-width: 768px) {
-    .modal {
+    .modal-home {
         width: 95%;
         padding: 1.5rem;
     }
@@ -695,7 +695,7 @@ footer {
         padding: 0.5rem;
     }
     
-    .modal h3 {
+    .modal-home h3 {
         font-size: 1.4rem;
     }
 }

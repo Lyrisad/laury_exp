@@ -2,7 +2,7 @@
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygLRqkAa4FFFwUJ11XsewgnIPD_mFp7VuvdtSaBbBJ7y3ouGMak0K8gGpKY7ZHq-rWPA/exec';
 const ADMIN_CREDENTIALS = {
     username: 'AdminRH',
-    password: 'SondageRH25!' // À changer en production
+    password: 'BaromètreRH25!' // À changer en production
 };
 
 // Éléments du DOM
@@ -822,7 +822,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setActiveNavLink();
 });
 
-// Modal de confirmation pour la clôture du questionnaire
+// Modal de confirmation pour la clôture du baromètre
 const closeQuestionnaireModal = document.createElement('div');
 closeQuestionnaireModal.className = 'modal';
 closeQuestionnaireModal.innerHTML = `
@@ -834,8 +834,8 @@ closeQuestionnaireModal.innerHTML = `
                 <path d="M12 16H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
         </div>
-        <h3>Confirmer la clôture du questionnaire</h3>
-        <p>Êtes-vous sûr de vouloir clôturer le questionnaire ? Cette action est réversible.</p>
+        <h3>Confirmer la clôture du baromètre</h3>
+        <p>Êtes-vous sûr de vouloir clôturer le baromètre ? Cette action est réversible.</p>
         <div class="confirm-buttons">
             <button id="closeQuestionnaireCancel" class="secondary-button">Annuler</button>
             <button id="closeQuestionnaireConfirm" class="delete-button">Clôturer</button>
@@ -865,16 +865,16 @@ function updateUIForStatus(isOpen) {
     isOpen = isOpen === true || isOpen === "TRUE";
 
     if (isOpen) {
-        closeButton.textContent = '🔒 Clôturer le questionnaire';
+        closeButton.textContent = '🔒 Clôturer le baromètre';
         closeButton.className = 'cta-button warning';
         confirmButton.textContent = 'Clôturer';
-        modalTitle.textContent = 'Confirmer la clôture du questionnaire';
-        modalText.textContent = 'Êtes-vous sûr de vouloir clôturer le questionnaire ? Cette action est réversible.';
+        modalTitle.textContent = 'Confirmer la clôture du baromètre';
+        modalText.textContent = 'Êtes-vous sûr de vouloir clôturer le baromètre ? Cette action est réversible.';
     } else {
-        closeButton.textContent = '🔓 Ouvrir le questionnaire';
+        closeButton.textContent = '🔓 Ouvrir le baromètre';
         confirmButton.textContent = 'Ouvrir';
-        modalTitle.textContent = 'Confirmer l\'ouverture du questionnaire';
-        modalText.textContent = 'Êtes-vous sûr de vouloir ouvrir le questionnaire ? Cette action est réversible.';
+        modalTitle.textContent = 'Confirmer l\'ouverture du baromètre';
+        modalText.textContent = 'Êtes-vous sûr de vouloir ouvrir le baromètre ? Cette action est réversible.';
     }
 }
 
@@ -976,7 +976,7 @@ function updateClickStats() {
             // Mettre à jour les statistiques des visiteurs et réponses
             document.getElementById('totalVisitors').textContent = data.totalVisitors || 0;
             
-            // Récupérer le nombre de réponses au questionnaire
+            // Récupérer le nombre de réponses au baromètre
             return fetch(`${SCRIPT_URL}?action=getTotalResponses`);
         })
         .then(response => {
@@ -1183,6 +1183,7 @@ document.getElementById('deleteAllResponsesConfirm').addEventListener('click', f
 // Ajout du gestionnaire d'événement pour le bouton d'ajout de section
 if (addSectionBtn) {
     addSectionBtn.addEventListener('click', function() {
+        console.log('addSectionBtn clicked');
         // Mettre à jour les listes déroulantes des questions
         updateQuestionSelects();
         // Réinitialiser le formulaire

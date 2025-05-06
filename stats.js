@@ -604,33 +604,38 @@ function getEmojiForUser(age, gender) {
   age = age.trim();
   gender = gender.toLowerCase().trim();
 
-  // Cas particuliers pour non-binaire ou genre fluide
-  if (gender === "non-binaire" || gender === "genre fluide") {
+  // Cas particulier pour le genre non genré
+  if (gender === "non genré") {
     return "🧑"; // emoji neutre
   }
   
-  // Pour chaque tranche d'âge, on effectue un test exact (en fonction de vos valeurs dans le select)
-  if (age === "18-25") {
+  // Pour chaque tranche d'âge, on effectue un test exact
+  if (age === "moins de 20 ans") {
     if (gender === "homme") return "👦";
     if (gender === "femme") return "👧";
     return "🧒";
   }
-  if (age === "26-35") {
+  if (age === "20-29 ans") {
     if (gender === "homme") return "👨";
     if (gender === "femme") return "👩";
     return "🧑";
   }
-  if (age === "36-45") {
+  if (age === "30-39 ans") {
     if (gender === "homme") return "🧔";
     if (gender === "femme") return "👩‍🦰";
     return "🧑";
   }
-  if (age === "46-55") {
+  if (age === "40-49 ans") {
+    if (gender === "homme") return "👨‍🦱";
+    if (gender === "femme") return "👩‍🦱";
+    return "🧑‍🦱";
+  }
+  if (age === "50-59 ans") {
     if (gender === "homme") return "👨‍🦳";
     if (gender === "femme") return "👩‍🦳";
     return "🧓";
   }
-  if (age === "56+") {
+  if (age === "plus de 60 ans") {
     if (gender === "homme") return "👴";
     if (gender === "femme") return "👵";
     return "🧓";

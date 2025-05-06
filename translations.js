@@ -3,15 +3,15 @@ const translations = {
         // Navigation
         home: "Accueil",
         presentation: "Présentation",
-        questionnaire: "Sondage",
+        questionnaire: "Baromètre",
         admin: "Administration",
         logout: "Déconnexion",
 
         // Index
-        title: "Sondage de Satisfaction",
+        title: "Baromètre Social Candor",
         subtitle: "Votre avis compte pour nous aider à nous améliorer",
-        startQuestionnaire: "Commencer le sondage",
-        whyQuestionnaire: "Pourquoi ce sondage ?",
+        startQuestionnaire: "Commencer le baromètre social",
+        whyQuestionnaire: "Pourquoi ce baromètre social ?",
         dataAnalysis: "Analyse des données",
         dataAnalysisDesc: "Des statistiques précises pour améliorer nos services",
         confidentiality: "Confidentialité",
@@ -19,20 +19,20 @@ const translations = {
         speed: "Rapidité",
         speedDesc: "Un questionnaire simple et rapide à remplir, cela prendra seulement quelques minutes de votre temps.",
         adaptability: "Adaptabilité",
-        adaptabilityDesc: "Pas d'ordinateur ? Pas de téléphone ? Ce sondage est accessible sur ordinateur, tablette et smartphone.",
+        adaptabilityDesc: "Pas d'ordinateur ? Ce baromètre social est aussi accessible sur tablette et smartphone.",
 
         // Section Comment ça marche
         howItWorks: "Comment ça marche",
         step0Title: "📚 Prendre connaissance de la page de présentation",
-        step0Desc: "Consultez la page de présentation pour comprendre l'objectif et l'importance de ce questionnaire de satisfaction.",
+        step0Desc: "Consultez la page de présentation pour comprendre l'objectif et l'importance de ce baromètre social.",
         step1Title: "🚀 Commencez le questionnaire",
-        step1Desc: "Cliquez sur le bouton \"Commencer le sondage\" pour débuter le processus en toute simplicité.",
+        step1Desc: "Cliquez sur le bouton \"Commencer le baromètre social\" pour débuter le processus en toute simplicité.",
         step2Title: "✍️ Répondez aux questions",
         step2Desc: "Prenez quelques minutes pour répondre aux questions qui vous sont posées sur votre expérience.",
         step3Title: "📮 Soumettez vos réponses",
         step3Desc: "Une fois terminé, soumettez vos réponses pour nous aider à améliorer nos services.",
         step4Title: "📊 Nous analysons vos retours",
-        step4Desc: "Notre équipe analyse attentivement tous les retours pour identifier les points d'amélioration.",
+        step4Desc: "Notre équipe analyse attentivement tous les retours pour identifier les points d'amélioration. Nous vous informerons des résultats dans les plus brefs délais.",
         clickForMoreInfo: "Cliquez pour plus d'infos",
         
         // Modals
@@ -40,22 +40,22 @@ const translations = {
         step1ModalInfo: "Le questionnaire a été conçu pour être intuitif et facile à utiliser. Vous pouvez y accéder depuis n'importe quel appareil avec une connexion internet, que ce soit un ordinateur, une tablette ou un smartphone.",
         step2ModalInfo: "Les questions sont organisées par thèmes pour faciliter votre réflexion. Pour chaque question, prenez le temps de réfléchir à votre expérience. N'hésitez pas à être honnête dans vos réponses - c'est ce qui nous aidera le plus à nous améliorer.",
         step3ModalInfo: "Avant de soumettre, vous aurez l'occasion de revoir et modifier vos réponses si nécessaire. Une fois soumises, vos réponses sont immédiatement enregistrées dans notre base de données sécurisée. Vous recevrez une confirmation à l'écran une fois l'envoi réussi.",
-        step4ModalInfo: "Nous analyserons vos réponses avec attention pour pouvoir adapter nos services à vos besoins. Vos retours sont essentiels pour faire évoluer notre offre et améliorer la qualité de nos prestations. Ce sondage permettra d'identifier les tendances et de mettre en place des actions concrètes pour répondre au mieux à vos attentes.",
+        step4ModalInfo: "Nous analyserons vos réponses avec attention pour pouvoir adapter nos services à vos besoins. Vos retours sont essentiels pour faire évoluer notre offre et améliorer la qualité de nos prestations. Ce baromètre social permettra d'identifier les tendances et de mettre en place des actions concrètes pour répondre au mieux à vos attentes.",
         gotoPresentation: "Aller à la page de présentation",
-        startSurvey: "Commencer le sondage",
+        startSurvey: "Commencer le baromètre social",
         closeModal: "Fermer",
         
         // Arrow down tooltip
         scrollToHow: "Voir comment ça marche",
 
         // Presentation
-        whyTitle: "Pourquoi ce sondage ?",
+        whyTitle: "Pourquoi ce Baromètre Social ?",
         objective: "Objectif",
-        objectiveDesc: "Ce sondage a pour but de recueillir votre retour d'expérience afin d'améliorer nos services et processus.",
+        objectiveDesc: "Ce baromètre social a pour but de recueillir votre retour d'expérience afin d'améliorer nos services et processus.",
         confidentialityTitle: "Confidentialité",
         confidentialityDesc: "Vos réponses sont totalement anonymes. Les données collectées seront utilisées uniquement à des fins statistiques.",
         duration: "Durée",
-        durationDesc: "Le sondage ne prendra que quelques minutes de votre temps. Vos réponses sont précieuses pour nous.",
+        durationDesc: "Le baromètre social ne prendra que quelques minutes de votre temps. Vos réponses sont précieuses pour nous.",
         consentText: "J'ai pris connaissance des informations ci-dessus et j'accepte de participer au questionnaire.",
         consentRequired: "Veuillez consulter la présentation et cocher la case de consentement pour accéder au questionnaire.",
 
@@ -86,37 +86,37 @@ const translations = {
         position8: "Fonctions supports",
         position9: "Managers Quadri",
         position10: "Exploitation",
-        satisfaction: "Sondage de satisfaction",
-        submit: "Envoyer le sondage",
-        successMessage: "Merci pour votre participation ! Votre sondage a été envoyé avec succès.",
-        errorMessage: "Une erreur est survenue lors de l'envoi du sondage. Veuillez réessayer.",
-        questionnaireClosed: "Sondage fermé",
-        questionnaireClosedMessage: "Le sondage est actuellement fermé. Veuillez réessayer ultérieurement.",
-        questionnaireError: "Erreur lors de la vérification du statut du sondage",
+        satisfaction: "Baromètre social",
+        submit: "Envoyer le baromètre social",
+        successMessage: "Merci pour votre participation ! Votre baromètre social a été envoyé avec succès.",
+        errorMessage: "Une erreur est survenue lors de l'envoi du baromètre social. Veuillez réessayer.",
+        questionnaireClosed: "Baromètre fermé",
+        questionnaireClosedMessage: "Le baromètre social est actuellement fermé. Veuillez réessayer ultérieurement.",
+        questionnaireError: "Erreur lors de la vérification du statut du baromètre social",
 
         // Disclaimer Modal
         disclaimerTitle: "Confidentialité et Utilisation des Données",
-        disclaimerText1: "Ce sondage est entièrement anonyme. Aucune information permettant de vous identifier ne sera collectée.",
+        disclaimerText1: "Ce baromètre social est entièrement anonyme. Aucune information permettant de vous identifier ne sera collectée.",
         disclaimerText2: "Les données recueillies seront utilisées par le",
         disclaimerText3: "à des fins statistiques pour :",
         disclaimerList1: "Améliorer nos services et produits",
         disclaimerList2: "Analyser les tendances et besoins",
         disclaimerList3: "Développer de nouvelles idées",
         disclaimerList4: "Optimiser l'expérience au travail",
-        disclaimerText4: "En participant à ce sondage, vous acceptez que vos réponses soient utilisées dans le cadre de ces analyses statistiques.",
+        disclaimerText4: "En participant à ce baromètre social, vous acceptez que vos réponses soient utilisées dans le cadre de ces analyses statistiques.",
         disclaimerAccept: "J'accepte et je continue",
 
         // Form Labels and Placeholders
-        experienceRating: "Comment évaluez-vous votre expérience avec ce sondage ?",
+        experienceRating: "Comment évaluez-vous votre expérience avec ce baromètre social ?",
         commentsLabel: "Avez-vous des commentaires/suggestions à nous partager ?",
-        commentsPlaceholder: "Vos commentaires sont précieux pour nous aider à améliorer ce sondage...",
+        commentsPlaceholder: "Vos commentaires sont précieux pour nous aider à améliorer ce baromètre social...",
         textAnswerPlaceholder: "Écrivez votre réponse ici",
 
         // Footer
         footerDescription: "Votre satisfaction est notre priorité. Merci de contribuer à l'amélioration continue de nos services.",
         footerNavigation: "Navigation", 
         footerContact: "Contact",
-        copyright: "© 2024 Sondage de Satisfaction créé par Daryl PARISI pour l'entreprise CANDOR. Tous droits réservés.",
+        copyright: "© 2024 Baromètre Social créé par Daryl PARISI pour l'entreprise CANDOR. Tous droits réservés.",
 
         // Messages de notification
         notificationPersonalInfo: "Veuillez remplir tous les champs obligatoires (Genre, Age, Fonction).",
@@ -176,7 +176,7 @@ const translations = {
         logout: "Logout",
 
         // Index
-        title: "Satisfaction Survey",
+        title: "Candor's Social Barometer",
         subtitle: "Your opinion matters to help us improve",
         startQuestionnaire: "Start the survey",
         whyQuestionnaire: "Why this survey?",
@@ -187,7 +187,7 @@ const translations = {
         speed: "Speed",
         speedDesc: "A simple and quick questionnaire to fill out, it will only take a few minutes of your time.",
         adaptability: "Adaptability",
-        adaptabilityDesc: "No computer? No phone? This survey is accessible on computer, tablet and smartphone.",
+        adaptabilityDesc: "No computer? This survey is also accessible on tablet and smartphone.",
 
         // Section How it works
         howItWorks: "How it works",
@@ -200,7 +200,7 @@ const translations = {
         step3Title: "📮 Submit your answers",
         step3Desc: "Once complete, submit your answers to help us improve our services.",
         step4Title: "📊 We analyze your feedback",
-        step4Desc: "Our team carefully analyzes all feedback to identify areas for improvement.",
+        step4Desc: "Our team carefully analyzes all feedback to identify areas for improvement. We will inform you of the results as soon as possible.",
         clickForMoreInfo: "Click for more info",
         
         // Modals
@@ -284,7 +284,7 @@ const translations = {
         footerDescription: "Your satisfaction is our priority. Thank you for contributing to the continuous improvement of our services.",
         footerNavigation: "Navigation", 
         footerContact: "Contact",
-        copyright: "© 2024 Satisfaction Survey created by Daryl PARISI for CANDOR company. All rights reserved.",
+        copyright: "© 2024 Social Barometer created by Daryl PARISI for CANDOR company. All rights reserved.",
 
         // Notification messages
         notificationPersonalInfo: "Please fill in all required fields (Gender, Age, Position).",
@@ -344,7 +344,7 @@ const translations = {
         logout: "Cerrar sesión",
 
         // Index
-        title: "Encuesta de Satisfacción",
+        title: "Barómetro Social",
         subtitle: "Tu opinión es importante para ayudarnos a mejorar",
         startQuestionnaire: "Comenzar la encuesta",
         whyQuestionnaire: "¿Por qué esta encuesta?",
@@ -355,7 +355,7 @@ const translations = {
         speed: "Rapidez",
         speedDesc: "Un cuestionario simple y rápido de completar, solo tomará unos pocos minutos de tu tiempo.",
         adaptability: "Adaptabilidad",
-        adaptabilityDesc: "¿No tienes ordenador? ¿No tienes teléfono? Esta encuesta es accesible en ordenador, tableta y smartphone.",
+        adaptabilityDesc: "¿No tienes ordenador? Esta encuesta también es accesible en tableta y smartphone.",
 
         // Section Cómo funciona
         howItWorks: "Cómo funciona",
@@ -366,9 +366,9 @@ const translations = {
         step2Title: "✍️ Responda a las preguntas",
         step2Desc: "Tómate unos minutos para responder a las preguntas sobre tu experiencia.",
         step3Title: "📮 Envía tus respuestas",
-        step3Desc: "Una vez completadas, envía tus respuestas para ayudarnos a mejorar nuestros servicios.",
+        step3Desc: "Ao terminar, envía tus respuestas para ayudarnos a mejorar nuestros servicios.",
         step4Title: "📊 Analizamos tus comentarios",
-        step4Desc: "Nuestro equipo analiza cuidadosamente todos los comentarios para identificar áreas de mejora.",
+        step4Desc: "Nuestro equipo analiza cuidadosamente todos los comentarios para identificar áreas de mejora. Le informaremos de los resultados lo antes posible.",
         clickForMoreInfo: "Haz clic para más información",
         
         // Modals
@@ -395,64 +395,29 @@ const translations = {
         consentText: "He leído la información anterior y acepto participar en la encuesta.",
         consentRequired: "Por favor, revise la presentación y marque la casilla de consentimiento para acceder al cuestionario.",
 
-        // Questionnaire
-        generalInfo: "Información general",
-        gender: "Género",
-        selectGender: "Seleccione su género",
-        male: "Masculino",
-        female: "Femenino",
-        nonGendered: "No binario",
-        age: "Rango de edad",
-        selectAge: "Seleccione su rango de edad",
-        age1: "Menos de 20 años",
-        age2: "20-29 años",
-        age3: "30-39 años",
-        age4: "40-49 años",
-        age5: "50-59 años",
-        age6: "Más de 60 años",
-        position: "Función",
-        selectPosition: "Seleccione su función",
-        position1: "Nómina",
-        position2: "Contabilidad",
-        position3: "Recursos Humanos",
-        position4: "Desarrollo",
-        position5: "Gestión",
-        position6: "Agente",
-        position7: "Gerente",
-        position8: "Funciones de Soporte",
-        position9: "Gerentes Quadri",
-        position10: "Operaciones",
-        satisfaction: "Encuesta de satisfacción",
-        submit: "Enviar encuesta",
-        successMessage: "¡Gracias por su participación! Su encuesta ha sido enviada con éxito.",
-        errorMessage: "Ha ocurrido un error al enviar la encuesta. Por favor, inténtelo de nuevo.",
-        questionnaireClosed: "Encuesta cerrada",
-        questionnaireClosedMessage: "La encuesta está actualmente cerrada. Por favor, inténtelo de nuevo más tarde.",
-        questionnaireError: "Error al verificar el estado de la encuesta",
-
         // Disclaimer Modal
         disclaimerTitle: "Confidencialidad y Uso de Datos",
         disclaimerText1: "Esta encuesta es completamente anónima. No se recopilará ninguna información que pueda identificarte.",
         disclaimerText2: "Los datos recopilados serán utilizados por",
         disclaimerText3: "con fines estadísticos para:",
-        disclaimerList1: "Mejorar nuestros servicios y productos",
-        disclaimerList2: "Analizar tendencias y necesidades",
+        disclaimerList1: "Melhorar nuestros servicios y productos",
+        disclaimerList2: "Analisar tendencias y necesidades",
         disclaimerList3: "Desarrollar nuevas ideas",
-        disclaimerList4: "Optimizar la experiencia laboral",
-        disclaimerText4: "Al participar en esta encuesta, aceptas que tus respuestas serán utilizadas para estos análisis estadísticos.",
-        disclaimerAccept: "Acepto y continúo",
+        disclaimerList4: "Otimizar a experiência de trabalho",
+        disclaimerText4: "Ao participar desta pesquisa, você concorda que suas respostas serão utilizadas para estos análises estatísticas.",
+        disclaimerAccept: "Acepto y continuo",
 
         // Form Labels and Placeholders
         experienceRating: "¿Cómo calificas tu experiencia con esta encuesta?",
-        commentsLabel: "¿Tienes algún comentario o sugerencia que compartir con nosotros?",
-        commentsPlaceholder: "Tus comentarios son valiosos para ayudarnos a mejorar esta encuesta...",
+        commentsLabel: "¿Tienes algún comentario o sugestão para compartilhar con nosotros?",
+        commentsPlaceholder: "Tus comentarios son valiosos para nos ayudar a mejorar esta encuesta...",
         textAnswerPlaceholder: "Escribe tu respuesta aquí",
 
         // Footer
-        footerDescription: "Tu satisfacción es nuestra prioridad. Gracias por contribuir a la mejora continua de nuestros servicios.",
+        footerDescription: "Tu satisfacción es nuestra prioridad. Gracias por contribuir a la mejora contínua de nuestros servicios.",
         footerNavigation: "Navegación", 
         footerContact: "Contacto",
-        copyright: "© 2024 Encuesta de Satisfacción creada por Daryl PARISI para la empresa CANDOR. Todos los derechos reservados.",
+        copyright: "© 2024 Barómetro Social creado por Daryl PARISI para la empresa CANDOR. Todos los derechos reservados.",
 
         // Notifications and messages
         notificationPersonalInfo: "Por favor complete todos los campos obligatorios (Género, Edad, Función).",
@@ -463,17 +428,17 @@ const translations = {
         notificationSending: "Enviando...",
         notificationSubmit: "Enviar cuestionario",
         notificationStatusError: "Error al verificar el estado del cuestionario",
-        notificationLoadingError: "Error al cargar las preguntas",
+        notificationLoadingError: "Error al carregar las preguntas",
         notificationNoQuestions: "No se encontraron preguntas",
         singleChoice: "Elección única",
-        multipleChoice: "Elección múltiple",
+        multipleChoice: "Elección múltipla",
         requiredResponses: "respuestas requeridas",
         maxResponsesExceeded: "Puede seleccionar un máximo de {max} respuestas",
         exactResponsesRequired: "Por favor seleccione exactamente {count} respuestas",
         notificationRequired: "Por favor responda a todas las preguntas obligatorias.",
-        notificationCheckboxLimit: "Por favor seleccione exactamente {0} respuestas.",
-        notificationCheckboxMin: "Por favor seleccione al menos {0} respuestas.",
-        notificationCheckboxMax: "Por favor seleccione como máximo {0} respuestas.",
+        notificationCheckboxLimit: "Por favor selecione exatamente {0} respuestas.",
+        notificationCheckboxMin: "Por favor selecione ao menos {0} respuestas.",
+        notificationCheckboxMax: "Por favor selecione no máximo {0} respuestas.",
         required: "obligatorio",
         requiredAnswers: "respuestas requeridas",
         
@@ -510,7 +475,7 @@ const translations = {
         logout: "Sair",
 
         // Index
-        title: "Pesquisa de Satisfação",
+        title: "Barômetro Social",
         subtitle: "Sua opinião é importante para nos ajudar a melhorar",
         startQuestionnaire: "Iniciar a pesquisa",
         whyQuestionnaire: "Por que esta pesquisa?",
@@ -521,7 +486,7 @@ const translations = {
         speed: "Rapidez",
         speedDesc: "Um questionário simples e rápido de preencher, levará apenas alguns minutos do seu tempo.",
         adaptability: "Adaptabilidade",
-        adaptabilityDesc: "Sem computador? Sem telefone? Esta pesquisa é acessível em computador, tablet e smartphone.",
+        adaptabilityDesc: "Sem computador? Esta pesquisa também é acessível em tablet e smartphone.",
 
         // Section Como funciona
         howItWorks: "Como funciona",
@@ -534,7 +499,7 @@ const translations = {
         step3Title: "📮 Envie suas respostas",
         step3Desc: "Ao terminar, envie suas respostas para nos ajudar a melhorar nossos serviços.",
         step4Title: "📊 Analisamos seu feedback",
-        step4Desc: "Nossa equipe analisa cuidadosamente todos os feedbacks para identificar áreas de melhoria.",
+        step4Desc: "Nossa equipe analisa cuidadosamente todos os feedbacks para identificar áreas de melhoria. Informaremos você sobre os resultados assim que possível.",
         clickForMoreInfo: "Clique para mais informações",
         
         // Modals
@@ -618,7 +583,7 @@ const translations = {
         footerDescription: "Sua satisfação é nossa prioridade. Obrigado por contribuir para a melhoria contínua de nossos serviços.",
         footerNavigation: "Navegação", 
         footerContact: "Contato",
-        copyright: "© 2024 Pesquisa de Satisfação criada por Daryl PARISI para a empresa CANDOR. Todos os direitos reservados.",
+        copyright: "© 2024 Barômetro Social criado por Daryl PARISI para a empresa CANDOR. Todos os direitos reservados.",
 
         // Notifications and messages
         notificationPersonalInfo: "Por favor preencha todos os campos obrigatórios (Gênero, Idade, Função).",
@@ -676,7 +641,7 @@ const translations = {
         logout: "تسجيل الخروج",
 
         // Index
-        title: "استطلاع الرضا",
+        title: "المقياس الاجتماعي",
         subtitle: "رأيك مهم لمساعدتنا على التحسين",
         startQuestionnaire: "بدء الاستطلاع",
         whyQuestionnaire: "لماذا هذا الاستطلاع؟",
@@ -687,7 +652,7 @@ const translations = {
         speed: "السرعة",
         speedDesc: "استبيان بسيط وسريع للإجابة، سيستغرق بضع دقائق فقط من وقتك.",
         adaptability: "التكيف",
-        adaptabilityDesc: "لا يوجد كمبيوتر؟ لا يوجد هاتف؟ هذا الاستطلاع متاح على الكمبيوتر والجهاز اللوحي والهاتف الذكي.",
+        adaptabilityDesc: "لا يوجد كمبيوتر؟ هذا الاستطلاع متاح أيضًا على الجهاز اللوحي والهاتف الذكي.",
 
         // Section كيف يعمل
         howItWorks: "كيف يعمل",
@@ -700,7 +665,7 @@ const translations = {
         step3Title: "📮 أرسل إجاباتك",
         step3Desc: "بمجرد الانتهاء، أرسل إجاباتك لمساعدتنا على تحسين خدماتنا.",
         step4Title: "📊 نحلل ملاحظاتك",
-        step4Desc: "يقوم فريقنا بتحليل جميع الملاحظات بعناية لتحديد مجالات التحسين.",
+        step4Desc: "يقوم فريقنا بتحليل جميع الملاحظات بعناية لتحديد مجالات التحسين. سنُعلمكم بالنتائج في أقرب وقت ممكن.",
         clickForMoreInfo: "انقر لمزيد من المعلومات",
         
         // Modals
@@ -784,7 +749,7 @@ const translations = {
         footerDescription: "رضاك هو أولويتنا. شكراً لمساهمتك في التحسين المستمر لخدماتنا.",
         footerNavigation: "التنقل", 
         footerContact: "اتصل بنا",
-        copyright: "© 2024 استطلاع الرضا من إنشاء داريل باريزي لشركة كاندور. جميع الحقوق محفوظة.",
+        copyright: "© 2024 المقياس الاجتماعي من إنشاء داريل باريزي لشركة كاندور. جميع الحقوق محفوظة.",
 
         // رسائل الإشعارات
         notificationPersonalInfo: "يرجى ملء جميع الحقول المطلوبة (الجنس، العمر، الوظيفة).",
