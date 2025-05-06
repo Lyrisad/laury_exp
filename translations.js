@@ -19,6 +19,33 @@ const translations = {
         speed: "Rapidité",
         speedDesc: "Un questionnaire simple et rapide à remplir",
 
+        // Section Comment ça marche
+        howItWorks: "Comment ça marche",
+        step0Title: "📚 Prendre connaissance de la page de présentation",
+        step0Desc: "Consultez la page de présentation pour comprendre l'objectif et l'importance de ce questionnaire de satisfaction.",
+        step1Title: "🚀 Commencez le questionnaire",
+        step1Desc: "Cliquez sur le bouton \"Commencer le sondage\" pour débuter le processus en toute simplicité.",
+        step2Title: "✍️ Répondez aux questions",
+        step2Desc: "Prenez quelques minutes pour répondre aux questions qui vous sont posées sur votre expérience.",
+        step3Title: "📮 Soumettez vos réponses",
+        step3Desc: "Une fois terminé, soumettez vos réponses pour nous aider à améliorer nos services.",
+        step4Title: "📊 Nous analysons vos retours",
+        step4Desc: "Notre équipe analyse attentivement tous les retours pour identifier les points d'amélioration.",
+        clickForMoreInfo: "Cliquez pour plus d'infos",
+        
+        // Modals
+        step0ModalInfo: "La page de présentation vous explique en détail pourquoi nous avons besoin de vos retours et comment nous allons les utiliser pour améliorer nos services. Comprendre l'objectif du questionnaire vous aide à fournir des réponses plus précises et pertinentes.",
+        step1ModalInfo: "Le questionnaire a été conçu pour être intuitif et facile à utiliser. Vous pouvez y accéder depuis n'importe quel appareil avec une connexion internet, que ce soit un ordinateur, une tablette ou un smartphone.",
+        step2ModalInfo: "Les questions sont organisées par thèmes pour faciliter votre réflexion. Pour chaque question, prenez le temps de réfléchir à votre expérience. N'hésitez pas à être honnête dans vos réponses - c'est ce qui nous aidera le plus à nous améliorer.",
+        step3ModalInfo: "Avant de soumettre, vous aurez l'occasion de revoir et modifier vos réponses si nécessaire. Une fois soumises, vos réponses sont immédiatement enregistrées dans notre base de données sécurisée. Vous recevrez une confirmation à l'écran une fois l'envoi réussi.",
+        step4ModalInfo: "Nous analyserons vos réponses avec attention pour pouvoir adapter nos services à vos besoins. Vos retours sont essentiels pour faire évoluer notre offre et améliorer la qualité de nos prestations. Ce sondage permettra d'identifier les tendances et de mettre en place des actions concrètes pour répondre au mieux à vos attentes.",
+        gotoPresentation: "Aller à la page de présentation",
+        startSurvey: "Commencer le sondage",
+        closeModal: "Fermer",
+        
+        // Arrow down tooltip
+        scrollToHow: "Voir comment ça marche",
+
         // Presentation
         whyTitle: "Pourquoi ce sondage ?",
         objective: "Objectif",
@@ -154,6 +181,33 @@ const translations = {
         confidentialityDesc: "Your answers are completely anonymous",
         speed: "Speed",
         speedDesc: "A simple and quick questionnaire to fill out",
+
+        // Section How it works
+        howItWorks: "How it works",
+        step0Title: "📚 Read the presentation page",
+        step0Desc: "Review the presentation page to understand the purpose and importance of this satisfaction survey.",
+        step1Title: "🚀 Start the survey",
+        step1Desc: "Click on the \"Start the survey\" button to begin the process with ease.",
+        step2Title: "✍️ Answer the questions",
+        step2Desc: "Take a few minutes to answer the questions about your experience.",
+        step3Title: "📮 Submit your answers",
+        step3Desc: "Once complete, submit your answers to help us improve our services.",
+        step4Title: "📊 We analyze your feedback",
+        step4Desc: "Our team carefully analyzes all feedback to identify areas for improvement.",
+        clickForMoreInfo: "Click for more info",
+        
+        // Modals
+        step0ModalInfo: "The presentation page explains in detail why we need your feedback and how we will use it to improve our services. Understanding the purpose of the survey helps you provide more precise and relevant answers.",
+        step1ModalInfo: "The survey has been designed to be intuitive and easy to use. You can access it from any device with an internet connection, whether it's a computer, tablet, or smartphone.",
+        step2ModalInfo: "The questions are organized by themes to facilitate your reflection. For each question, take the time to think about your experience. Don't hesitate to be honest in your answers - that's what will help us improve the most.",
+        step3ModalInfo: "Before submitting, you will have the opportunity to review and modify your answers if necessary. Once submitted, your answers are immediately recorded in our secure database. You will receive on-screen confirmation once the submission is successful.",
+        step4ModalInfo: "We will analyze your responses carefully to adapt our services to your needs. Your feedback is essential to evolve our offering and improve the quality of our services. This survey will identify trends and implement concrete actions to best meet your expectations.",
+        gotoPresentation: "Go to the presentation page",
+        startSurvey: "Start the survey",
+        closeModal: "Close",
+        
+        // Arrow down tooltip
+        scrollToHow: "See how it works",
 
         // Presentation
         whyTitle: "Why this survey?",
@@ -291,6 +345,33 @@ const translations = {
         speed: "Rapidez",
         speedDesc: "Un cuestionario simple y rápido de completar",
 
+        // Section Cómo funciona
+        howItWorks: "Cómo funciona",
+        step0Title: "📚 Revisar la página de presentación",
+        step0Desc: "Consulta la página de presentación para comprender el objetivo y la importancia de esta encuesta de satisfacción.",
+        step1Title: "🚀 Comienza la encuesta",
+        step1Desc: "Haz clic en el botón \"Comenzar la encuesta\" para iniciar el proceso con facilidad.",
+        step2Title: "✍️ Responde a las preguntas",
+        step2Desc: "Tómate unos minutos para responder a las preguntas sobre tu experiencia.",
+        step3Title: "📮 Envía tus respuestas",
+        step3Desc: "Una vez completadas, envía tus respuestas para ayudarnos a mejorar nuestros servicios.",
+        step4Title: "📊 Analizamos tus comentarios",
+        step4Desc: "Nuestro equipo analiza cuidadosamente todos los comentarios para identificar áreas de mejora.",
+        clickForMoreInfo: "Haz clic para más información",
+        
+        // Modals
+        step0ModalInfo: "La página de presentación explica en detalle por qué necesitamos tus comentarios y cómo los utilizaremos para mejorar nuestros servicios. Comprender el propósito de la encuesta te ayuda a proporcionar respuestas más precisas y relevantes.",
+        step1ModalInfo: "La encuesta ha sido diseñada para ser intuitiva y fácil de usar. Puedes acceder a ella desde cualquier dispositivo con conexión a Internet, ya sea un ordenador, tableta o smartphone.",
+        step2ModalInfo: "Las preguntas están organizadas por temas para facilitar tu reflexión. Para cada pregunta, tómate el tiempo de pensar en tu experiencia. No dudes en ser honesto en tus respuestas - eso es lo que más nos ayudará a mejorar.",
+        step3ModalInfo: "Antes de enviar, tendrás la oportunidad de revisar y modificar tus respuestas si es necesario. Una vez enviadas, tus respuestas se registran inmediatamente en nuestra base de datos segura. Recibirás una confirmación en pantalla una vez que el envío sea exitoso.",
+        step4ModalInfo: "Analizaremos tus respuestas cuidadosamente para adaptar nuestros servicios a tus necesidades. Tus comentarios son esenciales para evolucionar nuestra oferta y mejorar la calidad de nuestros servicios. Esta encuesta permitirá identificar tendencias e implementar acciones concretas para satisfacer mejor tus expectativas.",
+        gotoPresentation: "Ir a la página de presentación",
+        startSurvey: "Comenzar la encuesta",
+        closeModal: "Cerrar",
+        
+        // Arrow down tooltip
+        scrollToHow: "Ver cómo funciona",
+
         // Presentation
         whyTitle: "¿Por qué esta encuesta?",
         objective: "Objetivo",
@@ -363,14 +444,14 @@ const translations = {
         notificationQuestions: "Por favor responda todas las preguntas del cuestionario.",
         notificationSatisfaction: "Por favor seleccione una calificación de satisfacción.",
         notificationSuccess: "¡Gracias por su participación! Su cuestionario ha sido enviado con éxito.",
-        notificationError: "Ocurrió un error al enviar el cuestionario. Por favor intente nuevamente.",
+        notificationError: "Ocurrió un error al enviar el cuestionario. Por favor tente novamente.",
         notificationSending: "Enviando...",
         notificationSubmit: "Enviar cuestionario",
         notificationStatusError: "Error al verificar el estado del cuestionario",
-        notificationLoadingError: "Error al cargar las preguntas",
+        notificationLoadingError: "Error al carregar as perguntas",
         notificationNoQuestions: "No se encontraron preguntas",
         singleChoice: "Elección única",
-        multipleChoice: "Elección múltiple",
+        multipleChoice: "Elección múltipla",
         requiredResponses: "respuestas requeridas",
         maxResponsesExceeded: "Puede seleccionar un máximo de {max} respuestas",
         exactResponsesRequired: "Por favor seleccione exactamente {count} respuestas",
@@ -426,6 +507,33 @@ const translations = {
         confidentialityDesc: "Suas respostas são completamente anônimas",
         speed: "Rapidez",
         speedDesc: "Um questionário simples e rápido de preencher",
+
+        // Section Como funciona
+        howItWorks: "Como funciona",
+        step0Title: "📚 Revisar a página de apresentação",
+        step0Desc: "Consulte a página de apresentação para entender o objetivo e a importância desta pesquisa de satisfação.",
+        step1Title: "🚀 Inicie a pesquisa",
+        step1Desc: "Clique no botão \"Iniciar a pesquisa\" para começar o processo com facilidade.",
+        step2Title: "✍️ Responda às perguntas",
+        step2Desc: "Dedique alguns minutos para responder às perguntas sobre sua experiência.",
+        step3Title: "📮 Envie suas respostas",
+        step3Desc: "Ao terminar, envie suas respostas para nos ajudar a melhorar nossos serviços.",
+        step4Title: "📊 Analisamos seu feedback",
+        step4Desc: "Nossa equipe analisa cuidadosamente todos os feedbacks para identificar áreas de melhoria.",
+        clickForMoreInfo: "Clique para mais informações",
+        
+        // Modals
+        step0ModalInfo: "A página de apresentação explica em detalhes por que precisamos do seu feedback e como o utilizaremos para melhorar nossos serviços. Entender o propósito da pesquisa ajuda você a fornecer respostas mais precisas e relevantes.",
+        step1ModalInfo: "A pesquisa foi projetada para ser intuitiva e fácil de usar. Você pode acessá-la de qualquer dispositivo com conexão à internet, seja um computador, tablet ou smartphone.",
+        step2ModalInfo: "As perguntas estão organizadas por temas para facilitar sua reflexão. Para cada pergunta, tire um tempo para pensar sobre sua experiência. Não hesite em ser honesto em suas respostas - isso é o que mais nos ajudará a melhorar.",
+        step3ModalInfo: "Antes de enviar, você terá a oportunidade de revisar e modificar suas respostas, se necessário. Uma vez enviadas, suas respostas são imediatamente registradas em nosso banco de dados seguro. Você receberá uma confirmação na tela assim que o envio for bem-sucedido.",
+        step4ModalInfo: "Analisaremos suas respostas cuidadosamente para adaptar nossos serviços às suas necessidades. Seu feedback é essencial para evoluir nossa oferta e melhorar a qualidade de nossos serviços. Esta pesquisa permitirá identificar tendências e implementar ações concretas para atender melhor às suas expectativas.",
+        gotoPresentation: "Ir para a página de apresentação",
+        startSurvey: "Iniciar a pesquisa",
+        closeModal: "Fechar",
+        
+        // Arrow down tooltip
+        scrollToHow: "Ver como funciona",
 
         // Presentation
         whyTitle: "Por que esta pesquisa?",
@@ -540,8 +648,8 @@ const translations = {
         goToPresentation: "Ir para a apresentação",
 
         // Ajouter les traductions pour les messages de questionnaire déjà complété
-        questionnaireCompleted: "Questionario già completato",
-        questionnaireCompletedMessage: "Hai già compilato questo questionario. Grazie per la tua partecipazione!"
+        questionnaireCompleted: "Questionário já completo",
+        questionnaireCompletedMessage: "Você já completou este questionário. Obrigado pela sua participação!"
     },
     ar: {
         // Navigation
@@ -562,6 +670,33 @@ const translations = {
         confidentialityDesc: "إجاباتك مجهولة تماماً",
         speed: "السرعة",
         speedDesc: "استبيان بسيط وسريع للإجابة",
+
+        // Section كيف يعمل
+        howItWorks: "كيف يعمل",
+        step0Title: "📚 مراجعة صفحة العرض",
+        step0Desc: "اطلع على صفحة العرض لفهم هدف وأهمية استطلاع الرضا هذا.",
+        step1Title: "🚀 ابدأ الاستطلاع",
+        step1Desc: "انقر على زر \"بدء الاستطلاع\" لبدء العملية بسهولة.",
+        step2Title: "✍️ أجب على الأسئلة",
+        step2Desc: "خذ بضع دقائق للإجابة على الأسئلة حول تجربتك.",
+        step3Title: "📮 أرسل إجاباتك",
+        step3Desc: "بمجرد الانتهاء، أرسل إجاباتك لمساعدتنا على تحسين خدماتنا.",
+        step4Title: "📊 نحلل ملاحظاتك",
+        step4Desc: "يقوم فريقنا بتحليل جميع الملاحظات بعناية لتحديد مجالات التحسين.",
+        clickForMoreInfo: "انقر لمزيد من المعلومات",
+        
+        // Modals
+        step0ModalInfo: "تشرح صفحة العرض بالتفصيل سبب حاجتنا إلى ملاحظاتك وكيف سنستخدمها لتحسين خدماتنا. فهم الغرض من الاستطلاع يساعدك على تقديم إجابات أكثر دقة وملاءمة.",
+        step1ModalInfo: "تم تصميم الاستطلاع ليكون بديهيًا وسهل الاستخدام. يمكنك الوصول إليه من أي جهاز متصل بالإنترنت، سواء كان جهاز كمبيوتر أو جهاز لوحي أو هاتف ذكي.",
+        step2ModalInfo: "الأسئلة منظمة حسب المواضيع لتسهيل تفكيرك. لكل سؤال، خذ وقتك للتفكير في تجربتك. لا تتردد في أن تكون صادقًا في إجاباتك - هذا ما سيساعدنا على التحسن أكثر.",
+        step3ModalInfo: "قبل الإرسال، ستتاح لك الفرصة لمراجعة وتعديل إجاباتك إذا لزم الأمر. بمجرد الإرسال، يتم تسجيل إجاباتك فورًا في قاعدة بياناتنا الآمنة. ستتلقى تأكيدًا على الشاشة بمجرد نجاح الإرسال.",
+        step4ModalInfo: "سنحلل إجاباتك بعناية لتكييف خدماتنا مع احتياجاتك. ملاحظاتك ضرورية لتطوير عرضنا وتحسين جودة خدماتنا. سيسمح هذا الاستطلاع بتحديد الاتجاهات وتنفيذ إجراءات ملموسة لتلبية توقعاتك بشكل أفضل.",
+        gotoPresentation: "اذهب إلى صفحة العرض",
+        startSurvey: "ابدأ الاستطلاع",
+        closeModal: "إغلاق",
+        
+        // Arrow down tooltip
+        scrollToHow: "شاهد كيف يعمل",
 
         // Presentation
         whyTitle: "لماذا هذا الاستطلاع؟",
@@ -646,8 +781,6 @@ const translations = {
         requiredResponses: "إجابات مطلوبة",
         maxResponsesExceeded: "يمكنك اختيار أقصى عدد {max} إجابات",
         exactResponsesRequired: "يرجى اختيار مباشرة {count} إجابات",
-
-        // Notifications et messages
         notificationRequired: "يرجى الإجابة على جميع أسئلة المطلوبة.",
         notificationCheckboxLimit: "يرجى اختيار مباشرة {0} إجابات.",
         notificationCheckboxMin: "يرجى اختيار على الأقل {0} إجابات.",

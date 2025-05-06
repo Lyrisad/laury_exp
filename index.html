@@ -37,18 +37,62 @@
             </div>
         </section>
 
-        <section class="features">
-            <div class="feature-card">
-                <h2><span>📊</span> <span data-translate="dataAnalysis">Analyse des données</span></h2>
-                <p data-translate="dataAnalysisDesc">Des statistiques précises pour améliorer nos services</p>
-            </div>
-            <div class="feature-card">
-                <h2><span>🔒</span> <span data-translate="confidentiality">Confidentialité</span></h2>
-                <p data-translate="confidentialityDesc">Vos réponses sont totalement anonymes</p>
-            </div>
-            <div class="feature-card">
-                <h2><span>⚡</span> <span data-translate="speed">Rapidité</span></h2>
-                <p data-translate="speedDesc">Un questionnaire simple et rapide à remplir</p>
+        <div class="features-wrapper">
+            <section class="features">
+                <div class="feature-card">
+                    <h2><span>📊</span> <span data-translate="dataAnalysis">Analyse des données</span></h2>
+                    <p data-translate="dataAnalysisDesc">Des statistiques précises pour améliorer nos services</p>
+                </div>
+                <div class="feature-card">
+                    <h2><span>🔒</span> <span data-translate="confidentiality">Confidentialité</span></h2>
+                    <p data-translate="confidentialityDesc">Vos réponses sont totalement anonymes</p>
+                </div>
+                <div class="feature-card">
+                    <h2><span>⚡</span> <span data-translate="speed">Rapidité</span></h2>
+                    <p data-translate="speedDesc">Un questionnaire simple et rapide à remplir</p>
+                </div>
+            </section>
+            <div class="arrow-down" data-tooltip="Voir comment ça marche" data-translate-tooltip="scrollToHow">↓</div>
+        </div>
+
+        <section class="how-it-works" id="how-it-works">
+            <h2 class="section-title" data-translate="howItWorks">Comment ça marche</h2>
+            <div class="steps-container">
+                <div class="step-card" data-modal-id="step1" data-click-message="Cliquez pour plus d'infos">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3 data-translate="step0Title">📚 Prendre connaissance de la page de présentation</h3>
+                        <p data-translate="step0Desc">Consultez la page de présentation pour comprendre l'objectif et l'importance de ce questionnaire de satisfaction.</p>
+                    </div>
+                </div>
+                <div class="step-card" data-modal-id="step2" data-click-message="Cliquez pour plus d'infos">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3 data-translate="step1Title">🚀 Commencez le questionnaire</h3>
+                        <p data-translate="step1Desc">Cliquez sur le bouton "Commencer le sondage" pour débuter le processus en toute simplicité.</p>
+                    </div>
+                </div>
+                <div class="step-card" data-modal-id="step3" data-click-message="Cliquez pour plus d'infos">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3 data-translate="step2Title">✍️ Répondez aux questions</h3>
+                        <p data-translate="step2Desc">Prenez quelques minutes pour répondre aux questions qui vous sont posées sur votre expérience.</p>
+                    </div>
+                </div>
+                <div class="step-card" data-modal-id="step4" data-click-message="Cliquez pour plus d'infos">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3 data-translate="step3Title">📮 Soumettez vos réponses</h3>
+                        <p data-translate="step3Desc">Une fois terminé, soumettez vos réponses pour nous aider à améliorer nos services.</p>
+                    </div>
+                </div>
+                <div class="step-card" data-modal-id="step5" data-click-message="Cliquez pour plus d'infos">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3 data-translate="step4Title">📊 Nous analysons vos retours</h3>
+                        <p data-translate="step4Desc">Notre équipe analyse attentivement tous les retours pour identifier les points d'amélioration.</p>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -61,5 +105,139 @@
     <script src="language.js"></script>
     <script src="script.js"></script>
     <script src="clickTracker.js"></script>
+
+    <!-- Modals pour les étapes -->
+    <div class="modal-overlay"></div>
+    
+    <div id="step1" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" title="Fermer">&times;</span>
+            <div class="modal-step-number">1</div>
+            <h3 data-translate="step0Title">📚 Prendre connaissance de la page de présentation</h3>
+            <p data-translate="step0Desc">Consultez la page de présentation pour comprendre l'objectif et l'importance de ce questionnaire de satisfaction.</p>
+            <p class="modal-extra-info" data-translate="step0ModalInfo">La page de présentation vous explique en détail pourquoi nous avons besoin de vos retours et comment nous allons les utiliser pour améliorer nos services. Comprendre l'objectif du questionnaire vous aide à fournir des réponses plus précises et pertinentes.</p>
+            <a href="presentation.html" class="action-button" data-translate="gotoPresentation">Aller à la page de présentation</a>
+        </div>
+    </div>
+
+    <div id="step2" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" title="Fermer">&times;</span>
+            <div class="modal-step-number">2</div>
+            <h3 data-translate="step1Title">🚀 Commencez le questionnaire</h3>
+            <p data-translate="step1Desc">Cliquez sur le bouton "Commencer le sondage" pour débuter le processus en toute simplicité.</p>
+            <p class="modal-extra-info" data-translate="step1ModalInfo">Le questionnaire a été conçu pour être intuitif et facile à utiliser. Vous pouvez y accéder depuis n'importe quel appareil avec une connexion internet, que ce soit un ordinateur, une tablette ou un smartphone.</p>
+            <a href="questionnaire.html" class="action-button" data-translate="startSurvey">Commencer le sondage</a>
+        </div>
+    </div>
+
+    <div id="step3" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" title="Fermer">&times;</span>
+            <div class="modal-step-number">3</div>
+            <h3 data-translate="step2Title">✍️ Répondez aux questions</h3>
+            <p data-translate="step2Desc">Prenez quelques minutes pour répondre aux questions qui vous sont posées sur votre expérience.</p>
+            <p class="modal-extra-info" data-translate="step2ModalInfo">Les questions sont organisées par thèmes pour faciliter votre réflexion. Pour chaque question, prenez le temps de réfléchir à votre expérience. N'hésitez pas à être honnête dans vos réponses - c'est ce qui nous aidera le plus à nous améliorer.</p>
+        </div>
+    </div>
+
+    <div id="step4" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" title="Fermer">&times;</span>
+            <div class="modal-step-number">4</div>
+            <h3 data-translate="step3Title">📮 Soumettez vos réponses</h3>
+            <p data-translate="step3Desc">Une fois terminé, soumettez vos réponses pour nous aider à améliorer nos services.</p>
+            <p class="modal-extra-info" data-translate="step3ModalInfo">Avant de soumettre, vous aurez l'occasion de revoir et modifier vos réponses si nécessaire. Une fois soumises, vos réponses sont immédiatement enregistrées dans notre base de données sécurisée. Vous recevrez une confirmation à l'écran une fois l'envoi réussi.</p>
+        </div>
+    </div>
+
+    <div id="step5" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" title="Fermer">&times;</span>
+            <div class="modal-step-number">5</div>
+            <h3 data-translate="step4Title">📊 Nous analysons vos retours</h3>
+            <p data-translate="step4Desc">Notre équipe analyse attentivement tous les retours pour identifier les points d'amélioration.</p>
+            <p class="modal-extra-info" data-translate="step4ModalInfo">Nous analyserons vos réponses avec attention pour pouvoir adapter nos services à vos besoins. Vos retours sont essentiels pour faire évoluer notre offre et améliorer la qualité de nos prestations. Ce sondage permettra d'identifier les tendances et de mettre en place des actions concrètes pour répondre au mieux à vos attentes.</p>
+        </div>
+    </div>
+
+    <script>
+        // Script pour les modals
+        document.addEventListener('DOMContentLoaded', function() {
+            const stepCards = document.querySelectorAll('.step-card');
+            const modalOverlay = document.querySelector('.modal-overlay');
+            const closeButtons = document.querySelectorAll('.close-modal');
+            
+            // Ouvrir le modal correspondant au clic sur une étape
+            stepCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const modalId = this.getAttribute('data-modal-id');
+                    const modal = document.getElementById(modalId);
+                    
+                    if (modal) {
+                        modal.classList.add('active');
+                        modalOverlay.classList.add('active');
+                        document.body.style.overflow = 'hidden'; // Empêche le défilement du body
+                    }
+                });
+            });
+            
+            // Fermer les modals avec le bouton de fermeture
+            closeButtons.forEach(button => {
+                button.addEventListener('click', closeModal);
+            });
+            
+            // Fermer les modals en cliquant sur l'overlay
+            modalOverlay.addEventListener('click', closeModal);
+            
+            // Fonction pour fermer les modals
+            function closeModal() {
+                const activeModals = document.querySelectorAll('.modal.active');
+                activeModals.forEach(modal => {
+                    modal.classList.remove('active');
+                });
+                modalOverlay.classList.remove('active');
+                document.body.style.overflow = ''; // Réactive le défilement
+            }
+            
+            // Fermer les modals avec la touche Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+            
+            // Script pour la flèche de défilement
+            const arrowDown = document.querySelector('.arrow-down');
+            if (arrowDown) {
+                // Mettre à jour le tooltip avec la traduction
+                function updateArrowTooltip() {
+                    if (typeof translations !== 'undefined' && typeof currentLanguage !== 'undefined') {
+                        const key = 'scrollToHow';
+                        if (translations[currentLanguage] && translations[currentLanguage][key]) {
+                            arrowDown.setAttribute('data-tooltip', translations[currentLanguage][key]);
+                        }
+                    }
+                }
+                
+                // Appeler la fonction au chargement
+                updateArrowTooltip();
+                
+                // Écouter le changement de langue
+                document.addEventListener('languageChanged', updateArrowTooltip);
+                
+                // Faire défiler vers la section au clic
+                arrowDown.addEventListener('click', function() {
+                    const howSection = document.getElementById('how-it-works');
+                    if (howSection) {
+                        howSection.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html> 

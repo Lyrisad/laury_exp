@@ -8,6 +8,10 @@ function changeLanguage(lang) {
     localStorage.setItem('language', lang);
     translatePage();
     
+    // Déclencher un événement personnalisé pour notifier du changement de langue
+    const event = new CustomEvent('languageChanged', { detail: { language: lang } });
+    document.dispatchEvent(event);
+    
     // Première tentative de mise à jour après un court délai
     setTimeout(() => {
         console.log('First update attempt for translated questions');
@@ -83,6 +87,22 @@ function translatePage() {
                 option.textContent = translations[currentLanguage][key];
             }
         });
+    });
+
+    // Traduire les attributs data-click-message
+    const stepCards = document.querySelectorAll('.step-card[data-click-message]');
+    stepCards.forEach(card => {
+        if (translations[currentLanguage]['clickForMoreInfo']) {
+            card.setAttribute('data-click-message', translations[currentLanguage]['clickForMoreInfo']);
+        }
+    });
+    
+    // Traduire les boutons de fermeture des modales
+    const closeButtons = document.querySelectorAll('.close-modal');
+    closeButtons.forEach(button => {
+        if (translations[currentLanguage]['closeModal']) {
+            button.setAttribute('title', translations[currentLanguage]['closeModal']);
+        }
     });
 
     // Traduire les messages dynamiques
