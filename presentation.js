@@ -237,8 +237,45 @@ function checkAdminAndAddEditControls() {
         card.appendChild(editButton);
     });
     
+    // Ajouter un bouton pour créer une nouvelle section
+    addNewSectionButton();
+    
     // Créer le modal d'édition de texte s'il n'existe pas déjà
     createEditModal();
+    
+    // Créer le modal d'ajout de section s'il n'existe pas déjà
+    createAddSectionModal();
+}
+
+// Fonction pour ajouter un bouton "Ajouter une section"
+function addNewSectionButton() {
+    const presentationCards = document.getElementById('presentationCards');
+    if (!presentationCards) return;
+    
+    // Vérifier si le bouton existe déjà
+    if (document.getElementById('addSectionButton')) return;
+    
+    // Créer un conteneur pour le bouton d'ajout
+    const addButtonContainer = document.createElement('div');
+    addButtonContainer.className = 'add-section-container';
+    
+    // Créer le bouton d'ajout
+    const addButton = document.createElement('button');
+    addButton.id = 'addSectionButton';
+    addButton.className = 'add-section-button';
+    addButton.innerHTML = '<span>+</span> Ajouter une section';
+    addButton.title = 'Ajouter une nouvelle section';
+    
+    // Ajouter le gestionnaire d'événement
+    addButton.addEventListener('click', function() {
+        openAddSectionModal();
+    });
+    
+    // Ajouter le bouton au conteneur
+    addButtonContainer.appendChild(addButton);
+    
+    // Ajouter le conteneur après les cartes existantes
+    presentationCards.appendChild(addButtonContainer);
 }
 
 // Fonction pour créer le modal d'édition
@@ -380,4 +417,151 @@ function checkForAdminTestMode() {
         // Reload the page without the parameter to prevent endless cookie setting
         window.location.href = window.location.pathname;
     }
+}
+
+// Fonction pour créer le modal d'ajout de section
+function createAddSectionModal() {
+    if (document.getElementById('addSectionModal')) return;
+    
+    const modalHTML = `
+    <div id="addSectionModal" class="edit-modal">
+        <div class="edit-modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Ajouter une nouvelle section</h2>
+            <div class="edit-form">
+                <div class="form-group">
+                    <label for="newSectionTitle">Titre:</label>
+                    <input type="text" id="newSectionTitle" class="edit-input" placeholder="Ex: Fonctionnalités">
+                </div>
+                <div class="form-group">
+                    <label for="newSectionText">Texte:</label>
+                    <textarea id="newSectionText" class="edit-textarea" rows="5" placeholder="Entrez le contenu de la section ici"></textarea>
+                </div>
+                <button id="saveSectionButton" class="save-button">Ajouter</button>
+            </div>
+        </div>
+    </div>`;
+    
+    // Ajouter le modal au body
+    const modalContainer = document.createElement('div');
+    modalContainer.innerHTML = modalHTML;
+    document.body.appendChild(modalContainer.firstElementChild);
+    
+    // Ajouter les gestionnaires d'événements
+    const modal = document.getElementById('addSectionModal');
+    const closeButton = modal.querySelector('.close-modal');
+    const saveButton = document.getElementById('saveSectionButton');
+    
+    closeButton.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+    
+    saveButton.addEventListener('click', saveNewSection);
+    
+    // Fermer le modal si on clique en dehors
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
+// Fonction pour ouvrir le modal d'ajout de section
+function openAddSectionModal() {
+    const modal = document.getElementById('addSectionModal');
+    if (!modal) {
+        createAddSectionModal();
+        return openAddSectionModal();
+    }
+    
+    // Réinitialiser les champs
+    document.getElementById('newSectionTitle').value = '';
+    document.getElementById('newSectionText').value = '';
+    
+    // Afficher le modal
+    modal.style.display = 'block';
+}
+
+// Fonction pour sauvegarder une nouvelle section
+function saveNewSection() {
+    const titleInput = document.getElementById('newSectionTitle');
+    const textInput = document.getElementById('newSectionText');
+    
+    const title = titleInput.value;
+    const text = textInput.value;
+    
+    // Valider les entrées
+    if (!title.trim() || !text.trim()) {
+        alert('Veuillez remplir tous les champs.');
+        return;
+    }
+    
+    // Afficher un indicateur de chargement
+    const saveButton = document.getElementById('saveSectionButton');
+    const originalText = saveButton.textContent;
+    saveButton.textContent = 'Enregistrement...';
+    saveButton.disabled = true;
+    
+    // Déterminer le prochain index de section
+    const presentationCards = document.getElementById('presentationCards');
+    const sectionCount = presentationCards.querySelectorAll('.info-card').length;
+    const newSectionIndex = sectionCount;
+    
+    // Construire les paramètres dans l'URL
+    const params = new URLSearchParams({
+        action: 'updatePresentationText',
+        title: title,
+        text: text,
+        section: newSectionIndex
+    });
+    
+    // Envoyer les données à l'API
+    fetch(`${SCRIPT_URL}?${params.toString()}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de l\'ajout de la section');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Ajouter la carte à l'interface
+                const newCard = createTextCard(title, text);
+                
+                // Ajouter la carte avant le bouton d'ajout
+                const addButton = document.querySelector('.add-section-container');
+                presentationCards.insertBefore(newCard, addButton);
+                
+                // Ajouter le bouton d'édition à la nouvelle carte
+                const editButton = document.createElement('button');
+                editButton.className = 'edit-text-button';
+                editButton.innerHTML = '✏️';
+                editButton.title = 'Modifier ce texte';
+                
+                // Ajouter le gestionnaire d'événement au bouton d'édition
+                editButton.addEventListener('click', function() {
+                    openEditModal(title, text, newSectionIndex);
+                });
+                
+                // Ajouter le bouton à la carte
+                newCard.appendChild(editButton);
+                
+                // Fermer le modal
+                document.getElementById('addSectionModal').style.display = 'none';
+                
+                // Afficher un message de succès
+                showNotification('Section ajoutée avec succès', 'success');
+            } else {
+                showNotification('Erreur lors de l\'ajout: ' + (data.message || 'Erreur inconnue'), 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            showNotification('Erreur lors de l\'ajout de la section', 'error');
+        })
+        .finally(() => {
+            // Restaurer le bouton
+            saveButton.textContent = originalText;
+            saveButton.disabled = false;
+        });
 } 

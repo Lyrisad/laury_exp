@@ -33,7 +33,6 @@
     background: white;
     border-radius: 15px;
     padding: 2rem;
-    margin-bottom: 2rem;
     box-shadow: var(--card-shadow);
     transition: var(--transition);
     position: relative;
@@ -552,4 +551,45 @@ footer {
     0% { opacity: 0.8; }
     50% { opacity: 1; }
     100% { opacity: 0.8; }
+}
+
+/* Styles pour le bouton d'ajout de section */
+.add-section-container {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.add-section-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(57, 85, 214, 0.2);
+}
+
+.add-section-button span {
+    font-size: 1.5rem;
+    line-height: 1;
+    font-weight: bold;
+}
+
+.add-section-button:hover {
+    background-color: #3955d6;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(57, 85, 214, 0.3);
+}
+
+.add-section-button:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(57, 85, 214, 0.3);
 }
