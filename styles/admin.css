@@ -411,6 +411,7 @@
 
 .warning-message p:first-child {
     font-weight: 500;
+    color: #ff2525;;
 }
 
 .warning-message .warning-icon {
