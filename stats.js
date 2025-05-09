@@ -111,6 +111,9 @@ function loadStats() {
       // Calcul de la moyenne de satisfaction
       stats.moyenneSatisfaction = countSatisfaction > 0 ? totalSatisfaction / countSatisfaction : 0;
       
+      // Stocker les statistiques globales pour l'export
+      globalStatsData = stats;
+      
       // Rendu des statistiques
       renderStats(stats);
       
@@ -953,9 +956,68 @@ function createStyledCell(value, isBold = false) {
 
 // --- Extraction for ALL stats into one Excel workbook
 function exportAllToExcel() {
+  // Vérification des données
   if (!globalStatsData) {
-    alert("Global statistics are not yet loaded.");
-    return;
+    // Essayer de récupérer les données des graphiques si disponibles
+    try {
+      // Récupérer les données depuis les graphiques existants
+      const stats = {
+        totalQuestionnaires: totalChart ? totalChart.data.datasets[0].data[0] : 0,
+        parGenre: {},
+        parPoste: {},
+        parAge: {},
+        parAnciennete: {},
+        satisfactionDistribution: {},
+        moyenneSatisfaction: satisfactionChart ? parseFloat(satisfactionChart.data.datasets[0].data[0]) : 0
+      };
+      
+      // Récupérer les données du genre
+      if (genreChart) {
+        genreChart.data.labels.forEach((label, index) => {
+          stats.parGenre[label] = genreChart.data.datasets[0].data[index];
+        });
+      }
+      
+      // Récupérer les données du poste
+      if (posteChart) {
+        posteChart.data.labels.forEach((label, index) => {
+          stats.parPoste[label] = posteChart.data.datasets[0].data[index];
+        });
+      }
+      
+      // Récupérer les données de l'âge
+      if (ageChart) {
+        ageChart.data.labels.forEach((label, index) => {
+          stats.parAge[label] = ageChart.data.datasets[0].data[index];
+        });
+      }
+      
+      // Récupérer les données d'ancienneté
+      if (ancienneteChart) {
+        ancienneteChart.data.labels.forEach((label, index) => {
+          stats.parAnciennete[label] = ancienneteChart.data.datasets[0].data[index];
+        });
+      }
+      
+      // Récupérer les données de la distribution de satisfaction
+      if (satisDistChart) {
+        satisDistChart.data.labels.forEach((label, index) => {
+          stats.satisfactionDistribution[label] = satisDistChart.data.datasets[0].data[index];
+        });
+      }
+      
+      globalStatsData = stats;
+    } catch (error) {
+      console.error("Erreur lors de la récupération des statistiques depuis les graphiques:", error);
+      alert("Les statistiques globales ne sont pas chargées. Veuillez d'abord charger les statistiques.");
+      return;
+    }
+    
+    // Vérifier à nouveau si les données sont disponibles
+    if (!globalStatsData) {
+      alert("Les statistiques globales ne sont pas chargées. Veuillez d'abord charger les statistiques.");
+      return;
+    }
   }
   
   // ----------- Global Stats Sheet ---------------
@@ -1004,6 +1066,19 @@ function exportAllToExcel() {
     globalSheetData.push([key, count, percentage]);
   }
   globalSheetData.push([]);
+  
+  // Distribution par Ancienneté
+  if (globalStatsData.parAnciennete && Object.keys(globalStatsData.parAnciennete).length > 0) {
+    globalSheetData.push([createStyledCell("Distribution par Ancienneté", true)]);
+    globalSheetData.push([createStyledCell("Ancienneté", true), createStyledCell("Nombre", true), createStyledCell("Pourcentage", true)]);
+    const totalAnciennete = Object.values(globalStatsData.parAnciennete).reduce((a, b) => a + b, 0);
+    for (let key in globalStatsData.parAnciennete) {
+      const count = globalStatsData.parAnciennete[key];
+      const percentage = ((count / totalAnciennete) * 100).toFixed(1) + "%";
+      globalSheetData.push([key, count, percentage]);
+    }
+    globalSheetData.push([]);
+  }
   
   // Distribution des Notes de Satisfaction
   globalSheetData.push([createStyledCell("Distribution des Notes de Satisfaction", true)]);
@@ -1088,9 +1163,68 @@ function exportAllToExcel() {
 
 // --- Extraction for Global Stats individually
 function exportGlobalStatsToExcel() {
+  // Vérification des données
   if (!globalStatsData) {
-    alert("Les statistiques globales ne sont pas chargées.");
-    return;
+    // Essayer de récupérer les données des graphiques si disponibles
+    try {
+      // Récupérer les données depuis les graphiques existants
+      const stats = {
+        totalQuestionnaires: totalChart ? totalChart.data.datasets[0].data[0] : 0,
+        parGenre: {},
+        parPoste: {},
+        parAge: {},
+        parAnciennete: {},
+        satisfactionDistribution: {},
+        moyenneSatisfaction: satisfactionChart ? parseFloat(satisfactionChart.data.datasets[0].data[0]) : 0
+      };
+      
+      // Récupérer les données du genre
+      if (genreChart) {
+        genreChart.data.labels.forEach((label, index) => {
+          stats.parGenre[label] = genreChart.data.datasets[0].data[index];
+        });
+      }
+      
+      // Récupérer les données du poste
+      if (posteChart) {
+        posteChart.data.labels.forEach((label, index) => {
+          stats.parPoste[label] = posteChart.data.datasets[0].data[index];
+        });
+      }
+      
+      // Récupérer les données de l'âge
+      if (ageChart) {
+        ageChart.data.labels.forEach((label, index) => {
+          stats.parAge[label] = ageChart.data.datasets[0].data[index];
+        });
+      }
+      
+      // Récupérer les données d'ancienneté
+      if (ancienneteChart) {
+        ancienneteChart.data.labels.forEach((label, index) => {
+          stats.parAnciennete[label] = ancienneteChart.data.datasets[0].data[index];
+        });
+      }
+      
+      // Récupérer les données de la distribution de satisfaction
+      if (satisDistChart) {
+        satisDistChart.data.labels.forEach((label, index) => {
+          stats.satisfactionDistribution[label] = satisDistChart.data.datasets[0].data[index];
+        });
+      }
+      
+      globalStatsData = stats;
+    } catch (error) {
+      console.error("Erreur lors de la récupération des statistiques depuis les graphiques:", error);
+      alert("Les statistiques globales ne sont pas chargées. Veuillez d'abord charger les statistiques.");
+      return;
+    }
+    
+    // Vérifier à nouveau si les données sont disponibles
+    if (!globalStatsData) {
+      alert("Les statistiques globales ne sont pas chargées. Veuillez d'abord charger les statistiques.");
+      return;
+    }
   }
   
   let data = [];
@@ -1136,6 +1270,19 @@ function exportGlobalStatsToExcel() {
     data.push([key, count, percentage]);
   }
   data.push([]);
+  
+  // Distribution par Ancienneté
+  if (globalStatsData.parAnciennete && Object.keys(globalStatsData.parAnciennete).length > 0) {
+    data.push([createStyledCell("Distribution par Ancienneté", true)]);
+    data.push([createStyledCell("Ancienneté", true), createStyledCell("Nombre", true), createStyledCell("Pourcentage", true)]);
+    const totalAnciennete = Object.values(globalStatsData.parAnciennete).reduce((a, b) => a + b, 0);
+    for (let key in globalStatsData.parAnciennete) {
+      const count = globalStatsData.parAnciennete[key];
+      const percentage = ((count / totalAnciennete) * 100).toFixed(1) + "%";
+      data.push([key, count, percentage]);
+    }
+    data.push([]);
+  }
   
   // Distribution des Notes de Satisfaction
   data.push([createStyledCell("Distribution des Notes de Satisfaction", true)]);

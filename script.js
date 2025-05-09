@@ -195,6 +195,26 @@ function createSkeletonLoading() {
     }
 }
 
+// Fonction pour mettre à jour le compteur de questions
+function updateQuestionCounter(count) {
+    const counterElement = document.getElementById('questionCount');
+    if (counterElement) {
+        counterElement.textContent = count;
+        
+        // Mettre à jour le texte "question" ou "questions" en fonction du nombre
+        const questionsText = document.querySelector('#questionsCounter [data-translate="questions"]');
+        if (questionsText) {
+            if (count <= 1) {
+                questionsText.setAttribute('data-translate', 'question');
+                questionsText.textContent = translateText('question') || 'question';
+            } else {
+                questionsText.setAttribute('data-translate', 'questions');
+                questionsText.textContent = translateText('questions') || 'questions';
+            }
+        }
+    }
+}
+
 // Initialisation du questionnaire
 function initQuestionnaire() {
     form = document.getElementById('questionnaireForm');
@@ -349,9 +369,13 @@ function loadQuestions() {
             setTimeout(() => {
             if (data.values) {
                     displayQuestions(data.values, true); // Ajouter un paramètre pour indiquer le chargement initial
+                    
+                    // Mettre à jour le compteur de questions
+                    updateQuestionCounter(data.values.length);
             } else {
                 console.warn('Aucune question trouvée');
                 questionsContainer.innerHTML = `<p>${translations[currentLanguage].notificationNoQuestions}</p>`;
+                updateQuestionCounter(0);
             }
             }, remainingDelay);
         })
@@ -366,6 +390,7 @@ function loadQuestions() {
             // Afficher l'erreur après le délai minimum
             setTimeout(() => {
             questionsContainer.innerHTML = `<p class="error">${translations[currentLanguage].notificationLoadingError}: ${error.message}</p>`;
+            updateQuestionCounter(0);
             }, remainingDelay);
         });
 }
@@ -434,8 +459,14 @@ function displayQuestions(questions, isInitialLoad = false) {
             let currentSection = null;
             let sectionContainer = null;
             
+            // Variables pour suivre le nombre réel de questions affichées
+            let actualQuestionsCount = 0;
+            
             // Fonction pour créer un élément de question
             const createQuestionElement = (question, index) => {
+        // Incrémenter le nombre de questions effectivement affichées
+        actualQuestionsCount++;
+        
         // Create a container for each question
         const questionElement = document.createElement('div');
         questionElement.className = 'form-group';
@@ -597,6 +628,9 @@ function displayQuestions(questions, isInitialLoad = false) {
                     questionsContainer.appendChild(questionElement);
                 });
             }
+
+            // Mettre à jour le compteur de questions avec le nombre réel de questions affichées
+            updateQuestionCounter(actualQuestionsCount);
 
     // After building the questions, reassign IDs and call initialization for rating and nps events
     setTimeout(() => {

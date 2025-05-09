@@ -115,6 +115,124 @@
     border-radius: 2px;
 }
 
+/* Ajout des styles pour le compteur de questions */
+.title-with-counter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+    position: relative;
+}
+
+.title-with-counter h2 {
+    margin-bottom: 0;
+    flex: 1;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.questions-counter {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    box-shadow: 0 2px 8px rgba(74, 107, 255, 0.2);
+    transition: all 0.3s ease;
+    animation: countAppear 0.7s ease-out, pulse-counter 2s infinite alternate;
+    position: relative;
+    overflow: hidden;
+}
+
+.questions-counter::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: translateX(-100%);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes countAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.7) translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateX(0);
+    }
+}
+
+@keyframes pulse-counter {
+    0% {
+        box-shadow: 0 2px 8px rgba(74, 107, 255, 0.2);
+    }
+    100% {
+        box-shadow: 0 4px 14px rgba(74, 107, 255, 0.4);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+#questionCount {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+/* Média queries pour le compteur de questions */
+@media (max-width: 768px) {
+    .title-with-counter {
+        gap: 0.7rem;
+    }
+    
+    .questions-counter {
+        font-size: 0.85rem;
+        padding: 0.3rem 0.7rem;
+    }
+    
+    #questionCount {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .title-with-counter {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+    
+    .title-with-counter h2 {
+        font-size: 1.3rem;
+    }
+    
+    .questions-counter {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.6rem;
+    }
+    
+    #questionCount {
+        font-size: 0.9rem;
+    }
+}
+
 /* Sections du formulaire */
 .form-section {
     background: white;
@@ -127,7 +245,6 @@
 .form-section h2 {
     color: var(--primary-color);
     font-size: 1.5rem;
-    margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -1283,6 +1400,7 @@
     position: relative;
     overflow: visible;
     border-left: 6px solid var(--primary-color);
+    
 }
 
 .section-header::before {
