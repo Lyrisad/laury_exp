@@ -1,5 +1,5 @@
 // Configuration
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygLRqkAa4FFFwUJ11XsewgnIPD_mFp7VuvdtSaBbBJ7y3ouGMak0K8gGpKY7ZHq-rWPA/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx2lYuwtOUoK9sfhAkU9ddP3rWN-EpI_00COZEjL14NVgbmhUQ9RNTYMcBS9Ep5vmJeIA/exec';
 
 // Éléments du DOM
 let form = null;
@@ -59,7 +59,7 @@ function showNotification(message, type = 'success') {
 function updateProgressBar() {
     if (!progressBar || !progressPercentage) return;
     
-    const totalQuestions = document.querySelectorAll('#questionsContainer .form-group').length + 3; // +3 pour le genre, l'âge, le poste
+    const totalQuestions = document.querySelectorAll('#questionsContainer .form-group').length + 4; // +4 pour le genre, l'âge, le poste et l'ancienneté
     
     let answeredQuestions = 0;
     
@@ -72,6 +72,9 @@ function updateProgressBar() {
     
     const poste = document.getElementById('poste');
     if (poste && poste.value) answeredQuestions++;
+    
+    const anciennete = document.getElementById('anciennete');
+    if (anciennete && anciennete.value) answeredQuestions++;
     
     // Vérifier les réponses aux questions dynamiques
     document.querySelectorAll('#questionsContainer .form-group').forEach(group => {
@@ -1183,10 +1186,11 @@ async function submitQuestionnaire(event) {
     const sexe = document.getElementById('sexe').value.trim();
     const age = document.getElementById('age').value.trim();
     const poste = document.getElementById('poste').value.trim();
+    const anciennete = document.getElementById('anciennete').value.trim();
     // Le genre est toujours égal à la valeur sélectionnée dans le dropdown
     const genreFinal = sexe;
     
-    if (!sexe || !age || !poste) {
+    if (!sexe || !age || !poste || !anciennete) {
         showNotification(translations[currentLanguage].notificationPersonalInfo, "error");
         return;
     }
@@ -1310,6 +1314,7 @@ async function submitQuestionnaire(event) {
         sexe: genreFinal,
         age: age,
         poste: poste,
+        anciennete: anciennete,
         // On envoie la liste des réponses avec les questions originales (en français)
         questionnaireResponses: questionnaireResponses.join(' | '),
         satisfaction: satisfaction,
@@ -1322,6 +1327,7 @@ async function submitQuestionnaire(event) {
         sexe: data.sexe,
         age: data.age,
         poste: data.poste,
+        anciennete: data.anciennete,
         questionnaireResponses: data.questionnaireResponses,
         satisfaction: data.satisfaction,
         commentaires: data.commentaires,

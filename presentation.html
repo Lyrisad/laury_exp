@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles/presentation.css">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
     <header>
@@ -28,19 +29,21 @@
         <section class="presentation">
             <h1 data-translate="whyTitle">Pourquoi ce questionnaire ?</h1>
             
-            <div class="info-card">
-                <h2 data-translate="objective">Objectif</h2>
-                <p data-translate="objectiveDesc">Ce questionnaire a pour but de recueillir votre retour d'expérience afin d'améliorer nos services et processus.</p>
-            </div>
-
-            <div class="info-card">
-                <h2 data-translate="confidentialityTitle">Confidentialité</h2>
-                <p data-translate="confidentialityDesc">Vos réponses sont totalement anonymes. Les données collectées seront utilisées uniquement à des fins statistiques.</p>
-            </div>
-
-            <div class="info-card">
-                <h2 data-translate="duration">Durée</h2>
-                <p data-translate="durationDesc">Le questionnaire ne prendra que quelques minutes de votre temps. Vos réponses sont précieuses pour nous.</p>
+            <div id="presentationCards" class="presentation-cards">
+                <!-- Les cartes d'information seront ajoutées dynamiquement -->
+                <!-- Placeholder pour le chargement -->
+                <div class="info-card skeleton-card">
+                    <div class="skeleton skeleton-title"></div>
+                    <div class="skeleton skeleton-text"></div>
+                </div>
+                <div class="info-card skeleton-card">
+                    <div class="skeleton skeleton-title"></div>
+                    <div class="skeleton skeleton-text"></div>
+                </div>
+                <div class="info-card skeleton-card">
+                    <div class="skeleton skeleton-title"></div>
+                    <div class="skeleton skeleton-text"></div>
+                </div>
             </div>
 
             <div class="consent-container">
@@ -72,9 +75,9 @@
             <div class="footer-column">
                 <h3 data-translate="footerContact">Contact</h3>
                 <p><strong>GROUPE CANDOR</strong></p>
-                <p>Laury Feugray</p>
-                <p><i class="footer-icon">📧</i> dparisi@groupecandor.fr</p>
-                <p><i class="footer-icon">📱</i> +33 02 32 63 43 10</p>
+                <p><i class="footer-icon">👩‍💼</i> Laury Feugray</p>
+                <p><i class="footer-icon">📧</i> lfeugray@groupecandor.fr</p>
+                <p><i class="footer-icon">📱</i> +33 06 72 33 91 21</p>
             </div>
         </div>
         <div class="footer-bottom">
@@ -84,6 +87,7 @@
 
     <script src="translations.js"></script>
     <script src="language.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="script.js"></script>
     <script src="presentation.js"></script>
     <script src="clickTracker.js"></script>

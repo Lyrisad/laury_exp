@@ -1,5 +1,5 @@
 // Variables globales pour stocker les instances des graphiques globaux
-let totalChart, genreChart, posteChart, satisfactionChart, ageChart, satisDistChart;
+let totalChart, genreChart, posteChart, satisfactionChart, ageChart, satisDistChart, ancienneteChart;
 
 // Ajouter ce style CSS au début du fichier, juste après les déclarations existantes
 document.addEventListener('DOMContentLoaded', function() {
@@ -48,20 +48,76 @@ function getFiltersQuery() {
 let globalStatsData = null;
   
 function loadStats() {
-  const filters = getFiltersQuery();
-  const url = `${SCRIPT_URL}?action=getStats${filters ? '&' + filters : ''}`;
-  
-  // Retrieve global stats from the API
-  fetch(url)
+  fetch(`${SCRIPT_URL}?action=getRawResponses`)
     .then(response => {
-      if (!response.ok) throw new Error('Erreur lors du chargement des statistiques');
+      if (!response.ok) throw new Error('Network response was not ok');
       return response.json();
     })
     .then(data => {
-      if (data.error) throw new Error(data.error);
-      globalStatsData = data.stats; // Save for extraction later
-      renderStats(data.stats);
+      if (!data.responses || !data.headers) throw new Error('Invalid data structure');
+      
+      // Appliquer les filtres sélectionnés
+      const filteredData = applyFilters(data);
+      
+      // Préparation des statistiques
+      const stats = {
+        totalQuestionnaires: filteredData.responses.length,
+        parGenre: {},
+        parPoste: {},
+        parAge: {},
+        parAnciennete: {},
+        satisfactionDistribution: {},
+        moyenneSatisfaction: 0
+      };
+      
+      let totalSatisfaction = 0;
+      let countSatisfaction = 0;
+      
+      // Structure des données filteredData
+      // Indices: 0=date, 1=sexe, 2=age, 3=poste, 4=anciennete, 5=satisfaction, 6=commentaires, ...
+      // Rechercher l'indice de la colonne "anciennete"
+      const ancienneteIndex = data.headers.findIndex(h => h.toLowerCase() === 'anciennete');
+      const satisfactionIndex = data.headers.findIndex(h => h.toLowerCase() === 'satisfaction');
+      
+      filteredData.responses.forEach(row => {
+        // Statistiques par genre
+        const genre = row[1];
+        stats.parGenre[genre] = (stats.parGenre[genre] || 0) + 1;
+        
+        // Statistiques par poste
+        const poste = row[3];
+        stats.parPoste[poste] = (stats.parPoste[poste] || 0) + 1;
+        
+        // Statistiques par tranche d'âge
+        const age = row[2];
+        stats.parAge[age] = (stats.parAge[age] || 0) + 1;
+        
+        // Statistiques par ancienneté
+        const anciennete = ancienneteIndex !== -1 ? row[ancienneteIndex] : null;
+        if (anciennete) {
+          stats.parAnciennete[anciennete] = (stats.parAnciennete[anciennete] || 0) + 1;
+        }
+        
+        // Moyennes et distribution de la satisfaction
+        const satisfactionValue = satisfactionIndex !== -1 ? row[satisfactionIndex] : row[4]; // Fallback à l'ancien index si non trouvé
+        const satisfaction = parseFloat(satisfactionValue);
+        if (!isNaN(satisfaction)) {
+          totalSatisfaction += satisfaction;
+          countSatisfaction++;
+          stats.satisfactionDistribution[satisfaction] = (stats.satisfactionDistribution[satisfaction] || 0) + 1;
+        }
+      });
+      
+      // Calcul de la moyenne de satisfaction
+      stats.moyenneSatisfaction = countSatisfaction > 0 ? totalSatisfaction / countSatisfaction : 0;
+      
+      // Rendu des statistiques
+      renderStats(stats);
+      
+      // Chargement des statistiques par question
       loadQuestionStats();
+      
+      // Chargement des réponses ouvertes
       loadOpenResponses();
     })
     .catch(error => {
@@ -219,6 +275,37 @@ function renderStats(stats) {
           title: {
             display: true,
             text: 'Répartition par Tranche d\'Âge',
+            font: {
+              size: 16
+            }
+          }
+        }
+      }
+    });
+  }
+  
+  // Ajout du graphique pour l'ancienneté
+  if (stats.parAnciennete) {
+    const anciennetes = Object.keys(stats.parAnciennete);
+    const ancienneteValues = Object.values(stats.parAnciennete);
+    const ancienneteCtx = prepareCanvas('ancienneteChart');
+    if (ancienneteChart) ancienneteChart.destroy();
+    ancienneteChart = new Chart(ancienneteCtx, {
+      type: 'pie',
+      data: {
+        labels: anciennetes,
+        datasets: [{
+          data: ancienneteValues,
+          backgroundColor: ['#3498db', '#9b59b6', '#e74c3c', '#f39c12', '#2ecc71', '#34495e']
+        }]
+      },
+      options: {
+        responsive: false,
+        plugins: { 
+          legend: { position: 'bottom' },
+          title: {
+            display: true,
+            text: 'Répartition par Ancienneté',
             font: {
               size: 16
             }
@@ -1149,3 +1236,56 @@ document.getElementById('extractStats').addEventListener('click', exportAllToExc
 document.getElementById('extractGeneralStats').addEventListener('click', exportGlobalStatsToExcel);
 document.getElementById('extractQuestionStats').addEventListener('click', exportQuestionStatsToExcel);
 document.getElementById('extractOpenResponses').addEventListener('click', exportOpenResponsesToExcel);
+
+// Ajout d'une fonction pour appliquer les filtres
+function applyFilters(data) {
+  const genreFilter = document.getElementById('filterGenre').value.trim().toLowerCase();
+  const posteFilter = document.getElementById('filterPoste').value.trim().toLowerCase();
+  const ageFilter = document.getElementById('filterAge').value.trim().toLowerCase();
+  const dateFrom = document.getElementById('filterDateFrom').value;
+  const dateTo = document.getElementById('filterDateTo').value;
+  
+  // Copie les données pour éviter de modifier l'original
+  const result = {
+    headers: [...data.headers],
+    responses: [...data.responses]
+  };
+  
+  // Filtrer les réponses en fonction des critères
+  result.responses = result.responses.filter(row => {
+    // Vérifier si le genre correspond
+    if (genreFilter && row[1] && row[1].toLowerCase() !== genreFilter) {
+      return false;
+    }
+    
+    // Vérifier si le poste correspond
+    if (posteFilter && row[3] && row[3].toLowerCase() !== posteFilter) {
+      return false;
+    }
+    
+    // Vérifier si l'âge correspond
+    if (ageFilter && row[2] && row[2].toLowerCase() !== ageFilter) {
+      return false;
+    }
+    
+    // Vérifier la plage de dates
+    const rowDate = new Date(row[0]);
+    if (dateFrom) {
+      const fromDate = new Date(dateFrom);
+      if (rowDate < fromDate) {
+        return false;
+      }
+    }
+    
+    if (dateTo) {
+      const toDate = new Date(dateTo);
+      if (rowDate > toDate) {
+        return false;
+      }
+    }
+    
+    return true;
+  });
+  
+  return result;
+}

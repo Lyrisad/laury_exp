@@ -186,6 +186,23 @@ function doGet(e) {
       var targetLang = e.parameter.targetLang;
       result.translatedText = translateText(text, targetLang);
       result.success = true;
+    } else if (action === "getPresentationTexts") {
+      // Récupérer les textes de présentation
+      result = getPresentationTexts();
+    } else if (action === "updatePresentationText") {
+      // Mettre à jour un texte de présentation
+      var contentType = e.parameter.contentType;
+      if (contentType === "application/json") {
+        // Traiter les données JSON
+        var postData = JSON.parse(e.parameter.postData.contents);
+        result = updatePresentationText(postData.title, postData.text, postData.section);
+      } else {
+        // Traiter les paramètres standard
+        var title = e.parameter.title;
+        var text = e.parameter.text;
+        var section = e.parameter.section;
+        result = updatePresentationText(title, text, section);
+      }
     } else if (action == "getQuestions") {
       var sheet = ss.getSheetByName("Questions");
       var data = sheet.getDataRange().getValues();
@@ -336,7 +353,7 @@ function doGet(e) {
       // Si la feuille n'existe pas, on la crée et on y écrit les en-têtes.
       if (!sheet) {
         sheet = ss.insertSheet("Données");
-        var headers = ["Date", "Sexe", "Age", "Poste", "Satisfaction", "Commentaire", "Réponses"];
+        var headers = ["Date", "Sexe", "Age", "Poste", "Anciennete", "Satisfaction", "Commentaire", "Réponses"];
         sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
       }
       
@@ -353,6 +370,7 @@ function doGet(e) {
         e.parameter.sexe,        // Sexe
         e.parameter.age,         // Age
         e.parameter.poste,       // Poste
+        e.parameter.anciennete,  // Ancienneté
         e.parameter.satisfaction,// Note de satisfaction finale
         e.parameter.commentaires,// Commentaire final
         questionnaireResponses   // Réponses au questionnaire
@@ -500,11 +518,6 @@ function doGet(e) {
     
     result.success = true;
     result.message = "Statistiques de clics réinitialisées avec succès";
-  } else if (action == "translate") {
-    var text = e.parameter.text;
-    var targetLang = e.parameter.targetLang;
-    result.translatedText = translateText(text, targetLang);
-    result.success = true;
   } else if (action === 'addSection') {
     return addSection(e);
   } else if (action === 'editSection') {
@@ -537,51 +550,158 @@ function doGet(e) {
  * Elle est surtout utilisée pour la soumission des réponses du questionnaire.
  */
 function doPost(e) {
-  var result = {};
+  var params = JSON.parse(e.postData.contents);
+  var action = e.parameter.action || params.action;
+  var response = {};
   
   try {
-    var data = JSON.parse(e.postData.contents);
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     
-    if (data.sexe && data.age && data.poste && data.responses) {
+    if (action == "submitResponse") {
       var sheet = ss.getSheetByName("Données");
-      // Création de la feuille "Données" si elle n'existe pas.
+      // Si la feuille n'existe pas, on la crée et on y écrit les en-têtes.
       if (!sheet) {
         sheet = ss.insertSheet("Données");
-        var qSheet = ss.getSheetByName("Questions");
-        var qData = qSheet.getDataRange().getValues();
-        var headers = ["Date", "Sexe", "Age", "Poste"];
-        for (var i = 1; i < qData.length; i++) {
-          headers.push(qData[i][1]);
-        }
+        var headers = [
+          "Date", "Sexe", "Age", "Poste", "Anciennete", "Satisfaction", "Commentaire", "Réponses"
+        ];
         sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
       }
       
-      var rowData = [data.timestamp, data.sexe, data.age, data.poste];
-      var qSheet = ss.getSheetByName("Questions");
-      var qData = qSheet.getDataRange().getValues();
-      for (var i = 1; i < qData.length; i++) {
-        var qText = qData[i][1];
-        var resp = "";
-        for (var j = 0; j < data.responses.length; j++) {
-          if (data.responses[j].question == qText) {
-            resp = data.responses[j].answer;
-            break;
+      // Formater la date
+      var timestamp = new Date(params.timestamp);
+      var formattedDate = Utilities.formatDate(timestamp, "Europe/Paris", "dd/MM/yyyy HH:mm");
+      
+      // Vérifier que nous avons bien les réponses du questionnaire
+      var questionnaireResponses = params.questionnaireResponses || "";
+      
+      // Préparer la ligne de données
+      var rowData = [
+        formattedDate, 
+        params.sexe, 
+        params.age, 
+        params.poste,
+        params.anciennete,
+        params.satisfaction,
+        params.commentaire, 
+        questionnaireResponses
+      ];
+      
+      // Ajouter la ligne à la feuille
+      sheet.appendRow(rowData);
+      response.success = true;
+      
+    } else if (action === "updatePresentationText") {
+      var title = params.title;
+      var text = params.text;
+      var section = params.section;
+      
+      response = updatePresentationText(title, text, section);
+    } else if (action === "addQuestion") {
+      var sheet = ss.getSheetByName("Questions");
+      var order = parseInt(params.order);
+      var question = params.question;
+      var type = params.type;
+      var responses = params.responses || "[]";
+      var maxResponses = parseInt(params.maxResponses || "0");
+      
+      if (!order || !question || !type) {
+        throw new Error("Paramètres manquants");
+      }
+      
+      // Vérifier que l'ordre n'existe pas déjà.
+      var data = sheet.getDataRange().getValues();
+      for (var i = 1; i < data.length; i++) {
+        if (data[i][0] == order) {
+          throw new Error("Une question avec cet ordre existe déjà");
+        }
+      }
+      
+      sheet.appendRow([order, question, type, responses, maxResponses]);
+      response.success = true;
+      response.message = "Question ajoutée avec succès";
+    } else if (action === "editQuestion") {
+      var sheet = ss.getSheetByName("Questions");
+      var order = parseInt(params.order);
+      var question = params.question;
+      var type = params.type;
+      var responses = params.responses || "[]";
+      var maxResponses = parseInt(params.maxResponses || "0");
+      var oldOrder = parseInt(params.oldOrder);
+      
+      if (!oldOrder || !order || !question || !type) {
+        throw new Error("Paramètres manquants");
+      }
+      
+      var data = sheet.getDataRange().getValues();
+      var rowIndex = -1;
+      
+      for (var i = 1; i < data.length; i++) {
+        if (data[i][0] == oldOrder) {
+          rowIndex = i + 1;
+          break;
+        }
+      }
+      
+      if (rowIndex === -1) {
+        throw new Error("Question non trouvée");
+      }
+      
+      // Vérifier que le nouvel ordre n'est pas déjà pris (sauf s'il est inchangé)
+      if (order !== oldOrder) {
+        for (var i = 1; i < data.length; i++) {
+          if (data[i][0] == order && i + 1 !== rowIndex) {
+            throw new Error("Une question avec cet ordre existe déjà");
           }
         }
-        rowData.push(resp);
       }
-      sheet.appendRow(rowData);
-      result.success = true;
-      result.message = "Réponses enregistrées avec succès";
+      
+      sheet.getRange(rowIndex, 1, 1, 5).setValues([[order, question, type, responses, maxResponses]]);
+      response.success = true;
+      response.message = "Question modifiée avec succès";
+    } else if (action === "deleteQuestion") {
+      var sheet = ss.getSheetByName("Questions");
+      var order = parseInt(params.order);
+      
+      if (!order) {
+        throw new Error("Paramètre manquant: order");
+      }
+      
+      var data = sheet.getDataRange().getValues();
+      var rowIndex = -1;
+      
+      for (var i = 1; i < data.length; i++) {
+        if (data[i][0] == order) {
+          rowIndex = i + 1;
+          break;
+        }
+      }
+      
+      if (rowIndex === -1) {
+        throw new Error("Question non trouvée");
+      }
+      
+      sheet.deleteRow(rowIndex);
+      response.success = true;
+      response.message = "Question supprimée avec succès";
+    } else if (action === "addSection") {
+      return addSection(e);
+    } else if (action === "editSection") {
+      return editSection(e);
+    } else if (action === "deleteSection") {
+      return deleteSection(e);
     } else {
-      throw new Error("Paramètres manquants dans le POST");
+      throw new Error("Action non reconnue: " + action);
     }
   } catch (err) {
-    result.error = err.toString();
+    response.success = false;
+    response.error = err.toString();
+    response.message = "Erreur: " + err.toString();
   }
   
-  return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+  // Set proper content type for JSON response
+  return ContentService.createTextOutput(JSON.stringify(response))
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
 // ======= GESTION DES SECTIONS =======
@@ -826,4 +946,107 @@ function createSuccessResponse(data) {
 function createErrorResponse(errorMessage) {
   return ContentService.createTextOutput(JSON.stringify({ error: errorMessage }))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+/**
+ * Récupère les textes de la page de présentation depuis la feuille de calcul
+ */
+function getPresentationTexts() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // Récupérer ou créer la feuille "Presentation"
+  var sheet = ss.getSheetByName("Presentation");
+  if (!sheet) {
+    sheet = ss.insertSheet("Presentation");
+    
+    // Ajouter les en-têtes
+    sheet.appendRow(["Section", "Titre", "Texte", "Dernière modification"]);
+    
+    // Ajouter les textes par défaut
+    var now = new Date();
+    var formattedDate = Utilities.formatDate(now, "Europe/Paris", "dd/MM/yyyy HH:mm");
+    
+    sheet.appendRow(["0", "Objectif", "Ce questionnaire a pour but de recueillir votre retour d'expérience afin d'améliorer nos services et processus.", formattedDate]);
+    sheet.appendRow(["1", "Confidentialité", "Vos réponses sont totalement anonymes. Les données collectées seront utilisées uniquement à des fins statistiques.", formattedDate]);
+    sheet.appendRow(["2", "Durée", "Le questionnaire ne prendra que quelques minutes de votre temps. Vos réponses sont précieuses pour nous.", formattedDate]);
+    
+    // Formater la feuille
+    sheet.getRange(1, 1, 1, 4).setFontWeight("bold");
+    sheet.setColumnWidth(1, 100);
+    sheet.setColumnWidth(2, 150);
+    sheet.setColumnWidth(3, 400);
+    sheet.setColumnWidth(4, 200);
+  }
+  
+  // Récupérer les données
+  var data = sheet.getDataRange().getValues();
+  var headerRow = data[0];
+  var textsData = data.slice(1);
+  
+  // Préparer les textes pour le front-end
+  var texts = textsData.map(function(row) {
+    return {
+      section: row[0],
+      title: row[1],
+      text: row[2],
+      lastModified: row[3]
+    };
+  });
+  
+  return {
+    success: true,
+    texts: texts
+  };
+}
+
+/**
+ * Met à jour un texte de la page de présentation
+ */
+function updatePresentationText(title, text, section) {
+  if (!title || !text || section === undefined) {
+    return {
+      success: false,
+      message: "Données incomplètes pour la mise à jour du texte"
+    };
+  }
+  
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("Presentation");
+  
+  if (!sheet) {
+    // Si la feuille n'existe pas, on la crée avec les textes par défaut
+    getPresentationTexts();
+    sheet = ss.getSheetByName("Presentation");
+  }
+  
+  // Rechercher la section appropriée
+  var data = sheet.getDataRange().getValues();
+  var rowIndex = -1;
+  
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0].toString() === section.toString()) {
+      rowIndex = i + 1; // +1 car les indices de feuille commencent à 1
+      break;
+    }
+  }
+  
+  if (rowIndex === -1) {
+    // Si la section n'existe pas, l'ajouter
+    var now = new Date();
+    var formattedDate = Utilities.formatDate(now, "Europe/Paris", "dd/MM/yyyy HH:mm");
+    sheet.appendRow([section, title, text, formattedDate]);
+  } else {
+    // Mettre à jour la section existante
+    var now = new Date();
+    var formattedDate = Utilities.formatDate(now, "Europe/Paris", "dd/MM/yyyy HH:mm");
+    sheet.getRange(rowIndex, 2, 1, 3).setValues([[title, text, formattedDate]]);
+  }
+  
+  return {
+    success: true,
+    message: "Texte mis à jour avec succès",
+    title: title,
+    text: text,
+    section: section
+  };
 }

@@ -65,6 +65,7 @@
     gap: 0.5rem;
 }
 
+/*
 .info-card:nth-child(2) h2::before {
     content: '🎯';
 }
@@ -76,6 +77,7 @@
 .info-card:nth-child(4) h2::before {
     content: '⚡';
 }
+*/
 
 .info-card p {
     color: var(--secondary-color);
@@ -264,6 +266,148 @@ footer {
     margin-top: auto;
 }
 
+/* Styles pour le bouton d'édition admin */
+.edit-text-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+    z-index: 50;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.edit-text-button:hover {
+    opacity: 1;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Styles pour le modal d'édition */
+.edit-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.edit-modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 25px;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+    animation: modalFadeIn 0.4s ease;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 25px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.close-modal:hover {
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.edit-form {
+    margin-top: 20px;
+}
+
+.edit-form .form-group {
+    margin-bottom: 20px;
+}
+
+.edit-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+
+.edit-input, .edit-textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    resize: vertical;
+    transition: border 0.2s ease;
+}
+
+.edit-input:focus, .edit-textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(57, 85, 214, 0.2);
+}
+
+.save-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    margin-left: auto;
+}
+
+.save-button:hover {
+    background-color: #3955d6;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(57, 85, 214, 0.3);
+}
+
+.save-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Effet hover pour indiquer que le texte est modifiable (admin seulement) */
+.info-card:has(.edit-text-button):hover {
+    border-left: 4px solid var(--primary-color);
+    cursor: pointer;
+}
+
+/* Modifier le before du info-card pour qu'il n'interfère pas avec la bordure de surbrillance */
+.info-card:has(.edit-text-button)::before {
+    display: none;
+}
+
 .footer-container {
     display: flex;
     flex-wrap: wrap;
@@ -364,4 +508,48 @@ footer {
     .footer-column {
         width: 100%;
     }
+}
+
+/* Classe pour le container des cartes de présentation */
+.presentation-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Styles pour les skeletons (placeholders de chargement) */
+.skeleton-card {
+    padding: 2rem;
+    height: 120px;
+    animation: pulse 1.5s infinite;
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    animation: loading 1.5s infinite;
+}
+
+.skeleton-title {
+    height: 28px;
+    width: 60%;
+    margin-bottom: 1rem;
+}
+
+.skeleton-text {
+    height: 16px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+@keyframes pulse {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
 }
