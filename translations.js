@@ -32,7 +32,7 @@ const translations = {
         step3Title: "📮 Soumettez vos réponses",
         step3Desc: "Une fois terminé, soumettez vos réponses pour nous aider à améliorer nos services.",
         step4Title: "📊 Nous analysons vos retours",
-        step4Desc: "Notre équipe analyse attentivement tous les retours pour identifier les points d'amélioration. Nous vous informerons des résultats dans les plus brefs délais.",
+        step4Desc: "Notre équipe analyse attentivement tous les retours pour identifier les points d'amélioration. Nous vous ferons un retour dans les plus brefs délais.",
         clickForMoreInfo: "Cliquez pour plus d'infos",
         
         // Modals
@@ -131,7 +131,7 @@ const translations = {
         notificationNoQuestions: "Aucune question trouvée",
         singleChoice: "Choix unique",
         multipleChoice: "Choix multiple",
-        requiredResponses: "réponses obligatoires",
+        requiredResponses: "réponses attendues",
         maxResponsesExceeded: "Vous ne pouvez sélectionner que {max} réponses maximum",
         exactResponsesRequired: "Veuillez sélectionner exactement {count} réponses",
 
@@ -141,7 +141,7 @@ const translations = {
         notificationCheckboxMin: "Veuillez sélectionner au moins {0} réponses.",
         notificationCheckboxMax: "Veuillez sélectionner au maximum {0} réponses.",
         required: "obligatoire",
-        requiredAnswers: "réponses obligatoires",
+        requiredAnswers: "réponses attendues",
         
         // Éléments de progression
         progressText: "Progression",

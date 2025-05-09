@@ -884,6 +884,7 @@
     opacity: 0.5;
     transform: scale(0.9);
     scroll-snap-align: center;  /* Pour un alignement agréable lors du défilement */
+    width: 15%;
 }
 
 .nps-smiley {
@@ -928,16 +929,11 @@
 
 /* Styles spécifiques pour chaque niveau de satisfaction */
 .nps-item[data-value="0"] .nps-smiley { color: #ff0000; }
-.nps-item[data-value="1"] .nps-smiley { color: #ff3333; }
-.nps-item[data-value="2"] .nps-smiley { color: #ff6666; }
-.nps-item[data-value="3"] .nps-smiley { color: #ff9999; }
-.nps-item[data-value="4"] .nps-smiley { color: #ffcccc; }
-.nps-item[data-value="5"] .nps-smiley { color: #cccccc; }
-.nps-item[data-value="6"] .nps-smiley { color: #ccffcc; }
-.nps-item[data-value="7"] .nps-smiley { color: #99ff99; }
-.nps-item[data-value="8"] .nps-smiley { color: #66ff66; }
-.nps-item[data-value="9"] .nps-smiley { color: #33ff33; }
-.nps-item[data-value="10"] .nps-smiley { color: #00ff00; }
+.nps-item[data-value="1"] .nps-smiley { color: #ff9966; }
+.nps-item[data-value="2"] .nps-smiley { color: #cccccc; }
+.nps-item[data-value="3"] .nps-smiley { color: #99cc99; }
+.nps-item[data-value="4"] .nps-smiley { color: #66cc66; }
+.nps-item[data-value="5"] .nps-smiley { color: #00cc00; }
 
 /* Ajustements pour tablettes et mobiles */
 @media screen and (max-width: 768px) {

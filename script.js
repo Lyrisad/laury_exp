@@ -1006,7 +1006,7 @@ function createResponseInput(type, responses, index, maxResponses = 0) {
         const scaleDiv = document.createElement('div');
         scaleDiv.className = 'nps-scale';
         
-        for (let i = 0; i < 11; i++) {
+        for (let i = 0; i < 6; i++) {
             const npsItem = document.createElement('div');
             npsItem.className = 'nps-item';
             npsItem.setAttribute('data-value', i);
@@ -1042,10 +1042,11 @@ function createResponseInput(type, responses, index, maxResponses = 0) {
 
 // Fonction pour obtenir le smiley correspondant à la note NPS
 function getNpsSmiley(value) {
-    if (value <= 3) return '😡'; // Très mécontent
-    if (value <= 5) return '😕'; // Mécontent
-    if (value <= 7) return '😐'; // Neutre
-    if (value <= 9) return '😊'; // Content
+    if (value === 0) return '😡'; // Très mécontent
+    if (value === 1) return '😕'; // Mécontent
+    if (value === 2) return '😐'; // Neutre
+    if (value === 3) return '🙂'; // Plutôt content
+    if (value === 4) return '😊'; // Content
     return '😍'; // Très content
 }
 
@@ -1346,7 +1347,7 @@ async function submitQuestionnaire(event) {
         showNotification(translations[currentLanguage].successMessage, "success");
         
         // Définir un cookie pour indiquer que le questionnaire a été complété
-        setCookie('questionnaireCompleted', 'true', 7); // Cookie valide pendant 1 semaine
+        setCookie('questionnaireCompleted', 'true', 30); // Cookie valide pendant 30 jours
         
         // Réinitialiser le formulaire
         form.reset();

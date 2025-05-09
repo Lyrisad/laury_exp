@@ -50,7 +50,7 @@ editModal.innerHTML = `
                     <option value="radio">Choix unique</option>
                     <option value="checkbox">Choix multiple</option>
                     <option value="barem">Barem</option>
-                    <option value="nps">NPS (0-10)</option>
+                    <option value="nps">NPS (0-5)</option>
                 </select>
             </div>
             <div id="editOptionsContainer" style="display: none;">
@@ -495,7 +495,7 @@ function appendQuestionElement(question) {
                 question.type === 'radio' ? 'Choix unique' : 
                 question.type === 'checkbox' ? 'Choix multiple' :
                 question.type === 'barem' ? 'Barem' : 
-                question.type === 'nps' ? 'NPS (0-10)' :  
+                question.type === 'nps' ? 'NPS (0-5)' :  
                 question.type
             }</span>
         </div>

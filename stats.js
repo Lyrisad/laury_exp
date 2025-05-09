@@ -1,6 +1,12 @@
 // Variables globales pour stocker les instances des graphiques globaux
 let totalChart, genreChart, posteChart, satisfactionChart, ageChart, satisDistChart;
 
+// Ajouter ce style CSS au début du fichier, juste après les déclarations existantes
+document.addEventListener('DOMContentLoaded', function() {
+  // Add click handler for the stats toggle button
+  document.getElementById('toggleStats')?.addEventListener('click', toggleStats);
+});
+
 // Affichage / masquage de la section stats
 document.getElementById('toggleStats').addEventListener('click', function() {
   const adminTitle = document.getElementById('adminTitle');
@@ -308,7 +314,17 @@ function removeAccents(str) {
 
 // Fonction de normalisation : conversion en minuscule, retrait des accents et de la ponctuation
 function normalizeString(str) {
-  return removeAccents(str).trim().toLowerCase().replace(/[^\w\s]/g, '');
+  return removeAccents(str.toLowerCase().trim()).replace(/[^\w\s]/g, '');
+}
+
+// Nouvelle fonction pour nettoyer spécifiquement les questions NPS
+function cleanNpsQuestion(question) {
+  // Enlever la partie échelle entre parenthèses, qui a probablement été modifiée
+  const parenthesisIndex = question.indexOf('(');
+  if (parenthesisIndex > 0) {
+    return question.substring(0, parenthesisIndex).trim();
+  }
+  return question.trim();
 }
 
 // Chargement des statistiques par question avec filtrage client-side et résumé enrichi
@@ -425,13 +441,29 @@ function renderQuestionStats(questions, rawData) {
           let key = part.substring(0, splitIndex).trim();
           let value = part.substring(splitIndex + 1).trim();
           
+          // For NPS, we compare only the part of the question before the parentheses
+          const questionToMatch = question.type === 'nps' ? 
+              cleanNpsQuestion(question.question) : question.question;
+          const keyToCheck = question.type === 'nps' ? 
+              cleanNpsQuestion(key) : key;
+          
           // If the key matches the question (after normalization)
-          if (normalizeString(key) === normalizeString(question.question)) {
+          const normalizedKey = normalizeString(keyToCheck);
+          const normalizedQuestion = normalizeString(questionToMatch);
+          
+          if (normalizedKey === normalizedQuestion || 
+              (question.type === 'nps' && normalizedKey.includes(normalizedQuestion))) {
             counts[value] = (counts[value] || 0) + 1;
             rowHasAnswerForThisQuestion = true;
             if (['barem', 'nps'].includes(question.type)) {
               let num = parseFloat(value);
               if (!isNaN(num)) {
+                // Convert old NPS scale (0-10) to new scale (0-5) if needed
+                if (question.type === 'nps' && num > 5) {
+                  // Map 0-10 scale to 0-5 scale
+                  num = Math.round(num * 5 / 10);
+                  console.log(`Converted NPS value from original ${value} to new scale: ${num}`);
+                }
                 numericAnswer = num;
                 numericValues.push(num);
                 sumNumeric += num;
@@ -473,6 +505,7 @@ function renderQuestionStats(questions, rawData) {
       // Numerical calculations (for barem and nps)
       let average = "N/A", median = "N/A", minVal = "N/A", maxVal = "N/A", stdDev = "N/A";
       if (['barem', 'nps'].includes(question.type) && countNumeric > 0) {
+        // Note: NPS scale is now 0-5 instead of 0-10
         average = (sumNumeric / countNumeric).toFixed(2);
         median = calculateMedian(numericValues);
         minVal = Math.min(...numericValues).toFixed(2);
@@ -554,20 +587,39 @@ function renderQuestionStats(questions, rawData) {
       
       // Create the chart using Chart.js
       const ctx = canvas.getContext('2d');
+      
+      // For NPS, we need to handle the scale change
+      let chartLabels = Object.keys(counts);
+      
+      // Create the chart
       new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: Object.keys(counts),
+          labels: chartLabels,
           datasets: [{
             label: 'Number of responses',
             data: Object.values(counts),
-            backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#8e44ad', '#2ecc71']
+            backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#8e44ad', '#2ecc71', '#4bc0c0']
           }]
         },
         options: {
           responsive: false,
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+          plugins: { 
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                title: function(tooltipItems) {
+                  return tooltipItems[0].label;
+                }
+              }
+            }
+          },
+          scales: { 
+            y: { 
+              beginAtZero: true, 
+              ticks: { stepSize: 1 } 
+            }
+          }
         }
       });
     } // End processing for this question
