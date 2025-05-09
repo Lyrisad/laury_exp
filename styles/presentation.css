@@ -81,6 +81,7 @@
 .info-card p {
     color: var(--secondary-color);
     line-height: 1.8;
+    white-space: pre-line;
 }
 
 .cta-button {
@@ -292,6 +293,12 @@ footer {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.delete-confirm-modal small {
+    color: #e74c3c;
+    font-style: italic;
+    font-size: 0.8rem;
+}
+
 .delete-text-button {
     background-color: #e74c3c;
 }
@@ -384,7 +391,7 @@ footer {
     margin: 10% auto;
     padding: 25px;
     width: 90%;
-    max-width: 600px;
+    max-width: 950px;
     border-radius: 15px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
     position: relative;
@@ -402,13 +409,14 @@ footer {
     right: 20px;
     font-size: 25px;
     font-weight: bold;
-    color: #aaa;
+    color: #ffffff;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .close-modal:hover {
-    color: var(--primary-color);
+    color: white;
+    background-color: #ff9d9d;
     transform: scale(1.1);
 }
 
@@ -433,8 +441,19 @@ footer {
     border: 1px solid #ddd;
     border-radius: 8px;
     font-family: 'Poppins', sans-serif;
-    resize: vertical;
     transition: border 0.2s ease;
+}
+
+.edit-input {
+    height: 42px;
+}
+
+.edit-textarea {
+    font-size: 1rem;
+    line-height: 1.6;
+    min-height: 150px;
+    resize: vertical;
+    white-space: pre-wrap;
 }
 
 .edit-input:focus, .edit-textarea:focus {
@@ -665,4 +684,118 @@ footer {
 .add-section-button:active {
     transform: translateY(-1px);
     box-shadow: 0 3px 8px rgba(57, 85, 214, 0.3);
+}
+
+/* Styles pour les messages d'information admin */
+.admin-info-text {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.admin-info-box {
+    background-color: #e9f5ff;
+    border-left: 4px solid var(--primary-color);
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.admin-info-box h3 {
+    position: relative;
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        width: 100%;
+        height: 2px;
+        background-color: #4a6bff50;
+    }
+}
+
+.admin-info-box p {
+    color: #333;
+    margin: 10px 0;
+    line-height: 1.5;
+}
+
+.admin-info-box ul {
+    padding-left: 20px;
+    margin: 12px 0;
+}
+
+.admin-info-box li {
+    margin-bottom: 8px;
+    color: #333;
+    line-height: 1.5;
+}
+
+.admin-info-box strong {
+    color: var(--primary-color);
+}
+
+.admin-info-box small {
+    color: #666;
+    font-style: italic;
+}
+
+.admin-rules-box {
+    background-color: #fff8e6;
+    border-left: 4px solid #f9a825;
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.admin-rules-box h4 {
+    color: #e67e22;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-rules-box p {
+    color: #333;
+    margin: 10px 0;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+}
+
+.admin-rules-box ul {
+    padding-left: 20px;
+    margin: 12px 0 5px 0;
+}
+
+.admin-rules-box li {
+    margin-bottom: 8px;
+    color: #333;
+    line-height: 1.5;
+}
+
+.admin-rules-box strong {
+    color: #e67e22;
+}
+
+.info-icon {
+    margin-right: 10px;
+    font-style: normal;
+    font-size: 18px;
+}
+
+/* Styles pour les tooltips améliorés */
+.edit-text-button, .delete-text-button {
+    position: relative;
 }

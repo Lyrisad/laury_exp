@@ -198,7 +198,23 @@ function createTextCard(title, text) {
     titleElement.textContent = title;
     
     const textElement = document.createElement('p');
-    textElement.textContent = text;
+    
+    // Vérifier si le texte contient déjà des balises HTML
+    if (/<br\s*\/?>/.test(text)) {
+        // Si le texte contient déjà des balises <br>, l'utiliser tel quel
+        textElement.innerHTML = text;
+    } else {
+        // Sinon, encoder le texte et convertir les retours à la ligne en <br>
+        const encodedText = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;')
+            .replace(/\n/g, '<br>');
+        
+        textElement.innerHTML = encodedText;
+    }
     
     card.appendChild(titleElement);
     card.appendChild(textElement);
@@ -233,6 +249,28 @@ function checkAdminAndAddEditControls() {
     
     console.log("Admin is logged in, adding edit controls...");
     
+    // Ajouter un message d'information pour l'administrateur sous le titre
+    const presentationSection = document.querySelector('.presentation');
+    const title = presentationSection.querySelector('h1');
+    
+    if (title) {
+        const adminInfoBox = document.createElement('div');
+        adminInfoBox.className = 'admin-info-box';
+        adminInfoBox.innerHTML = `
+            <h3>🔐 Mode Administrateur</h3>
+            <p class="admin-info-text">Vous êtes authentifié en tant qu'administrateur. Vous disposez des fonctionnalités suivantes :</p>
+            <ul>
+                <li><strong>✏️ Modifier</strong> : Cliquez sur ce bouton pour modifier le titre et le contenu de chaque section.</li>
+                <li><strong>🗑️ Supprimer</strong> : Vous pouvez supprimer les sections personnalisées (les 3 premières sections ne sont pas supprimables).</li>
+                <li><strong>➕ Ajouter</strong> : Utilisez le bouton en bas de page pour ajouter de nouvelles sections.</li>
+            </ul>
+            <p><small>Note : Toutes les modifications sont sauvegardées instantanément dans la base de données.</small></p>
+        `;
+        
+        // Insérer le message après le titre
+        title.parentNode.insertBefore(adminInfoBox, title.nextSibling);
+    }
+    
     // L'utilisateur est admin, ajouter les boutons d'édition
     const infoCards = document.querySelectorAll('.info-card');
     console.log("Found info cards:", infoCards.length);
@@ -248,12 +286,13 @@ function checkAdminAndAddEditControls() {
         const editButton = document.createElement('button');
         editButton.className = 'edit-text-button';
         editButton.innerHTML = '✏️';
-        editButton.title = 'Modifier ce texte';
+        editButton.title = 'Modifier le titre et le texte de cette section';
         
         // Ajouter le gestionnaire d'événement
         editButton.addEventListener('click', function() {
             const cardTitle = card.querySelector('h2').textContent;
-            const cardText = card.querySelector('p').textContent;
+            // Récupérer le contenu HTML du paragraphe pour préserver les balises <br>
+            const cardText = card.querySelector('p').innerHTML;
             openEditModal(cardTitle, cardText, index);
         });
         
@@ -261,14 +300,14 @@ function checkAdminAndAddEditControls() {
         const deleteButton = document.createElement('button');
         deleteButton.className = 'delete-text-button';
         deleteButton.innerHTML = '🗑️';
-        deleteButton.title = 'Supprimer cette section';
         
         // Ne pas permettre la suppression des 3 premières sections (sections importantes)
         if (index < 3) {
             deleteButton.disabled = true;
             deleteButton.classList.add('disabled');
-            deleteButton.title = 'Les sections principales ne peuvent pas être supprimées';
+            deleteButton.title = 'Les 3 premières sections sont essentielles et ne peuvent pas être supprimées';
         } else {
+            deleteButton.title = 'Supprimer cette section (action définitive après confirmation)';
             // Ajouter le gestionnaire d'événement pour la suppression
             deleteButton.addEventListener('click', function() {
                 confirmDeleteSection(index);
@@ -304,6 +343,19 @@ function addNewSectionButton() {
     // Vérifier si le bouton existe déjà
     if (document.getElementById('addSectionButton')) return;
     
+    // Ajouter un message d'information sur les règles de modification/suppression
+    const adminRulesBox = document.createElement('div');
+    adminRulesBox.className = 'admin-rules-box';
+    adminRulesBox.innerHTML = `
+        <h4>📝 Gestion des sections</h4>
+        <ul>
+            <li>🔒 <strong>Protection</strong> : Les 3 premiers blocs sont protégés et ne peuvent pas être supprimés.</li>
+            <li>✏️ <strong>Édition</strong> : Vous pouvez modifier tous les blocs, y compris les blocs protégés.</li>
+            <li>➕ <strong>Ajout</strong> : Vous pouvez ajouter autant de nouveaux blocs que nécessaire.</li>
+            <li>🗑️ <strong>Suppression</strong> : Les blocs personnalisés (ajoutés par vous) peuvent être supprimés à tout moment.</li>
+        </ul>
+    `;
+    
     // Créer un conteneur pour le bouton d'ajout
     const addButtonContainer = document.createElement('div');
     addButtonContainer.className = 'add-section-container';
@@ -313,7 +365,7 @@ function addNewSectionButton() {
     addButton.id = 'addSectionButton';
     addButton.className = 'add-section-button';
     addButton.innerHTML = '<span>+</span> Ajouter une section';
-    addButton.title = 'Ajouter une nouvelle section';
+    addButton.title = 'Ajouter une nouvelle section de contenu';
     
     // Ajouter le gestionnaire d'événement
     addButton.addEventListener('click', function() {
@@ -323,7 +375,8 @@ function addNewSectionButton() {
     // Ajouter le bouton au conteneur
     addButtonContainer.appendChild(addButton);
     
-    // Ajouter le conteneur après les cartes existantes
+    // Ajouter le message d'information et le conteneur de bouton après les cartes existantes
+    presentationCards.appendChild(adminRulesBox);
     presentationCards.appendChild(addButtonContainer);
 }
 
@@ -335,15 +388,15 @@ function createEditModal() {
     <div id="editTextModal" class="edit-modal">
         <div class="edit-modal-content">
             <span class="close-modal">&times;</span>
-            <h2>Modifier le texte</h2>
+            <h2>✏️ Modifier le texte</h2>
             <div class="edit-form">
                 <div class="form-group">
                     <label for="editTitle">Titre:</label>
                     <input type="text" id="editTitle" class="edit-input">
                 </div>
                 <div class="form-group">
-                    <label for="editText">Texte:</label>
-                    <textarea id="editText" class="edit-textarea" rows="5"></textarea>
+                    <label for="editText">Texte: <small>(Utilisez Entrée pour les retours à la ligne)</small></label>
+                    <textarea id="editText" class="edit-textarea" rows="8"></textarea>
                 </div>
                 <input type="hidden" id="editSection">
                 <button id="saveTextButton" class="save-button">Enregistrer</button>
@@ -382,8 +435,17 @@ function openEditModal(title, text, sectionIndex) {
     const textInput = document.getElementById('editText');
     const sectionInput = document.getElementById('editSection');
     
+    // Conversion complète de HTML vers le texte brut avec retours à la ligne
+    // 1. Remplacer toutes les balises <br> par des retours à la ligne
+    let decodedText = text.replace(/<br\s*\/?>/g, '\n');
+    
+    // 2. Décoder les entités HTML (&amp; -> &, &lt; -> <, etc.)
+    const textDecoder = document.createElement('textarea');
+    textDecoder.innerHTML = decodedText;
+    decodedText = textDecoder.value;
+    
     titleInput.value = title;
-    textInput.value = text;
+    textInput.value = decodedText;
     sectionInput.value = sectionIndex;
     
     modal.style.display = 'block';
@@ -395,12 +457,13 @@ function savePresText() {
     const textInput = document.getElementById('editText');
     const sectionInput = document.getElementById('editSection');
     
-    const title = titleInput.value;
-    const text = textInput.value;
+    const title = titleInput.value.trim();
+    // Récupérer le texte brut avec retours à la ligne
+    const rawText = textInput.value;
     const sectionIndex = sectionInput.value;
     
     // Valider les entrées
-    if (!title.trim() || !text.trim()) {
+    if (!title || !rawText) {
         alert('Veuillez remplir tous les champs.');
         return;
     }
@@ -415,7 +478,7 @@ function savePresText() {
     const params = new URLSearchParams({
         action: 'updatePresentationText',
         title: title,
-        text: text,
+        text: rawText, // Envoyer le texte avec les retours à la ligne comme caractères \n
         section: sectionIndex
     });
     
@@ -429,28 +492,26 @@ function savePresText() {
         })
         .then(data => {
             if (data.success) {
-                // Mettre à jour le texte dans l'interface
-                const infoCards = document.querySelectorAll('.info-card');
-                if (infoCards[sectionIndex]) {
-                    const card = infoCards[sectionIndex];
-                    card.querySelector('h2').textContent = title;
-                    card.querySelector('p').textContent = text;
-                }
-                
                 // Fermer le modal
                 document.getElementById('editTextModal').style.display = 'none';
                 
                 // Afficher un message de succès
                 showNotification('Texte mis à jour avec succès', 'success');
+                
+                // Rafraîchir la page après un court délai
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
             } else {
                 showNotification('Erreur lors de la mise à jour: ' + (data.message || 'Erreur inconnue'), 'error');
+                // Restaurer le bouton
+                saveButton.textContent = originalText;
+                saveButton.disabled = false;
             }
         })
         .catch(error => {
             console.error('Erreur:', error);
             showNotification('Erreur lors de la mise à jour du texte', 'error');
-        })
-        .finally(() => {
             // Restaurer le bouton
             saveButton.textContent = originalText;
             saveButton.disabled = false;
@@ -476,15 +537,15 @@ function createAddSectionModal() {
     <div id="addSectionModal" class="edit-modal">
         <div class="edit-modal-content">
             <span class="close-modal">&times;</span>
-            <h2>Ajouter une nouvelle section</h2>
+            <h2>➕ Ajouter une nouvelle section</h2>
             <div class="edit-form">
                 <div class="form-group">
                     <label for="newSectionTitle">Titre:</label>
                     <input type="text" id="newSectionTitle" class="edit-input" placeholder="Ex: Fonctionnalités">
                 </div>
                 <div class="form-group">
-                    <label for="newSectionText">Texte:</label>
-                    <textarea id="newSectionText" class="edit-textarea" rows="5" placeholder="Entrez le contenu de la section ici"></textarea>
+                    <label for="newSectionText">Texte: <small>(Utilisez Entrée pour les retours à la ligne)</small></label>
+                    <textarea id="newSectionText" class="edit-textarea" rows="8" placeholder="Entrez le contenu de la section ici"></textarea>
                 </div>
                 <button id="saveSectionButton" class="save-button">Ajouter</button>
             </div>
@@ -536,11 +597,12 @@ function saveNewSection() {
     const titleInput = document.getElementById('newSectionTitle');
     const textInput = document.getElementById('newSectionText');
     
-    const title = titleInput.value;
-    const text = textInput.value;
+    const title = titleInput.value.trim();
+    // Récupérer le texte brut avec retours à la ligne
+    const rawText = textInput.value;
     
     // Valider les entrées
-    if (!title.trim() || !text.trim()) {
+    if (!title || !rawText) {
         alert('Veuillez remplir tous les champs.');
         return;
     }
@@ -560,7 +622,7 @@ function saveNewSection() {
     const params = new URLSearchParams({
         action: 'updatePresentationText',
         title: title,
-        text: text,
+        text: rawText, // Envoyer le texte avec les retours à la ligne comme caractères \n
         section: newSectionIndex
     });
     
@@ -574,41 +636,26 @@ function saveNewSection() {
         })
         .then(data => {
             if (data.success) {
-                // Ajouter la carte à l'interface
-                const newCard = createTextCard(title, text);
-                
-                // Ajouter la carte avant le bouton d'ajout
-                const addButton = document.querySelector('.add-section-container');
-                presentationCards.insertBefore(newCard, addButton);
-                
-                // Ajouter le bouton d'édition à la nouvelle carte
-                const editButton = document.createElement('button');
-                editButton.className = 'edit-text-button';
-                editButton.innerHTML = '✏️';
-                editButton.title = 'Modifier ce texte';
-                
-                // Ajouter le gestionnaire d'événement au bouton d'édition
-                editButton.addEventListener('click', function() {
-                    openEditModal(title, text, newSectionIndex);
-                });
-                
-                // Ajouter le bouton à la carte
-                newCard.appendChild(editButton);
-                
                 // Fermer le modal
                 document.getElementById('addSectionModal').style.display = 'none';
                 
                 // Afficher un message de succès
                 showNotification('Section ajoutée avec succès', 'success');
+                
+                // Rafraîchir la page après un court délai pour voir les changements
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
             } else {
                 showNotification('Erreur lors de l\'ajout: ' + (data.message || 'Erreur inconnue'), 'error');
+                // Restaurer le bouton
+                saveButton.textContent = originalText;
+                saveButton.disabled = false;
             }
         })
         .catch(error => {
             console.error('Erreur:', error);
             showNotification('Erreur lors de l\'ajout de la section', 'error');
-        })
-        .finally(() => {
             // Restaurer le bouton
             saveButton.textContent = originalText;
             saveButton.disabled = false;
@@ -623,7 +670,8 @@ function createDeleteConfirmModal() {
     <div id="deleteConfirmModal" class="edit-modal">
         <div class="edit-modal-content delete-confirm-modal">
             <span class="close-modal">&times;</span>
-            <h2>Confirmer la suppression</h2>
+            <h2>🗑️ Confirmer la suppression</h2>
+            <p><small>⚠️ Vous êtes sur le point de supprimer une section.</small></p>
             <p>Êtes-vous sûr de vouloir supprimer cette section ? Cette action est irréversible.</p>
             <input type="hidden" id="sectionToDelete">
             <div class="delete-modal-buttons">
@@ -713,30 +761,23 @@ function deleteSection() {
                 // Fermer le modal
                 document.getElementById('deleteConfirmModal').style.display = 'none';
                 
-                // Trouver et supprimer la carte de l'interface
-                const presentationCards = document.getElementById('presentationCards');
-                const cards = presentationCards.querySelectorAll('.info-card');
-                
-                if (cards[sectionIndex]) {
-                    cards[sectionIndex].remove();
-                }
-                
                 // Afficher un message de succès
                 showNotification('Section supprimée avec succès', 'success');
                 
-                // Recharger la page pour mettre à jour les index des sections
+                // Toujours rafraîchir la page après un court délai
                 setTimeout(() => {
                     location.reload();
-                }, 1500);
+                }, 1000);
             } else {
                 showNotification('Erreur lors de la suppression: ' + (data.message || 'Erreur inconnue'), 'error');
+                // Restaurer le bouton
+                deleteButton.textContent = originalText;
+                deleteButton.disabled = false;
             }
         })
         .catch(error => {
             console.error('Erreur:', error);
             showNotification('Erreur lors de la suppression de la section', 'error');
-        })
-        .finally(() => {
             // Restaurer le bouton
             deleteButton.textContent = originalText;
             deleteButton.disabled = false;

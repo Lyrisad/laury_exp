@@ -626,6 +626,7 @@ footer {
     width: 30px;
     height: 30px;
     background-color: var(--primary-color);
+    font-weight: bold;
     color: white;
     border-radius: 50%;
     display: flex;
@@ -638,8 +639,9 @@ footer {
 }
 
 .close-modal:hover {
-    background-color: #3658e6;
+    background-color: #ff9d9d;
     transform: scale(1.1);
+    color: white; 
 }
 
 .modal-step-number {
