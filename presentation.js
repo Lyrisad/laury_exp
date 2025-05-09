@@ -41,6 +41,13 @@ document.addEventListener('DOMContentLoaded', function() {
     loadPresentationTexts();
 });
 
+// Écouter l'événement de changement de langue
+document.addEventListener('languageChanged', function(event) {
+    console.log('Événement de changement de langue détecté:', event.detail.language);
+    // Recharger les textes avec la nouvelle langue
+    loadPresentationTexts();
+});
+
 // Fonction de débogage pour vérifier tous les cookies
 function debugCheckCookies() {
     console.log("========= COOKIE DEBUG =========");
@@ -106,8 +113,12 @@ function loadPresentationTexts() {
         </div>
     `;
     
-    // Faire une requête à l'API pour récupérer les textes
-    fetch(`${SCRIPT_URL}?action=getPresentationTexts`)
+    // Récupérer la langue actuelle
+    const currentLang = localStorage.getItem('language') || 'fr';
+    console.log('Chargement des textes de présentation avec la langue:', currentLang);
+    
+    // Faire une requête à l'API pour récupérer les textes avec la langue spécifiée
+    fetch(`${SCRIPT_URL}?action=getPresentationTexts&targetLang=${currentLang}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Erreur lors de la récupération des textes');
@@ -155,11 +166,20 @@ function displayDefaultTexts() {
     
     presentationCards.innerHTML = '';
     
-    // Textes par défaut
+    // Textes par défaut avec traduction
     const defaultTexts = [
-        { title: 'Objectif', text: 'Ce questionnaire a pour but de recueillir votre retour d\'expérience afin d\'améliorer nos services et processus.' },
-        { title: 'Confidentialité', text: 'Vos réponses sont totalement anonymes. Les données collectées seront utilisées uniquement à des fins statistiques.' },
-        { title: 'Durée', text: 'Le questionnaire ne prendra que quelques minutes de votre temps. Vos réponses sont précieuses pour nous.' }
+        { 
+            title: typeof translateText === 'function' ? translateText('objective') : 'Objectif', 
+            text: typeof translateText === 'function' ? translateText('objectiveDesc') : 'Ce questionnaire a pour but de recueillir votre retour d\'expérience afin d\'améliorer nos services et processus.' 
+        },
+        { 
+            title: typeof translateText === 'function' ? translateText('confidentialityTitle') : 'Confidentialité', 
+            text: typeof translateText === 'function' ? translateText('confidentialityDesc') : 'Vos réponses sont totalement anonymes. Les données collectées seront utilisées uniquement à des fins statistiques.' 
+        },
+        { 
+            title: typeof translateText === 'function' ? translateText('duration') : 'Durée', 
+            text: typeof translateText === 'function' ? translateText('durationDesc') : 'Le questionnaire ne prendra que quelques minutes de votre temps. Vos réponses sont précieuses pour nous.' 
+        }
     ];
     
     // Créer une carte pour chaque texte par défaut
@@ -218,7 +238,11 @@ function checkAdminAndAddEditControls() {
     console.log("Found info cards:", infoCards.length);
     
     infoCards.forEach((card, index) => {
-        console.log(`Adding edit button to card ${index}`);
+        console.log(`Adding edit buttons to card ${index}`);
+        
+        // Créer un conteneur pour les boutons
+        const buttonsContainer = document.createElement('div');
+        buttonsContainer.className = 'admin-buttons-container';
         
         // Créer un bouton d'édition
         const editButton = document.createElement('button');
@@ -233,8 +257,30 @@ function checkAdminAndAddEditControls() {
             openEditModal(cardTitle, cardText, index);
         });
         
-        // Ajouter le bouton à la carte
-        card.appendChild(editButton);
+        // Créer un bouton de suppression
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'delete-text-button';
+        deleteButton.innerHTML = '🗑️';
+        deleteButton.title = 'Supprimer cette section';
+        
+        // Ne pas permettre la suppression des 3 premières sections (sections importantes)
+        if (index < 3) {
+            deleteButton.disabled = true;
+            deleteButton.classList.add('disabled');
+            deleteButton.title = 'Les sections principales ne peuvent pas être supprimées';
+        } else {
+            // Ajouter le gestionnaire d'événement pour la suppression
+            deleteButton.addEventListener('click', function() {
+                confirmDeleteSection(index);
+            });
+        }
+        
+        // Ajouter les boutons au conteneur
+        buttonsContainer.appendChild(editButton);
+        buttonsContainer.appendChild(deleteButton);
+        
+        // Ajouter le conteneur à la carte
+        card.appendChild(buttonsContainer);
     });
     
     // Ajouter un bouton pour créer une nouvelle section
@@ -245,6 +291,9 @@ function checkAdminAndAddEditControls() {
     
     // Créer le modal d'ajout de section s'il n'existe pas déjà
     createAddSectionModal();
+    
+    // Créer le modal de confirmation de suppression
+    createDeleteConfirmModal();
 }
 
 // Fonction pour ajouter un bouton "Ajouter une section"
@@ -564,4 +613,177 @@ function saveNewSection() {
             saveButton.textContent = originalText;
             saveButton.disabled = false;
         });
+}
+
+// Fonction pour créer le modal de confirmation de suppression
+function createDeleteConfirmModal() {
+    if (document.getElementById('deleteConfirmModal')) return;
+    
+    const modalHTML = `
+    <div id="deleteConfirmModal" class="edit-modal">
+        <div class="edit-modal-content delete-confirm-modal">
+            <span class="close-modal">&times;</span>
+            <h2>Confirmer la suppression</h2>
+            <p>Êtes-vous sûr de vouloir supprimer cette section ? Cette action est irréversible.</p>
+            <input type="hidden" id="sectionToDelete">
+            <div class="delete-modal-buttons">
+                <button id="cancelDeleteButton" class="cancel-button">Annuler</button>
+                <button id="confirmDeleteButton" class="delete-button">Supprimer</button>
+            </div>
+        </div>
+    </div>`;
+    
+    // Ajouter le modal au body
+    const modalContainer = document.createElement('div');
+    modalContainer.innerHTML = modalHTML;
+    document.body.appendChild(modalContainer.firstElementChild);
+    
+    // Ajouter les gestionnaires d'événements
+    const modal = document.getElementById('deleteConfirmModal');
+    const closeButton = modal.querySelector('.close-modal');
+    const cancelButton = document.getElementById('cancelDeleteButton');
+    const confirmButton = document.getElementById('confirmDeleteButton');
+    
+    closeButton.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+    
+    cancelButton.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+    
+    confirmButton.addEventListener('click', deleteSection);
+    
+    // Fermer le modal si on clique en dehors
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
+// Fonction pour afficher la confirmation de suppression
+function confirmDeleteSection(sectionIndex) {
+    const modal = document.getElementById('deleteConfirmModal');
+    if (!modal) {
+        createDeleteConfirmModal();
+        return confirmDeleteSection(sectionIndex);
+    }
+    
+    // Stocker l'index de la section à supprimer
+    document.getElementById('sectionToDelete').value = sectionIndex;
+    
+    // Afficher le modal
+    modal.style.display = 'block';
+}
+
+// Fonction pour supprimer une section
+function deleteSection() {
+    const sectionIndexInput = document.getElementById('sectionToDelete');
+    const sectionIndex = parseInt(sectionIndexInput.value);
+    
+    // Vérifier que l'index est valide
+    if (isNaN(sectionIndex) || sectionIndex < 3) {
+        alert('Impossible de supprimer cette section.');
+        return;
+    }
+    
+    // Afficher un indicateur de chargement
+    const deleteButton = document.getElementById('confirmDeleteButton');
+    const originalText = deleteButton.textContent;
+    deleteButton.textContent = 'Suppression...';
+    deleteButton.disabled = true;
+    
+    // Construire les paramètres dans l'URL
+    const params = new URLSearchParams({
+        action: 'deletePresentationText',
+        section: sectionIndex
+    });
+    
+    // Envoyer les données à l'API
+    fetch(`${SCRIPT_URL}?${params.toString()}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de la suppression de la section');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Fermer le modal
+                document.getElementById('deleteConfirmModal').style.display = 'none';
+                
+                // Trouver et supprimer la carte de l'interface
+                const presentationCards = document.getElementById('presentationCards');
+                const cards = presentationCards.querySelectorAll('.info-card');
+                
+                if (cards[sectionIndex]) {
+                    cards[sectionIndex].remove();
+                }
+                
+                // Afficher un message de succès
+                showNotification('Section supprimée avec succès', 'success');
+                
+                // Recharger la page pour mettre à jour les index des sections
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
+            } else {
+                showNotification('Erreur lors de la suppression: ' + (data.message || 'Erreur inconnue'), 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            showNotification('Erreur lors de la suppression de la section', 'error');
+        })
+        .finally(() => {
+            // Restaurer le bouton
+            deleteButton.textContent = originalText;
+            deleteButton.disabled = false;
+        });
+}
+
+// Fonction pour traduire un texte à la volée si nécessaire
+function translateOnDemand(text, targetLang, callback) {
+    // Si on est déjà en français ou si le texte est vide, on retourne le texte tel quel
+    if (targetLang === 'fr' || !text) {
+        if (callback) callback(text);
+        return text;
+    }
+    
+    // Si translateText est défini dans le contexte global et que nous ne sommes pas en français,
+    // essayons d'utiliser la fonction de traduction locale
+    if (typeof window.translateText === 'function' && window.translations && 
+        window.translations[targetLang]) {
+        
+        // Chercher si le texte existe dans les traductions
+        for (const key in window.translations.fr) {
+            if (window.translations.fr[key] === text && window.translations[targetLang][key]) {
+                const translated = window.translations[targetLang][key];
+                if (callback) callback(translated);
+                return translated;
+            }
+        }
+    }
+    
+    // Si nous n'avons pas pu trouver de traduction localement, demander à l'API
+    fetch(`${SCRIPT_URL}?action=translate&text=${encodeURIComponent(text)}&targetLang=${targetLang}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.translatedText) {
+                if (callback) callback(data.translatedText);
+                return data.translatedText;
+            } else {
+                if (callback) callback(text);
+                return text;
+            }
+        })
+        .catch(error => {
+            console.error('Erreur de traduction:', error);
+            if (callback) callback(text);
+            return text;
+        });
+    
+    // Retourner le texte original en attendant
+    return text;
 } 

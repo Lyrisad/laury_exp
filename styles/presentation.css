@@ -58,7 +58,7 @@
 .info-card h2 {
     color: var(--primary-color);
     margin-bottom: 1rem;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -265,11 +265,17 @@ footer {
     margin-top: auto;
 }
 
-/* Styles pour le bouton d'édition admin */
-.edit-text-button {
+/* Styles pour les boutons d'admin */
+.admin-buttons-container {
     position: absolute;
     top: 10px;
     right: 10px;
+    display: flex;
+    gap: 8px;
+    z-index: 50;
+}
+
+.edit-text-button, .delete-text-button {
     background-color: var(--primary-color);
     color: white;
     border: none;
@@ -283,14 +289,81 @@ footer {
     cursor: pointer;
     opacity: 0.9;
     transition: all 0.3s ease;
-    z-index: 50;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.edit-text-button:hover {
+.delete-text-button {
+    background-color: #e74c3c;
+}
+
+.edit-text-button:hover, .delete-text-button:hover {
     opacity: 1;
     transform: scale(1.1);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.delete-text-button:hover {
+    background-color: #c0392b;
+}
+
+.delete-text-button.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.5;
+    box-shadow: none;
+}
+
+.delete-text-button.disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Styles pour le modal de confirmation de suppression */
+.delete-confirm-modal {
+    max-width: 450px;
+}
+
+.delete-confirm-modal p {
+    margin: 20px 0;
+    color: #555;
+    line-height: 1.6;
+}
+
+.delete-modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.cancel-button {
+    background-color: #f1f1f1;
+    color: #555;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.delete-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-button:hover {
+    background-color: #e5e5e5;
+}
+
+.delete-button:hover {
+    background-color: #c0392b;
 }
 
 /* Styles pour le modal d'édition */

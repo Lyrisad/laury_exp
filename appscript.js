@@ -188,7 +188,7 @@ function doGet(e) {
       result.success = true;
     } else if (action === "getPresentationTexts") {
       // Récupérer les textes de présentation
-      result = getPresentationTexts();
+      result = getPresentationTexts(e.parameter.targetLang);
     } else if (action === "updatePresentationText") {
       // Mettre à jour un texte de présentation
       var contentType = e.parameter.contentType;
@@ -203,6 +203,10 @@ function doGet(e) {
         var section = e.parameter.section;
         result = updatePresentationText(title, text, section);
       }
+    } else if (action === "deletePresentationText") {
+      // Supprimer un texte de présentation
+      var section = e.parameter.section;
+      result = deletePresentationText(section);
     } else if (action == "getQuestions") {
       var sheet = ss.getSheetByName("Questions");
       var data = sheet.getDataRange().getValues();
@@ -950,9 +954,13 @@ function createErrorResponse(errorMessage) {
 
 /**
  * Récupère les textes de la page de présentation depuis la feuille de calcul
+ * @param {string} targetLang - Langue cible (par défaut: 'fr')
  */
-function getPresentationTexts() {
+function getPresentationTexts(targetLang) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // Définir la langue par défaut comme français si non spécifiée
+  targetLang = targetLang || 'fr';
   
   // Récupérer ou créer la feuille "Presentation"
   var sheet = ss.getSheetByName("Presentation");
@@ -985,17 +993,27 @@ function getPresentationTexts() {
   
   // Préparer les textes pour le front-end
   var texts = textsData.map(function(row) {
+    // Si la langue demandée n'est pas le français, traduire le titre et le texte
+    var title = row[1];
+    var text = row[2];
+    
+    if (targetLang !== 'fr') {
+      title = translateText(title, targetLang);
+      text = translateText(text, targetLang);
+    }
+    
     return {
       section: row[0],
-      title: row[1],
-      text: row[2],
+      title: title,
+      text: text,
       lastModified: row[3]
     };
   });
   
   return {
     success: true,
-    texts: texts
+    texts: texts,
+    language: targetLang
   };
 }
 
@@ -1047,6 +1065,77 @@ function updatePresentationText(title, text, section) {
     message: "Texte mis à jour avec succès",
     title: title,
     text: text,
+    section: section
+  };
+}
+
+/**
+ * Supprime un texte de la page de présentation
+ */
+function deletePresentationText(section) {
+  if (section === undefined) {
+    return {
+      success: false,
+      message: "Section non spécifiée pour la suppression"
+    };
+  }
+  
+  // Convertir section en string pour la comparaison
+  var sectionStr = section.toString();
+  
+  // Protection contre la suppression des 3 premières sections (0, 1, 2)
+  if (sectionStr === "0" || sectionStr === "1" || sectionStr === "2") {
+    return {
+      success: false,
+      message: "Les sections principales ne peuvent pas être supprimées"
+    };
+  }
+  
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("Presentation");
+  
+  if (!sheet) {
+    return {
+      success: false,
+      message: "Feuille de présentation non trouvée"
+    };
+  }
+  
+  // Rechercher la section appropriée
+  var data = sheet.getDataRange().getValues();
+  var rowIndex = -1;
+  
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0].toString() === sectionStr) {
+      rowIndex = i + 1; // +1 car les indices de feuille commencent à 1
+      break;
+    }
+  }
+  
+  if (rowIndex === -1) {
+    return {
+      success: false,
+      message: "Section non trouvée"
+    };
+  }
+  
+  // Supprimer la ligne
+  sheet.deleteRow(rowIndex);
+  
+  // Réorganiser les indices de section après la suppression
+  // Cela permet de s'assurer que les sections restent séquentielles
+  data = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    var currentSection = parseInt(data[i][0]);
+    if (!isNaN(currentSection) && currentSection > parseInt(section)) {
+      // Décrémenter les sections supérieures à celle supprimée
+      sheet.getRange(i + 1, 1).setValue((currentSection - 1).toString());
+    }
+  }
+  
+  return {
+    success: true,
+    message: "Section supprimée avec succès",
     section: section
   };
 }

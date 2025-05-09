@@ -1,5 +1,5 @@
 // Configuration
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx2lYuwtOUoK9sfhAkU9ddP3rWN-EpI_00COZEjL14NVgbmhUQ9RNTYMcBS9Ep5vmJeIA/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwBoROYUHOh_nVuKQGeSiRJkXztUJQO6hOwARa_Dcgy_dCXBHFyI00gwFWjeYRHm4uufg/exec';
 const ADMIN_CREDENTIALS = {
     username: 'AdminRH',
     password: 'BaromètreRH25!' // À changer en production
