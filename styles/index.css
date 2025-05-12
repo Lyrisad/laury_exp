@@ -752,7 +752,6 @@ footer {
 @media (max-width: 768px) {
     footer {
         text-align: center;
-        padding: 4rem;
         background-color: white;
         box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
         margin-top: auto;
