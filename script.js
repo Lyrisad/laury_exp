@@ -277,11 +277,53 @@ function initQuestionnaire() {
             });
         }
         
+        // Initialiser le défilement automatique pour les champs d'informations générales
+        initAutoScrollForGeneralInfo();
+        
         // Ajouter l'écouteur d'événement pour le défilement
         window.addEventListener('scroll', handleProgressScroll);
         // Initialiser l'état du scroll
         handleProgressScroll();
     }
+}
+
+// Fonction pour initialiser le défilement automatique pour les champs d'informations générales
+function initAutoScrollForGeneralInfo() {
+    // Sélectionner tous les selects dans la section d'informations générales
+    const generalInfoSelects = document.querySelectorAll('.form-section:first-of-type select');
+    
+    generalInfoSelects.forEach(select => {
+        select.addEventListener('change', function() {
+            if (this.value) {
+                // Trouver le prochain groupe de formulaire
+                const currentGroup = this.closest('.form-group');
+                if (!currentGroup) return;
+                
+                let nextGroup = currentGroup.nextElementSibling;
+                
+                // Si nous avons trouvé un élément suivant et qu'il s'agit d'un groupe de formulaire
+                if (nextGroup && nextGroup.classList.contains('form-group')) {
+                    // Utiliser la même méthode de défilement que pour les autres éléments
+                    setTimeout(() => {
+                        // Calculer la position exacte pour centrer l'élément dans la fenêtre
+                        const elementRect = nextGroup.getBoundingClientRect();
+                        const absoluteElementTop = elementRect.top + window.pageYOffset;
+                        const elementHeight = elementRect.height;
+                        const windowHeight = window.innerHeight;
+                        
+                        // Position pour centrer l'élément
+                        const centerPosition = absoluteElementTop - (windowHeight / 2) + (elementHeight / 2);
+                        
+                        // Faire défiler à la position calculée
+                        window.scrollTo({
+                            top: centerPosition,
+                            behavior: 'smooth'
+                        });
+                    }, 300);
+                }
+            }
+        });
+    });
 }
 
 // Fonction pour envoyer une requête de suivi sans bloquer la navigation
@@ -650,17 +692,52 @@ function displayQuestions(questions, isInitialLoad = false) {
                         // Ajouter les écouteurs d'événements pour la progression
                         input.addEventListener('change', updateProgressBar);
                         input.addEventListener('input', updateProgressBar);
-            });
-            const labels = group.querySelectorAll('label');
-            labels.forEach(label => {
-                if (label.htmlFor && !document.getElementById(label.htmlFor)) {
-                    const firstInput = group.querySelector('input, textarea');
-                    if (firstInput) {
-                        label.htmlFor = firstInput.id;
+            
+            // Ajouter l'écouteur d'événement pour le défilement automatique
+            if (input.type === 'radio' || input.type === 'checkbox') {
+                input.addEventListener('change', function() {
+                    scrollToNextQuestion(this);
+                });
+            }
+            
+            // Pour les textarea, ajouter un événement de défilement après un délai de frappe
+            if (input.tagName === 'TEXTAREA') {
+                let typingTimer;
+                input.addEventListener('keyup', function() {
+                    clearTimeout(typingTimer);
+                    if (this.value.trim().length > 0) {
+                        typingTimer = setTimeout(() => {
+                            scrollToNextQuestion(this);
+                        }, 1500); // Délai de 1.5 secondes après la dernière frappe
                     }
+                });
+                // Annuler le défilement si l'utilisateur continue à taper
+                input.addEventListener('keydown', function() {
+                    clearTimeout(typingTimer);
+                });
+            }
+        });
+        
+        // Pour les selects, ajouter un écouteur d'événement de changement
+        const selects = group.querySelectorAll('select');
+        selects.forEach(select => {
+            select.addEventListener('change', function() {
+                if (this.value) {
+                    scrollToNextQuestion(this);
                 }
             });
         });
+        
+        const labels = group.querySelectorAll('label');
+        labels.forEach(label => {
+            if (label.htmlFor && !document.getElementById(label.htmlFor)) {
+                const firstInput = group.querySelector('input, textarea');
+                if (firstInput) {
+                    label.htmlFor = firstInput.id;
+                }
+            }
+        });
+    });
         // Reinitialize rating and nps events for barem and nps types:
         initializeRatingStars();
         initializeNps();
@@ -1087,6 +1164,101 @@ function getNpsSmiley(value) {
     return '😍'; // Très content
 }
 
+// Fonction pour mettre en surbrillance les étoiles
+function highlightStars(container, value) {
+    const stars = container.querySelectorAll('.star');
+    stars.forEach(star => {
+        const starValue = parseFloat(star.dataset.value);
+        if (starValue <= value) {
+            star.style.color = '#ffd700';
+        } else {
+            star.style.color = '#ccc';
+        }
+    });
+}
+
+// Fonction pour faire défiler automatiquement à la question suivante
+function scrollToNextQuestion(currentElement) {
+    // Trouver le groupe de formulaire parent
+    const currentGroup = currentElement.closest('.form-group');
+    if (!currentGroup) return;
+    
+    // Pour les choix multiples (checkbox), vérifier si le quota est atteint
+    if (currentElement.type === 'checkbox') {
+        const checkboxGroup = currentElement.closest('.checkbox-group');
+        if (checkboxGroup) {
+            const maxRequired = parseInt(checkboxGroup.getAttribute('data-max') || '0');
+            if (maxRequired > 0) {
+                // Compter le nombre de cases cochées
+                const checkedBoxes = checkboxGroup.querySelectorAll('input[type="checkbox"]:checked').length;
+                // Ne pas défiler si le quota n'est pas atteint
+                if (checkedBoxes < maxRequired) {
+                    return;
+                }
+            }
+        }
+    }
+    
+    // Trouver le prochain groupe de formulaire
+    let nextGroup = currentGroup.nextElementSibling;
+    
+    // Si nous sommes dans une section, il faut vérifier si le prochain élément est dans la même section
+    const currentSection = currentGroup.closest('.questionnaire-section');
+    if (currentSection) {
+        // Si nous sommes à la dernière question de la section, passer à l'élément après la section
+        if (currentGroup === currentSection.lastElementChild) {
+            nextGroup = currentSection.nextElementSibling;
+        }
+    }
+    
+    // Si nous avons trouvé un élément suivant
+    if (nextGroup) {
+        // Vérifier si l'élément suivant est une section
+        if (nextGroup.classList.contains('questionnaire-section')) {
+            // Si c'est une section, trouver la première question dans cette section
+            const firstQuestionInSection = nextGroup.querySelector('.form-group');
+            if (firstQuestionInSection) {
+                // Utiliser la première question de la section comme cible
+                nextGroup = firstQuestionInSection;
+            }
+        }
+        
+        // Vérifier si l'élément suivant est un groupe de formulaire ou une section
+        if (nextGroup.classList.contains('form-group') || nextGroup.classList.contains('questionnaire-section')) {
+            // Faire défiler jusqu'à cet élément avec une animation fluide
+            setTimeout(() => {
+                // Calculer la position exacte pour centrer l'élément dans la fenêtre
+                const elementRect = nextGroup.getBoundingClientRect();
+                const absoluteElementTop = elementRect.top + window.pageYOffset;
+                const elementHeight = elementRect.height;
+                const windowHeight = window.innerHeight;
+                
+                // Position pour centrer l'élément
+                const centerPosition = absoluteElementTop - (windowHeight / 2) + (elementHeight / 2);
+                
+                // Faire défiler à la position calculée
+                window.scrollTo({
+                    top: centerPosition,
+                    behavior: 'smooth'
+                });
+            }, 300); // Petit délai pour permettre à l'animation de se terminer
+        }
+    }
+}
+
+// Fonction pour mettre en surbrillance les éléments NPS
+function highlightNps(container, value) {
+    const items = container.querySelectorAll('.nps-item');
+    items.forEach(item => {
+        const itemValue = parseInt(item.dataset.value);
+        if (itemValue <= value) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+}
+
 // Fonction pour initialiser les étoiles de notation
 function initializeRatingStars() {
     document.querySelectorAll('.rating-stars, .nps-scale').forEach(container => {
@@ -1112,6 +1284,15 @@ function initializeRatingStars() {
                 } else {
                     highlightStars(container, value);
                 }
+                
+                // Faire défiler à la question suivante après sélection
+                // Utiliser le conteneur parent pour un meilleur ciblage
+                const parentContainer = isNps ? container.closest('.nps-container') : container.closest('.rating-container');
+                if (parentContainer) {
+                    scrollToNextQuestion(parentContainer);
+                } else {
+                    scrollToNextQuestion(item);
+                }
             });
         });
         
@@ -1130,37 +1311,24 @@ function initializeRatingStars() {
     });
 }
 
-// Fonction pour mettre en surbrillance les étoiles
-function highlightStars(container, value) {
-    const stars = container.querySelectorAll('.star');
-    stars.forEach(star => {
-        const starValue = parseFloat(star.dataset.value);
-        if (starValue <= value) {
-            star.style.color = '#ffd700';
-        } else {
-            star.style.color = '#ccc';
-        }
-    });
-}
-
-// Fonction pour mettre en surbrillance les éléments NPS
-function highlightNps(container, value) {
-    const items = container.querySelectorAll('.nps-item');
-    items.forEach(item => {
-        const itemValue = parseInt(item.dataset.value);
-        if (itemValue <= value) {
-            item.classList.add('active');
-        } else {
-            item.classList.remove('active');
-        }
-    });
-}
-
 // Fonction pour gérer les clics sur les éléments NPS
 function handleNpsClick(container, value) {
     const hiddenInput = container.nextElementSibling;
     hiddenInput.value = value;
     highlightNps(container, value);
+    
+    // Ajouter un délai légèrement plus long pour les éléments NPS
+    // pour s'assurer que tous les calculs sont terminés avant le défilement
+    setTimeout(() => {
+        // Faire défiler à la question suivante après sélection
+        // Utiliser le conteneur parent pour un meilleur ciblage
+        const npsContainer = container.closest('.nps-container');
+        if (npsContainer) {
+            scrollToNextQuestion(npsContainer);
+        } else {
+            scrollToNextQuestion(container);
+        }
+    }, 100);
 }
 
 // Initialisation des éléments NPS
@@ -1180,6 +1348,7 @@ function initializeNps() {
             // Gestion du clic
             item.addEventListener('click', () => {
                 handleNpsClick(container, value);
+                // Ne pas appeler scrollToNextQuestion ici car c'est déjà fait dans handleNpsClick
             });
         });
         
@@ -1431,10 +1600,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Vérifier si le formulaire questionnaire existe ; s'il existe, l'initialiser.
     const questionnaireForm = document.getElementById('questionnaireForm');
-    const disclaimerModal = document.getElementById('disclaimerModal');
     
     if (questionnaireForm) {
-        // Vérifier le consentement avant même de montrer le disclaimer modal
+        // Vérifier le consentement avant de montrer le questionnaire
         const consentGiven = localStorage.getItem('consentGiven') === 'true';
         const consentCheck = document.getElementById('consent-check');
         const questionnaireContent = document.getElementById('questionnaire-content');
@@ -1449,41 +1617,21 @@ document.addEventListener('DOMContentLoaded', function() {
             if (consentCheck) consentCheck.style.display = 'none';
             if (questionnaireContent) questionnaireContent.style.display = 'block';
             
-        // Pour s'assurer que le modal de disclaimer est géré uniquement quand il existe
-        if (window.location.pathname.includes('questionnaire.html') || questionnaireForm) {
-            if (disclaimerModal) {
-                const acceptButton = document.getElementById('acceptDisclaimer');
-                if (!localStorage.getItem('disclaimerAccepted')) {
-                    disclaimerModal.style.display = 'block';
-                    questionnaireForm.style.display = 'none';
-                } else {
-                    disclaimerModal.style.display = 'none';
-                    questionnaireForm.style.display = 'block';
-                }
-
-                // Gestion du disclaimer
-                acceptButton.addEventListener('click', function() {
-                    disclaimerModal.style.display = 'none';
-                    questionnaireForm.style.display = 'block';
-                    localStorage.setItem('disclaimerAccepted', 'true');
-                });
-            }
-            // Initialiser le questionnaire (si l'élément existe, on l'appelle)
+            // Initialiser le questionnaire
             initQuestionnaire();
                 
-                // Initialiser la barre de progression
-                updateProgressBar();
+            // Initialiser la barre de progression
+            updateProgressBar();
                 
-                // Make sure translations are applied once questions are loaded
-                setTimeout(() => {
-                    if (typeof updateTranslatedQuestions === 'function') {
-                        updateTranslatedQuestions();
-                    }
-                }, 500);
+            // Make sure translations are applied once questions are loaded
+            setTimeout(() => {
+                if (typeof updateTranslatedQuestions === 'function') {
+                    updateTranslatedQuestions();
+                }
+            }, 500);
             
             // Ajouter l'écouteur d'événement de soumission du formulaire
             questionnaireForm.addEventListener('submit', submitQuestionnaire);
-            }
         }
     }
 

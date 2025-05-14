@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" style="scroll-behavior: smooth;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,17 +33,14 @@
             <p data-translate="subtitle">Votre avis compte pour nous aider à nous améliorer</p>
             
             <div class="action-buttons">
-                <a href="questionnaire.html" class="action-button" data-translate="startQuestionnaire">Commencer le questionnaire</a>
+                <a href="#how-it-works" id="comment_ca_marche" class="action-button" data-translate="howItWorks">Comment ça marche ?</a>  
                 <a href="presentation.html" class="action-button secondary" data-translate="whyQuestionnaire">Pourquoi ce questionnaire ?</a>
+                <a href="questionnaire.html" class="action-button primary" data-translate="startQuestionnaire">Commencer le questionnaire</a>
             </div>
         </section>
 
         <div class="features-wrapper">
             <section class="features">
-                <div class="feature-card">
-                    <h2><span>📊</span> <span data-translate="dataAnalysis">Analyse des données</span></h2>
-                    <p data-translate="dataAnalysisDesc">Des statistiques précises pour améliorer nos services</p>
-                </div>
                 <div class="feature-card">
                     <h2><span>🔒</span> <span data-translate="confidentiality">Confidentialité</span></h2>
                     <p data-translate="confidentialityDesc">Vos réponses sont totalement anonymes</p>
@@ -55,6 +52,10 @@
                 <div class="feature-card">
                     <h2><span>📱</span> <span data-translate="adaptability">Adaptabilité</span></h2>
                     <p data-translate="adaptabilityDesc">Ce baromètre social est accessible sur ordinateur, tablette et smartphone.</p>
+                </div>
+                <div class="feature-card">
+                    <h2><span>📊</span> <span data-translate="dataAnalysis">Analyse des données</span></h2>
+                    <p data-translate="dataAnalysisDesc">Des statistiques précises pour améliorer nos services</p>
                 </div>
             </section>
             <div class="arrow-down" data-tooltip="Voir comment ça marche" data-translate-tooltip="scrollToHow">↓</div>
@@ -196,6 +197,27 @@
             const stepCards = document.querySelectorAll('.step-card');
             const modalOverlay = document.querySelector('.modal-overlay');
             const closeButtons = document.querySelectorAll('.close-modal');
+            
+            // Défilement fluide pour le bouton "Comment ça marche ?"
+            const commentCaMarcheBtn = document.getElementById('comment_ca_marche');
+            if (commentCaMarcheBtn) {
+                commentCaMarcheBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const howSection = document.getElementById('how-it-works');
+                    if (howSection) {
+                        // Utiliser requestAnimationFrame pour un défilement plus fluide
+                        const targetPosition = howSection.getBoundingClientRect().top + window.pageYOffset;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Mettre à jour l'URL avec le hash
+                        history.pushState(null, null, '#how-it-works');
+                    }
+                });
+            }
             
             // Ouvrir le modal correspondant au clic sur une étape
             stepCards.forEach(card => {
