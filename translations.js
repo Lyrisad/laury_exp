@@ -32,7 +32,7 @@ const translations = {
         step3Title: "📮 Soumettez vos réponses",
         step3Desc: "Une fois terminé, soumettez vos réponses pour nous aider à améliorer vos conditions de travail.",
         step4Title: "📊 Nous analysons vos retours",
-        step4Desc: "Notre équipe RH analysera attentivement tous les retours pour travail, avec les Comités Sociaux et Economiques, à la définition d’axes d’amélioration des conditions de travail. Nous vous ferons un retour dans les plus brefs délais.",
+        step4Desc: "Notre équipe RH analysera attentivement tous les retours pour travailler avec les Comités Sociaux et Economiques, à la définition d’axes d’amélioration des conditions de travail. Nous vous ferons un retour dans les plus brefs délais.",
         clickForMoreInfo: "Cliquez pour plus d'infos",
         
         // Modals
@@ -40,7 +40,7 @@ const translations = {
         step1ModalInfo: "Le questionnaire a été conçu pour être intuitif et facile à utiliser. Vous pouvez y accéder depuis n'importe quel appareil avec une connexion internet, que ce soit un ordinateur, une tablette ou un smartphone.",
         step2ModalInfo: "Les questions sont organisées par thèmes pour faciliter votre navigation. Pour chaque question, répondez avec honnêteté. C’est ce qui nous aidera le plus à agir.",
         step3ModalInfo: "Avant de soumettre, vous aurez l'occasion de revoir et modifier vos réponses si nécessaire. Une fois soumises, vos réponses sont immédiatement enregistrées dans notre base de données sécurisée. Vous recevrez une confirmation à l'écran une fois l'envoi réussi.",
-        step4ModalInfo: "Nous analyserons vos réponses avec attention pour définir les actions adaptées. Vos retours sont essentiels pour faire évoluer vos conditions de travail et améliorer la qualité de nos prestations. Ce baromètre social permettra d'identifier les tendances et de mettre en place des actions concrètes pour répondre au mieux à vos attentes.",
+        step4ModalInfo: "Nous analyserons vos réponses avec attention pour définir les actions adaptées. Vos retours sont essentiels pour faire évoluer vos conditions de travail et améliorer la qualité de nos prestations. Ce baromètre social permettre d’identifier les actions à entreprendre pour améliorer votre qualité de vie et conditions de travail au sein de CANDOR.",
         gotoPresentation: "Aller à la page de présentation",
         startSurvey: "Commencer le baromètre social",
         closeModal: "Fermer",
